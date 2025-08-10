@@ -4,6 +4,13 @@
     ViewData["Title"] = "Delete";
 }
 
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a asp-action="Index">Products</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Delete</li>
+    </ol>
+</nav>
+
 <h1>Delete</h1>
 
 <h3>Are you sure you want to delete this?</h3>
@@ -35,12 +42,21 @@
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.Quantity)
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.ImageUrl)
+
+        <dt class="col-sm-2">
+            Image
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ImageUrl)
+        <dd class="col-sm-10">
+            @if (!string.IsNullOrEmpty(Model.ImageUrl))
+            {
+                <img src="@Model.ImageUrl" alt="Product Image" style="width: 200px; border-radius: 5px;" />
+            }
+            else
+            {
+                <span>No Image Available</span>
+            }
         </dd>
+
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.CreatedAt)
         </dt>
@@ -55,9 +71,36 @@
         </dd>
     </dl>
     
-    <form asp-action="Delete">
+    <!-- Delete Confirmation Modal -->
+    <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteModalLabel">Confirm Deletion</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Are you sure you want to delete this product?
+                    <br />
+                    <strong>@Model.Name</strong>
+                    <br />
+                    This action cannot be undone, and the associated image file on the server will be permanently removed.
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    @* Nút này sẽ thực sự submit form gốc *@
+                    <button type="button" class="btn btn-danger" onclick="document.getElementById('deleteForm').submit();">Confirm Delete</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <form asp-action="Delete" id="deleteForm">
         <input type="hidden" asp-for="Id" />
-        <input type="submit" value="Delete" class="btn btn-danger" /> |
+        <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal">
+            Delete    
+        </button>
         <a asp-action="Index">Back to List</a>
     </form>
 </div>
