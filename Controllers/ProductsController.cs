@@ -242,5 +242,12 @@ namespace Horizon.Controllers
         {
             return _context.Products.Any(e => e.Id == id);
         }
+
+        //GET: /Products/Shop
+        public async Task<IActionResult> Shop()
+        {
+            var allProducts = await _context.Products.Include(p => p.Category).ToListAsync();
+            return View(allProducts);
+        }
     }
 }
