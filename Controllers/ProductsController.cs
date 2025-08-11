@@ -22,10 +22,37 @@ namespace Horizon.Controllers
         }
 
         // GET: Products
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string productCategory, string searchString)
         {
-            var myDbContext = _context.Products.Include(p => p.Category);
-            return View(await myDbContext.ToListAsync());
+            // --- Phần 1: Lấy danh sách Categories để đưa lên Dropdown ---
+            // Sử dụng LINQ để lấy tất cả các danh mục từ CSDL.
+            IQueryable<string> categoryQuery = from c in _context.Categories
+                                               orderby c.Name
+                                               select c.Name;
+
+            // --- Phần 2: Lấy danh sách Products và áp dụng bộ lọc ---
+            // Bắt đầu với một truy vấn lấy tất cả sản phẩm, bao gồm cả thông tin Category liên quan.
+            var products = from p in _context.Products.Include(p => p.Category)
+                           select p;
+
+            // Lọc theo tên sản phẩm nếu người dùng nhập vào ô tìm kiếm.
+            if (!string.IsNullOrEmpty(searchString))
+            {
+                products = products.Where(s => s.Name.Contains(searchString));
+            }
+
+            // Lọc theo Category nếu người dùng chọn một mục trong dropdown.
+            if (!string.IsNullOrEmpty(productCategory))
+            {
+                products = products.Where(x => x.Category.Name == productCategory);
+            }
+
+            // --- Phần 3: Gửi dữ liệu lên View ---
+            // Tạo một SelectList chứa các danh mục đã lọc (nếu có) và gửi nó qua ViewBag.
+            ViewBag.ProductCategory = new SelectList(await categoryQuery.Distinct().ToListAsync());
+
+            // Trả về View với danh sách sản phẩm đã được lọc.
+            return View(await products.ToListAsync());
         }
 
         // GET: Products/Details/5
