@@ -1,39 +1,52 @@
 ﻿@model IEnumerable<Horizon.Models.Product>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Manage Products";
 }
 
-<h1>Index</h1>
+@* Thêm Breadcrumb cho nhất quán *@
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item active" aria-current="page">Products</li>
+    </ol>
+</nav>
 
-@* --- THÊM FORM TÌM KIẾM/LỌC VÀO ĐÂY --- *@
-<form asp-controller="Products" asp-action="Index" method="get">
-    <div class="row mb-3">
-        <div class="col-md-6">
-            <label class="form-label">Search by Name:</label>
-            <input type="text" name="searchString" class="form-control" placeholder="Enter product name..." />
+<h1>@ViewData["Title"]</h1>
+
+@* --- FORM TÌM KIẾM/LỌC ĐÃ THÊM asp-area --- *@
+<div class="card card-body mb-3">
+    <form asp-area="Admin" asp-controller="Products" asp-action="Index" method="get">
+        <div class="row align-items-end">
+            <div class="col-md-5">
+                <label class="form-label">Search by Name:</label>
+                <input type="text" name="searchString" class="form-control" value="@ViewData["CurrentSearchString"]" />
+            </div>
+            <div class="col-md-5">
+                <label class="form-label">Filter by Category:</label>
+                <select name="productCategory" class="form-control" asp-items="ViewBag.ProductCategory">
+                    <option value="">-- All Categories --</option>
+                </select>
+            </div>
+            <div class="col-md-2">
+                <input type="submit" value="Search" class="btn btn-primary w-100" />
+            </div>
         </div>
-        <div class="col-md-4">
-            <label class="form-label">Filter by Category:</label>
-            <select name="productCategory" class="form-control" asp-items="ViewBag.ProductCategory">
-                <option value="">-- All Categories --</option>
-            </select>
-        </div>
-        <div class="col-md-2 d-flex align-items-end">
-            <input type="submit" value="Search" class="btn btn-primary w-100" />
-        </div>
-    </div>
-</form>
-@* -------------------------------------- *@
+    </form>
+</div>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    @* Sửa lại link Create New cho đúng Area *@
+    <a asp-area="Admin" asp-action="Create" class="btn btn-success">Create New Product</a>
 </p>
-<table class="table">
+
+<table class="table table-striped table-hover">
     <thead>
         <tr>
             <th>
                 @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th>
+                Image
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Description)
@@ -45,46 +58,52 @@
                 @Html.DisplayNameFor(model => model.Quantity)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.ImageUrl)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CreatedAt)
-            </th>
-            <th>
                 @Html.DisplayNameFor(model => model.Category)
             </th>
-            <th></th>
+            <th></th> @* Cột trống cho các nút hành động *@
         </tr>
     </thead>
     <tbody>
-        @if (Model.Any()) // Kiểm tra xem Model có phần tử nào không
+        @if (Model != null && Model.Any())
         {
             @foreach (var item in Model)
             {
                 <tr>
-                    <td>@Html.DisplayFor(modelItem => item.Name)</td>
-                    <td>@Html.DisplayFor(modelItem => item.Description)</td>
-                    <td>@Html.DisplayFor(modelItem => item.Price)</td>
-                    @* Hiển thị ảnh thay vì link *@
+                    @* -- DỮ LIỆU CẦN KHỚP VỚI TIÊU ĐỀ BÊN TRÊN -- *@
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Name)
+                    </td>
                     <td>
                         @if (!string.IsNullOrEmpty(item.ImageUrl))
                         {
-                            <img src="@item.ImageUrl" alt="Product Image" style="width: 100px; height: auto;" />
+                            <img src="@item.ImageUrl" alt="Product Image" style="width: 80px; height: auto; border-radius: 4px;" />
                         }
                     </td>
-                    <td>@Html.DisplayFor(modelItem => item.Category.Name)</td>
                     <td>
-                        <a asp-area="Admin" asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                        <a asp-area="Admin" asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                        <a asp-area="Admin" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                        @Html.DisplayFor(modelItem => item.Description)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Price)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Quantity)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Category.Name)
+                    </td>
+                    <td>
+                        <a asp-area="Admin" asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-outline-primary">Edit</a>
+                        <a asp-area="Admin" asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-outline-info">Details</a>
+                        <a asp-area="Admin" asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-outline-danger">Delete</a>
                     </td>
                 </tr>
             }
         }
-        else // Nếu Model rỗng
+        else
         {
             <tr>
-                <td colspan="6" class="text-center">No products found matching your criteria.</td>
+                @* Colspan phải khớp với tổng số cột <th> ở trên (là 7) *@
+                <td colspan="7" class="text-center">No products found matching your criteria.</td>
             </tr>
         }
     </tbody>
