@@ -5,8 +5,9 @@ using System.Linq;
 using System.Threading.Tasks;
 
 
-namespace Horizon.Controllers
+namespace Horizon.Areas.Customer.Controllers
 {
+    [Area("Customer")]
     public class HomeController : Controller
     {
         private readonly MyDbContext _context;

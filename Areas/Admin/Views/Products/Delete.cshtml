@@ -96,11 +96,11 @@
     </div>
 
 
-    <form asp-action="Delete" id="deleteForm">
+    <form asp-area="Admin" asp-action="Delete" id="deleteForm">
         <input type="hidden" asp-for="Id" />
         <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal">
             Delete    
         </button>
-        <a asp-action="Index">Back to List</a>
+        <a asp-area="Admin" asp-action="Index">Back to List</a>
     </form>
 </div>

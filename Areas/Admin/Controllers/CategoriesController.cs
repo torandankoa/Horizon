@@ -2,12 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Horizon.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 
-namespace Horizon.Models
+namespace Horizon.Areas.Admin.Controllers
 {
+    [Area("Admin")]
     public class CategoriesController : Controller
     {
         private readonly MyDbContext _context;

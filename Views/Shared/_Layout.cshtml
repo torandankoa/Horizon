@@ -1,9 +1,9 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8" />
+    <meta charset="utf-g" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - Horizon</title>
+    <title>@ViewData["Title"] - Horizon Admin</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/Horizon.styles.css" asp-append-version="true" />
@@ -12,7 +12,8 @@
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Horizon</a>
+                @* SỬA 1: Link trang chủ của Admin, trỏ về trang quản lý sản phẩm *@
+                <a class="navbar-brand" asp-area="Admin" asp-controller="Products" asp-action="Index">Horizon ADMIN</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -20,10 +21,20 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                            @* SỬA 2: Link đến trang quản lý sản phẩm *@
+                            <a class="nav-link text-dark" asp-area="Admin" asp-controller="Products" asp-action="Index">Manage Products</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                            @* SỬA 3: Link đến trang quản lý danh mục *@
+                            <a class="nav-link text-dark" asp-area="Admin" asp-controller="Categories" asp-action="Index">Manage Categories</a>
+                        </li>
+                        <li class="nav-item">
+                            @* Link đến trang thống kê (sẽ làm sau) *@
+                            @* <a class="nav-link text-dark" asp-area="Admin" asp-controller="Dashboard" asp-action="Index">Statistics</a> *@
+                        </li>
+                        <li class="nav-item">
+                            @* SỬA 4: Thêm link quay về trang Khách hàng *@
+                            <a class="nav-link text-info" asp-area="Customer" asp-controller="Home" asp-action="Index" target="_blank">View Customer Site</a>
                         </li>
                     </ul>
                 </div>
@@ -38,7 +49,7 @@
 
     <footer class="border-top footer text-muted">
         <div class="container">
-            &copy; 2025 - Horizon - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            &copy; 2025 - Horizon Admin Panel
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>

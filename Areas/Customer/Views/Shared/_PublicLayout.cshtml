@@ -1,7 +1,7 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-g" />
+    <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - Horizon</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
@@ -12,7 +12,8 @@
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Horizon</a>
+                @* SỬA 1: Thêm asp-area="Customer" *@
+                <a class="navbar-brand" asp-area="Customer" asp-controller="Home" asp-action="Index">Horizon</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -20,14 +21,25 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                            @* SỬA 2: Thêm asp-area="Customer" *@
+                            <a class="nav-link text-dark" asp-area="Customer" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
                         <li class="nav-item">
-                            @* Sửa lại asp-action thành "Shop" *@
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Products" asp-action="Shop">Shop</a>
+                            @* SỬA 3: Thêm asp-area="Customer" vào link Shop *@
+                            <a class="nav-link text-dark" asp-area="Customer" asp-controller="Products" asp-action="Shop">Shop</a>
                         </li>
-                        @* Bạn có thể thêm link Giỏ hàng, Giới thiệu... ở đây sau *@
+                        <li class="nav-item">
+                            @* Sẽ thêm sau: Link đến giỏ hàng *@
+                            @* <a class="nav-link text-dark" asp-area="Customer" asp-controller="ShoppingCart" asp-action="Index">Shopping Cart</a> *@
+                        </li>
                     </ul>
+                    @* Bổ sung sau: Ô tìm kiếm nhanh ở đây *@
+                    @* 
+                    <form class="d-flex" asp-area="Customer" asp-controller="Products" asp-action="Shop" method="get">
+                        <input class="form-control me-2" type="search" placeholder="Search products..." aria-label="Search" name="searchString">
+                        <button class="btn btn-outline-success" type="submit">Search</button>
+                    </form>
+                    *@
                 </div>
             </div>
         </nav>
@@ -41,7 +53,8 @@
 
     <footer class="border-top footer text-muted">
         <div class="container">
-            &copy; 2025 - Horizon - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            @* SỬA 4: Thêm asp-area="Customer" vào link Privacy *@
+            &copy; 2025 - Horizon - <a asp-area="Customer" asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>
     </footer>
 
