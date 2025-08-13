@@ -1,0 +1,82 @@
+﻿@model List<Horizon.Models.CartItem>
+
+@{
+    ViewData["Title"] = "Shopping Cart";
+    decimal total = Model?.Sum(item => item.Subtotal) ?? 0;
+}
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a asp-area="Customer" asp-controller="Home" asp-action="Index">Home</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Shopping Cart</li>
+    </ol>
+</nav>
+
+<h1>@ViewData["Title"]</h1>
+
+@if (Model != null && Model.Any())
+{
+    <div class="row">
+        <div class="col-lg-8">
+            <table class="table">
+                <thead class="table-light">
+                    <tr>
+                        <th colspan="2">Product</th>
+                        <th class="text-center">Quantity</th>
+                        <th class="text-end">Price</th>
+                        <th class="text-end">Subtotal</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td style="width: 100px;">
+                                <img src="@(item.ImageUrl ?? "/images/placeholder.png")" class="img-fluid rounded" alt="@item.ProductName" />
+                            </td>
+                            <td>@item.ProductName</td>
+                            <td style="width: 150px;">
+                                @* FORM NÀY SẼ GỌI ACTION "UpdateCart" *@
+                                <form asp-action="UpdateCart" method="post" class="d-flex">
+                                    <input type="hidden" name="productId" value="@item.ProductId" />
+                                    <input type="number" name="quantity" value="@item.Quantity" class="form-control form-control-sm" min="1" />
+                                    <button type="submit" class="btn btn-sm btn-outline-primary ms-2" title="Update quantity">✓</button>
+                                </form>
+                            </td>
+                            <td class="text-end">@item.Price.ToString("C")</td>
+                            <td class="text-end">@item.Subtotal.ToString("C")</td>
+                            <td>
+                                @* LINK NÀY SẼ GỌI ACTION "RemoveFromCart" *@
+                                <a asp-action="RemoveFromCart" asp-route-productId="@item.ProductId" class="btn btn-sm btn-outline-danger" title="Remove item">&times;</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        <div class="col-lg-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">Cart Summary</h5>
+                </div>
+                <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                        <span>Total</span>
+                        <strong>@total.ToString("C")</strong>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <div class="d-grid">
+                        <a href="#" class="btn btn-primary">Proceed to Checkout</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    <div class="alert alert-info">Your shopping cart is empty.</div>
+    <a asp-area="Customer" asp-controller="Products" asp-action="Shop" class="btn btn-primary">Continue Shopping</a>
+}
