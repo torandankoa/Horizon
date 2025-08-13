@@ -28,5 +28,15 @@ namespace Horizon.Areas.Customer.Controllers
 
             return View(newProducts);
         }
+        // GET: /Customer/Home/About
+        public IActionResult About()
+        {
+            return View();
+        }
+        // GET: /Customer/Home/Contact
+        public IActionResult Contact()
+        {
+            return View();
+        }
     }
 }

@@ -14,6 +14,28 @@
 
 <h2 class="mt-5 mb-3">All Products</h2>
 
+@* --- FORM TÌM KIẾM/LỌC --- *@
+<div class="card card-body mb-4 shadow-sm">
+    <form asp-area="Customer" asp-controller="Products" asp-action="Shop" method="get">
+        <div class="row align-items-end">
+            <div class="col-md-5">
+                <label class="form-label fw-bold">Search by Name</label>
+                <input type="text" name="searchString" class="form-control" value="@ViewData["CurrentSearchString"]" placeholder="Enter product name..." />
+            </div>
+            <div class="col-md-5">
+                <label class="form-label fw-bold">Filter by Category</label>
+                <select name="productCategory" class="form-select" asp-items="ViewBag.ProductCategory">
+                    <option value="">-- All Categories --</option>
+                </select>
+            </div>
+            <div class="col-md-2">
+                <input type="submit" value="Filter" class="btn btn-primary w-100" />
+            </div>
+        </div>
+    </form>
+</div>
+@* ------------------------- *@
+
 @if (Model != null && Model.Any())
 {
     <div class="row">

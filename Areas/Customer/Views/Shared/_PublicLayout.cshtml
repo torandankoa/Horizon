@@ -53,8 +53,9 @@
 
     <footer class="border-top footer text-muted">
         <div class="container">
-            @* SỬA 4: Thêm asp-area="Customer" vào link Privacy *@
-            &copy; 2025 - Horizon - <a asp-area="Customer" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            &copy; 2025 - Horizon -
+            <a asp-area="Customer" asp-controller="Home" asp-action="About">About Us</a> -
+            <a asp-area="Customer" asp-controller="Home" asp-action="Contact">Contact</a>
         </div>
     </footer>
 
@@ -63,5 +64,19 @@
     <script src="~/js/site.js" asp-append-version="true"></script>
 
     @await RenderSectionAsync("Scripts", required: false)
+
+    <!--Start of Tawk.to Script-->
+    <script type="text/javascript">
+        var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+        (function(){
+        var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+        s1.async=true;
+        s1.src='https://embed.tawk.to/689c5078ed02831924d200f2/1j2hagn1v';
+        s1.charset='UTF-8';
+        s1.setAttribute('crossorigin','*');
+        s0.parentNode.insertBefore(s1,s0);
+        })();
+    </script>
+    <!--End of Tawk.to Script-->
 </body>
 </html>
