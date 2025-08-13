@@ -1,4 +1,5 @@
 ﻿using Horizon.Models;
+using Horizon.Data;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -11,7 +12,7 @@ using System.IO;
 namespace Horizon.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    public class ProductsController : Controller
+    public class ProductsController : AdminBaseController
     {
         private readonly MyDbContext _context;
         private readonly IWebHostEnvironment _webHostEnvironment;

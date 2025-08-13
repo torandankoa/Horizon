@@ -1,11 +1,14 @@
-﻿using Horizon.Infrastructure; // Quan trọng: Thêm using cho SessionExtensions
+﻿using Microsoft.AspNetCore.Authorization; // Thêm using này
+using Horizon.Infrastructure; // Quan trọng: Thêm using cho SessionExtensions
 using Horizon.Models;
+using Horizon.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace Horizon.Areas.Customer.Controllers
 {
     [Area("Customer")]
+    [Authorize]
     public class ShoppingCartController : Controller
     {
         private readonly MyDbContext _context;

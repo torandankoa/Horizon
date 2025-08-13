@@ -1,0 +1,41 @@
+﻿@{
+    ViewData["Title"] = "Admin Dashboard";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Welcome to the Admin Dashboard</h1>
+    <p>Select an option below to manage your site.</p>
+</div>
+
+<hr />
+
+<div class="row mt-4">
+    <div class="col-md-4">
+        <div class="card text-center h-100">
+            <div class="card-body">
+                <h5 class="card-title">Product Management</h5>
+                <p class="card-text">Add, edit, and delete products and their details.</p>
+                <a asp-area="Admin" asp-controller="Products" asp-action="Index" class="btn btn-primary">Manage Products</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card text-center h-100">
+            <div class="card-body">
+                <h5 class="card-title">Category Management</h5>
+                <p class="card-text">Manage the product categories available in the store.</p>
+                <a asp-area="Admin" asp-controller="Categories" asp-action="Index" class="btn btn-primary">Manage Categories</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card text-center h-100">
+            <div class="card-body">
+                <h5 class="card-title">Data Analytics</h5>
+                <p class="card-text">View statistics and charts about sales and products.</p>
+                @* Tạm thời vô hiệu hóa nút này, sẽ làm ở Ngày 9 *@
+                <a href="#" class="btn btn-secondary disabled">View Statistics (Coming Soon)</a>
+            </div>
+        </div>
+    </div>
+</div>

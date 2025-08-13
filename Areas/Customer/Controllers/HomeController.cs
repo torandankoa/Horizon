@@ -1,4 +1,5 @@
 ﻿using Horizon.Models;
+using Horizon.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore; // <<< THÊM DÒNG NÀY VÀO
 using System.Linq;
