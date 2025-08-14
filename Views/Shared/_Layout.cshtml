@@ -12,7 +12,6 @@
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container-fluid">
-                @* SỬA 1: Link Logo trỏ về trang Dashboard (Admin/Home/Index) *@
                 <a class="navbar-brand" asp-area="Admin" asp-controller="Home" asp-action="Index">Horizon ADMIN</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
@@ -21,7 +20,6 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            @* SỬA 2: Thêm link Dashboard làm link chính *@
                             <a class="nav-link text-dark" asp-area="Admin" asp-controller="Home" asp-action="Index">Dashboard</a>
                         </li>
                         <li class="nav-item">
@@ -35,7 +33,6 @@
                         </li>
                     </ul>
 
-                    @* SỬA 3: Thêm khu vực đăng nhập/logout cho Admin *@
                     <partial name="_LoginPartial" />
 
                 </div>
@@ -57,6 +54,9 @@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    @* --- SCRIPTS VẼ BIỂU ĐỒ--- *@
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
