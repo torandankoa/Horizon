@@ -11,7 +11,39 @@
     <h1 class="display-4">Welcome to Horizon</h1>
     <p>Your one-stop shop for tactical gear inspired by Girl's Frontline.</p>
 </div>
+@* --- SÂN KHẤU CHIBI ANIMATION --- *@
+<div id="chibi-stage" class="my-5">
+    <div class="chibi-character" data-dialogue="I am all you need.">
+        <img src="~/images/chibi/HK416.gif" alt="HK416">
+    </div>
+    <div class="chibi-character" data-dialogue="“Customer, what do you think?!.">
+        <img src="~/images/chibi/KALINA.gif" alt="KALINA">
+    </div>
+    <div class="chibi-character" data-dialogue="Welcome back Customer.">
+        <img src="~/images/chibi/M4A1.gif" alt="M4A1">
+    </div>
+    <div class="chibi-character" data-dialogue="What is it? Let me take a look too!">
+        <img src="~/images/chibi/SOP.gif" alt="SOP">
+    </div>
+    <div class="chibi-character" data-dialogue="When... will it be my turn?">
+        <img src="~/images/chibi/STAR155.gif" alt="STAR15">
+    </div>
+    <div class="chibi-character" data-dialogue="I've been waiting for you, Customer.">
+        <img src="~/images/chibi/UMP40.gif" alt="UMP40">
+    </div>
+    <div class="chibi-character" data-dialogue="Oh I'm back, what's next?.">
+        <img src="~/images/chibi/UMP45.gif" alt="UMP45">
+    </div>
+    <div class="chibi-character" data-dialogue="~La~La~La~.">
+        <img src="~/images/chibi/Vep.gif" alt="Vep">
+    </div>
 
+
+    @* Thêm các nhân vật khác ở đây nếu bạn muốn *@
+
+    <div id="dialogue-box" class="dialogue-hidden"></div>
+</div>
+@* ---------------------------------- *@
 <h2 class="mt-5 mb-3">Newest Arrivals</h2>
 
 @if (Model != null && Model.Any())

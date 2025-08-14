@@ -206,3 +206,127 @@ h1, h2, h3, h4, h5, h6 {
             background-color: #e74c3c;
             color: white;
         }
+
+/* =================================== */
+/* === CSS CHO SÂN KHẤU CHIBI ANIMATION === */
+/* =================================== */
+
+#chibi-stage {
+    position: relative;
+    height: 100px;
+    background-color: var(--gfl-bg-secondary);
+    border-top: 1px solid var(--gfl-border-color);
+    border-bottom: 1px solid var(--gfl-border-color);
+    overflow: hidden; /* Quan trọng: Ẩn các chibi khi chúng chạy ra ngoài */
+}
+
+.chibi-character {
+    position: absolute;
+    bottom: -10px; /* Hơi lùi xuống để trông tự nhiên hơn */
+    height: 120px;
+    cursor: pointer;
+    /* Animation: tên | thời gian hoàn thành 1 vòng | kiểu lặp | lặp vô tận */
+    animation: march-past 25s linear infinite;
+    /* Hiệu ứng mượt mà khi tạm dừng/chạy */
+    transition: transform 0.2s ease-out;
+}
+
+/* Khi di chuột vào, tạm dừng animation */
+#chibi-stage:hover .chibi-character {
+    animation-play-state: paused;
+}
+
+/* Tạo độ trễ khác nhau để các chibi không xuất hiện cùng lúc */
+.chibi-character:nth-child(1) {
+    animation-delay: -6s;
+}
+.chibi-character:nth-child(2) {
+    animation-delay: -8s;
+}
+.chibi-character:nth-child(3) {
+    animation-delay: -10s;
+}
+.chibi-character:nth-child(4) {
+    animation-delay: -12s;
+}
+.chibi-character:nth-child(5) {
+    animation-delay: -14s;
+}
+.chibi-character:nth-child(6) {
+    animation-delay: -16s;
+}
+.chibi-character:nth-child(7) {
+    animation-delay: -18s;
+}
+.chibi-character:nth-child(8) {
+    animation-delay: -20s;
+}
+
+.chibi-character img {
+    height: 100%;
+    /* Lật ngược hình ảnh nếu GIF đang đi sai hướng */
+    /* transform: scaleX(-1); */
+}
+
+/* Định nghĩa Animation chạy từ phải sang trái */
+@keyframes march-past {
+    from {
+        /* Bắt đầu từ bên ngoài màn hình (phía bên phải) */
+        transform: translateX(105vw);
+    }
+
+    to {
+        /* Kết thúc ở bên ngoài màn hình (phía bên trái) */
+        transform: translateX(-150px);
+    }
+}
+
+/* CSS cho hộp thoại */
+#dialogue-box {
+    position: absolute;
+    z-index: 10;
+    background-color: rgba(15, 16, 20, 0.85); /* Dùng màu nền chính với độ trong suốt */
+    color: var(--gfl-text-primary);
+    padding: 8px 12px;
+    border-radius: 4px;
+    border: 1px solid var(--gfl-accent-yellow);
+    transition: opacity 0.3s ease-in-out;
+    pointer-events: none; /* Cho phép click "xuyên qua" nó */
+    transform: translate(-50%, -100%); /* Căn giữa và đặt ngay trên điểm click */
+    white-space: nowrap; /* Không cho xuống dòng */
+}
+
+.dialogue-hidden {
+    opacity: 0;
+}
+
+/* --- NÚT ĐIỀU KHIỂN ÂM THANH --- */
+#music-control {
+    position: fixed; /* Nằm cố định trên màn hình */
+    bottom: 20px;
+    left: 20px;
+    z-index: 1000; /* Nằm trên các phần tử khác */
+
+    width: 50px;
+    height: 50px;
+    background-color: var(--gfl-accent-yellow);
+    color: var(--gfl-bg-dark);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%; /* Nút tròn */
+    font-size: 24px;
+    cursor: pointer;
+    box-shadow: 0 0 10px var(--gfl-accent-yellow-glow);
+    transition: transform 0.2s ease-in-out;
+}
+
+    #music-control:hover {
+        transform: scale(1.1);
+    }
+
+    /* Thêm một class để biểu thị trạng thái "đang tắt" */
+    #music-control.muted {
+        background-color: var(--gfl-border-color);
+        color: var(--gfl-text-secondary);
+    }
