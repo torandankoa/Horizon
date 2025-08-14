@@ -1,0 +1,208 @@
+﻿
+html {
+    font-size: 14px;
+}
+
+:root {
+    /* --- BẢNG MÀU CHUẨN GF2 EXILIUM --- */
+    /* Nền và các yếu tố phụ */
+    --gfl-bg-dark: #0f1014; /* Gần như đen, màu nền chính */
+    --gfl-bg-secondary: #1e2029; /* Xám đậm cho card, navbar, footer */
+    --gfl-border-color: #3a3f50; /* Màu viền mặc định (xám xanh) */
+    /* Văn bản */
+    --gfl-text-primary: #e6e6e6; /* Màu chữ chính (trắng xám) */
+    --gfl-text-secondary: #8d93ab; /* Màu chữ phụ (mô tả, category) */
+    /* Màu nhấn - Yếu tố quan trọng nhất */
+    --gfl-accent-yellow: #e4ae3a; /* MÀU VÀNG đặc trưng */
+    --gfl-accent-yellow-glow: rgba(228, 174, 58, 0.5); /* Ánh sáng cho hiệu ứng glow */
+    /* Font chữ */
+    --gfl-font: 'Exo 2', sans-serif; /* Giữ nguyên font này vì nó rất hợp */
+}
+
+/* --- NỀN VÀ TIÊU ĐỀ --- */
+body {
+    background-color: var(--gfl-bg-dark);
+    color: var(--gfl-text-primary);
+    font-family: var(--gfl-font);
+}
+
+h1, h2, h3, h4, h5, h6 {
+    color: var(--gfl-text-primary); /* Tiêu đề giờ là màu chữ chính */
+    /* Có thể thêm một đường gạch chân màu vàng */
+    border-bottom: 2px solid var(--gfl-accent-yellow);
+    padding-bottom: 5px;
+}
+
+
+/* --- SỬA THANH ĐIỀU HƯỚNG (NAVBAR) --- */
+.navbar {
+    background-color: var(--gfl-bg-secondary) !important;
+    border-bottom: 1px solid var(--gfl-border-color) !important;
+}
+
+    .navbar .navbar-brand {
+        color: var(--gfl-accent-yellow) !important; /* Logo màu vàng nổi bật */
+    }
+
+    .navbar .nav-link {
+        color: var(--gfl-text-primary) !important;
+    }
+
+        .navbar .nav-link:hover, .navbar .navbar-brand:hover {
+            color: var(--gfl-accent-yellow) !important;
+        }
+
+/* --- SỬA FOOTER --- */
+.footer {
+    background-color: var(--gfl-bg-secondary);
+    border-top: 1px solid var(--gfl-border-color) !important;
+    color: var(--gfl-text-secondary);
+}
+
+/* --- THIẾT KẾ LẠI CARD SẢN PHẨM --- */
+.card {
+    background-color: var(--gfl-bg-secondary);
+    border: 1px solid var(--gfl-border-color);
+    border-radius: 2px; /* Một chút bo tròn rất nhỏ cho hiện đại */
+    transition: all 0.2s ease-in-out;
+}
+
+    .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 0 15px var(--gfl-accent-yellow-glow);
+        border-color: var(--gfl-accent-yellow);
+    }
+
+    .card .card-title a {
+        color: var(--gfl-text-primary) !important; /* Giữ màu trắng xám */
+        /* QUAN TRỌNG: Ép buộc độ trong suốt là 100% (không bị mờ) */
+        opacity: 1 !important;
+        text-decoration: none;
+        font-weight: 700; /* Làm chữ đậm hơn một chút cho dễ đọc */
+        transition: color 0.2s ease-in-out;
+    }
+        .card .card-title a:hover {
+            color: var(--gfl-accent-yellow);
+        }
+
+    .card .card-text {
+        color: var(--gfl-text-secondary);
+    }
+
+    .card .card-footer {
+        /* Chỉ định rõ màu nền giống hệt màu của card, thêm !important để đảm bảo ưu tiên */
+        background-color: var(--gfl-bg-secondary) !important;
+        /* Đồng bộ màu viền */
+        border-top: 1px solid var(--gfl-border-color) !important;
+        padding: 1rem;
+    }
+
+        .card .card-footer form {
+            margin-bottom: 0;
+        }
+
+/* --- TÙY CHỈNH NÚT BẤM --- */
+.btn-primary {
+    background-color: var(--gfl-accent-yellow);
+    border-color: var(--gfl-accent-yellow);
+    color: var(--gfl-bg-dark); /* Chữ màu tối trên nền vàng */
+    font-weight: bold;
+    border-radius: 2px;
+}
+
+    .btn-primary:hover {
+        background-color: #f5c56a; /* Sáng hơn khi di chuột */
+        border-color: #f5c56a;
+        color: var(--gfl-bg-dark);
+        box-shadow: 0 0 10px var(--gfl-accent-yellow-glow);
+    }
+
+/* --- TÙY CHỈNH FORM --- */
+.form-control, .form-select {
+    border-radius: 2px;
+    background-color: #2b2e3b;
+    border: 1px solid var(--gfl-border-color);
+    color: var(--gfl-text-primary);
+}
+
+    .form-control:focus {
+        background-color: #2b2e3b;
+        border-color: var(--gfl-accent-yellow);
+        color: var(--gfl-text-primary);
+        box-shadow: 0 0 5px var(--gfl-accent-yellow-glow);
+    }
+
+/* --- TÙY CHỈNH FORM NHẬP SỐ LƯỢNG TRÊN TRANG DETAILS --- */
+
+#quantity-input {
+    /* Ghi đè màu chữ và nền từ form mặc định */
+    background-color: var(--gfl-bg-dark) !important; /* Nền đen hơn */
+    color: var(--gfl-text-primary) !important; /* Chữ trắng sáng */
+    font-size: 1.2rem;
+    font-weight: 700;
+    /* Ghi đè màu viền khi focus */
+    border-color: var(--gfl-border-color);
+    box-shadow: none; /* Bỏ hiệu ứng glow mặc định của form */
+}
+
+    #quantity-input:focus {
+        border-color: var(--gfl-accent-yellow); /* Viền vàng khi được chọn */
+        box-shadow: 0 0 10px var(--gfl-accent-yellow-glow); /* Hiệu ứng glow */
+    }
+
+/* --- TÙY CHỈNH GIỎ HÀNG --- */
+
+.table-cart {
+    background-color: var(--gfl-bg-secondary);
+    border: 1px solid var(--gfl-border-color);
+    /* THAY ĐỔI QUAN TRỌNG: Ghi đè màu chữ mặc định của bảng */
+    color: var(--gfl-text-primary);
+}
+
+    .table-cart thead {
+        color: var(--gfl-accent-yellow);
+        border-bottom: 2px solid var(--gfl-border-color);
+    }
+
+    /* Đảm bảo tất cả các ô trong thân bảng đều có màu chữ sáng */
+    .table-cart tbody td {
+        vertical-align: middle; /* Căn giữa các item theo chiều dọc */
+        color: var(--gfl-text-primary) !important; /* Ghi đè màu chữ */
+        opacity: 1 !important; /* Đảm bảo không bị làm mờ */
+        border-top: 1px solid var(--gfl-border-color); /* Thêm đường kẻ ngang giữa các sản phẩm */
+    }
+
+    /* Định dạng cho tên sản phẩm trong giỏ hàng */
+    .table-cart .product-name {
+        font-weight: 700;
+    }
+
+    /* ĐỊNH DẠNG Ô NHẬP SỐ LƯỢNG TRONG GIỎ HÀNG */
+    .table-cart input[type="number"] {
+        background-color: var(--gfl-bg-dark) !important;
+        color: var(--gfl-text-primary) !important;
+        border-color: var(--gfl-border-color);
+        text-align: center;
+        font-weight: bold;
+    }
+
+    /* Tùy chỉnh nút Update và Remove */
+    .table-cart .btn-outline-primary {
+        border-color: var(--gfl-accent-yellow);
+        color: var(--gfl-accent-yellow);
+    }
+
+        .table-cart .btn-outline-primary:hover {
+            background-color: var(--gfl-accent-yellow);
+            color: var(--gfl-bg-dark);
+        }
+
+    .table-cart .btn-outline-danger {
+        border-color: #e74c3c;
+        color: #e74c3c;
+    }
+
+        .table-cart .btn-outline-danger:hover {
+            background-color: #e74c3c;
+            color: white;
+        }

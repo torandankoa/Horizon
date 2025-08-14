@@ -18,7 +18,7 @@
 {
     <div class="row">
         <div class="col-lg-8">
-            <table class="table">
+            <table class="table table-cart">
                 <thead class="table-light">
                     <tr>
                         <th colspan="2">Product</th>
@@ -35,7 +35,7 @@
                             <td style="width: 100px;">
                                 <img src="@(item.ImageUrl ?? "/images/placeholder.png")" class="img-fluid rounded" alt="@item.ProductName" />
                             </td>
-                            <td>@item.ProductName</td>
+                            <td class="product-name">@item.ProductName</td>
                             <td style="width: 150px;">
                                 @* FORM NÀY SẼ GỌI ACTION "UpdateCart" *@
                                 <form asp-action="UpdateCart" method="post" class="d-flex">
@@ -68,7 +68,7 @@
                 </div>
                 <div class="card-footer">
                     <div class="d-grid">
-                        <a href="#" class="btn btn-primary">Proceed to Checkout</a>
+                        <a asp-area="Customer" asp-controller="Order" asp-action="Checkout" class="btn btn-primary">Proceed to Checkout</a>
                     </div>
                 </div>
             </div>

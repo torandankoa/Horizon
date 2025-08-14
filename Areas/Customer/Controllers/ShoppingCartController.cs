@@ -81,6 +81,15 @@ namespace Horizon.Areas.Customer.Controllers
             // Chuyển hướng người dùng về trang họ vừa ở (hoặc trang Shop)
             return RedirectToAction("Shop", "Products");
         }
+        //Fix
+        [HttpGet] // Chỉ chấp nhận GET
+        public IActionResult AddToCart()
+        {
+            // Thêm một thông báo để hướng dẫn người dùng
+            TempData["Info"] = "Please select a product to add to your cart again.";
+            // Chuyển hướng về trang Shop
+            return RedirectToAction("Shop", "Products");
+        }
 
         // Các action Update
         [HttpPost]
@@ -121,5 +130,6 @@ namespace Horizon.Areas.Customer.Controllers
             // Sau khi xóa, quay lại trang giỏ hàng
             return RedirectToAction("Index");
         }
+
     }
 }

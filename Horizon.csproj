@@ -26,6 +26,7 @@
     <Folder Include="Areas\Customer\Models\" />
     <Folder Include="Controllers\" />
     <Folder Include="wwwroot\images\products\" />
+    <Folder Include="wwwroot\videos\" />
   </ItemGroup>
 
 </Project>

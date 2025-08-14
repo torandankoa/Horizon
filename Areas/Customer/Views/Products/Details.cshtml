@@ -29,11 +29,21 @@
 
         <form asp-area="Customer" asp-controller="ShoppingCart" asp-action="AddToCart" method="post">
             <input type="hidden" name="productId" value="@Model.Id" />
-            <div class="input-group mb-3" style="max-width: 150px;">
-                <input type="number" name="quantity" class="form-control" value="1" min="1" max="@Model.Quantity">
-                <button class="btn btn-primary" type="submit">Add to Cart</button>
+
+            <div class="row align-items-center mb-3">
+                <div class="col-md-5">
+                    <label for="quantity-input" class="form-label">Quantity:</label>
+                    <div class="input-group">
+                        <input id="quantity-input" type="number" name="quantity" class="form-control text-center" value="1" min="1" max="@Model.Quantity">
+                    </div>
+                </div>
             </div>
-            <p class="text-success">In Stock: @Model.Quantity</p>
+
+            <div class="d-grid">
+                <button class="btn btn-primary btn-lg" type="submit">Add to Cart</button>
+            </div>
+
+            <p class="mt-3" style="color: var(--gfl-text-secondary);">In Stock: @Model.Quantity</p>
         </form>
     </div>
 </div>
