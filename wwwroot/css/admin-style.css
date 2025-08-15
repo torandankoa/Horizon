@@ -1,0 +1,103 @@
+﻿/* =================================== */
+/* ===   ADMIN INTERFACE STYLES    === */
+/* =================================== */
+
+:root {
+    --admin-bg-dark: #1e2029;
+    --admin-bg-secondary: #2b2e3b;
+    --admin-border-color: #3a3f50;
+    --admin-text-primary: #e6e6e6;
+    --admin-text-secondary: #8d93ab;
+    --admin-accent-blue: #4e73df;
+    --admin-accent-green: #1cc88a;
+    --admin-accent-yellow: #f6c23e;
+}
+
+body {
+    background-color: var(--admin-bg-dark);
+    color: var(--admin-text-primary);
+}
+
+/* --- NAVBAR & FOOTER --- */
+.navbar.navbar-light.bg-white, .footer.bg-white {
+    background-color: var(--admin-bg-secondary) !important;
+    border-color: var(--admin-border-color) !important;
+}
+
+.navbar .navbar-brand, .navbar .nav-link {
+    color: var(--admin-text-primary) !important;
+}
+
+    .navbar .navbar-brand:hover, .navbar .nav-link:hover {
+        color: var(--admin-accent-yellow) !important;
+    }
+
+    .navbar .nav-link.text-info {
+        color: #36b9cc !important;
+    }
+
+/* --- CARDS & FORMS --- */
+.card {
+    background-color: var(--admin-bg-secondary);
+    border-color: var(--admin-border-color);
+}
+
+.card-header {
+    background-color: var(--admin-bg-dark);
+    border-bottom-color: var(--admin-border-color);
+}
+
+.form-control, .form-select {
+    background-color: #1a1a1a; /* Nền tối hơn cho input */
+    border-color: var(--admin-border-color);
+    color: var(--admin-text-primary);
+}
+
+    .form-control:focus, .form-select:focus {
+        background-color: #1a1a1a;
+        border-color: var(--admin-accent-blue);
+        color: var(--admin-text-primary);
+        box-shadow: none;
+    }
+
+label {
+    color: var(--admin-text-secondary);
+}
+
+/* --- TABLE CUSTOMIZATION (QUAN TRỌNG NHẤT) --- */
+
+.table {
+    /* Áp dụng màu chữ sáng cho toàn bộ bảng */
+    color: var(--admin-text-primary) !important;
+}
+
+    .table > :not(caption) > * > * {
+        /* Ghi đè màu nền và viền mặc định của Bootstrap cho mọi ô (th, td) */
+        background-color: transparent !important;
+        border-bottom-width: 1px;
+        border-color: var(--admin-border-color) !important;
+        box-shadow: none !important;
+    }
+
+    .table thead th {
+        /* Tiêu đề cột */
+        color: var(--admin-accent-yellow) !important;
+        font-weight: 700;
+    }
+
+    .table tbody td {
+        /* Đảm bảo chữ trong thân bảng sáng màu */
+        color: var(--admin-text-primary) !important;
+        vertical-align: middle;
+    }
+
+/* --- BUTTONS --- */
+.btn-success {
+    background-color: var(--admin-accent-green) !important;
+    border-color: var(--admin-accent-green) !important;
+}
+
+.btn-primary {
+    background-color: var(--admin-accent-blue) !important;
+    border-color: var(--admin-accent-blue) !important;
+}

@@ -26,5 +26,8 @@ namespace Horizon.Models
         // Foreign Key
         public int CategoryId { get; set; }
         public Category? Category { get; set; }
+        public bool IsFeature {  get; set; } = false;//Danh dau san pham noi bat
+        [Column(TypeName ="decimal(18,2)")]
+        public decimal? SalePrice { get; set; }//Gia sau khi giam
     }
 }

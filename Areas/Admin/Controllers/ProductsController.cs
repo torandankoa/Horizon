@@ -86,7 +86,7 @@ namespace Horizon.Areas.Admin.Controllers
         // POST: Products/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Name,Description,Price,Quantity,CategoryId,ImageUrl")] Product product, IFormFile? imageFile)
+        public async Task<IActionResult> Create([Bind("Name,Description,Price,Quantity,CategoryId,ImageUrl,IsFeature,SalePrice")] Product product, IFormFile? imageFile)
         {
             // Bây giờ chúng ta bind cả ImageUrl, nên không cần Remove khỏi ModelState
 
@@ -143,7 +143,7 @@ namespace Horizon.Areas.Admin.Controllers
         // POST: Products/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Description,Price,Quantity,ImageUrl,CreatedAt,CategoryId")] Product product, IFormFile? imageFile)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Description,Price,Quantity,ImageUrl,CreatedAt,CategoryId,IsFeature,SalePrice")] Product product, IFormFile? imageFile)
         {
             if (id != product.Id)
             {

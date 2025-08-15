@@ -20,14 +20,33 @@ namespace Horizon.Areas.Customer.Controllers
 
         public async Task<IActionResult> Index()
         {
-            // Bây giờ dòng code này sẽ hết báo lỗi màu đỏ
-            var newProducts = await _context.Products
-                                        .Include(p => p.Category)
-                                        .OrderByDescending(p => p.CreatedAt)
-                                        .Take(8)
-                                        .ToListAsync();
+            var viewModel = new HomeViewModel
+            {
+                NewestProducts = await _context.Products
+                    .AsNoTracking()
+                    .Include(p => p.Category)
+                    .OrderByDescending(p => p.CreatedAt)
+                    .Take(4) // Lấy 4 sản phẩm mới nhất
+                    .ToListAsync(),
 
-            return View(newProducts);
+                SaleProducts = await _context.Products
+                    .AsNoTracking()
+                    .Include(p => p.Category)
+                    .Where(p => p.SalePrice != null && p.SalePrice < p.Price)
+                    .OrderBy(p => Guid.NewGuid()) // Lấy ngẫu nhiên 4 sản phẩm giảm giá
+                    .Take(4)
+                    .ToListAsync(),
+
+                FeaturedProducts = await _context.Products
+                    .AsNoTracking()
+                    .Include(p => p.Category)
+                    .Where(p => p.IsFeature == true)
+                    .OrderBy(p => Guid.NewGuid()) // Lấy ngẫu nhiên 4 sản phẩm nổi bật
+                    .Take(4)
+                    .ToListAsync()
+            };
+
+            return View(viewModel);
         }
         // GET: /Customer/Home/About
         public IActionResult About()

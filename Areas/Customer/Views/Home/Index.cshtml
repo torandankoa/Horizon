@@ -1,18 +1,17 @@
-﻿@model IEnumerable<Horizon.Models.Product>
+﻿@model HomeViewModel
 
 @{
     ViewData["Title"] = "Home Page";
-    // Dòng Layout = "..." không còn cần thiết ở đây nếu bạn đã cấu hình _ViewStart.cshtml
-    // Nếu chưa, hãy chắc chắn bạn có file /Areas/Customer/Views/_ViewStart.cshtml
-    // với nội dung: @{ Layout = "_PublicLayout"; }
 }
 
-<div class="text-center">
+<div class="text-center mb-5">
     <h1 class="display-4">Welcome to Horizon</h1>
     <p>Your one-stop shop for tactical gear inspired by Girl's Frontline.</p>
 </div>
-@* --- SÂN KHẤU CHIBI ANIMATION --- *@
+
+@* --- SÂN KHẤU CHIBI ANIMATION (Giữ nguyên) --- *@
 <div id="chibi-stage" class="my-5">
+    @* ... Nội dung chibi của bạn ... *@
     <div class="chibi-character" data-dialogue="I am all you need.">
         <img src="~/images/chibi/HK416.gif" alt="HK416">
     </div>
@@ -37,49 +36,50 @@
     <div class="chibi-character" data-dialogue="~La~La~La~.">
         <img src="~/images/chibi/Vep.gif" alt="Vep">
     </div>
-
-
-    @* Thêm các nhân vật khác ở đây nếu bạn muốn *@
-
     <div id="dialogue-box" class="dialogue-hidden"></div>
 </div>
-@* ---------------------------------- *@
-<h2 class="mt-5 mb-3">Newest Arrivals</h2>
+<hr class="my-5" style="border-color: var(--gfl-border-color);" />
 
-@if (Model != null && Model.Any())
+@* ================================================================ *@
+@* KHU VỰC SẢN PHẨM NỔI BẬT (BỘ SƯU TẬP)                         *@
+@* ================================================================ *@
+@if (Model.FeaturedProducts.Any())
 {
+    <h2 class="section-title">FEATURED COLLECTION</h2>
     <div class="row">
-        @foreach (var item in Model)
+        @foreach (var item in Model.FeaturedProducts)
         {
-            <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
-                <div class="card h-100 shadow-sm">
-                    @* SỬA 1: Link ảnh và tên sản phẩm trỏ đến trang Details *@
-                    <a asp-area="Customer" asp-controller="Products" asp-action="Details" asp-route-id="@item.Id">
-                        <img class="card-img-top" src="@(item.ImageUrl ?? "/images/placeholder.png")" alt="@item.Name" style="height: 200px; object-fit: cover;">
-                    </a>
-                    <div class="card-body d-flex flex-column">
-                        <h5 class="card-title">
-                            <a class="text-dark text-decoration-none" asp-area="Customer" asp-controller="Products" asp-action="Details" asp-route-id="@item.Id">@item.Name</a>
-                        </h5>
-                        <p class="card-text text-muted">@item.Category.Name</p>
-                        <h6 class="mt-auto">@item.Price.ToString("C")</h6>
-                    </div>
-                    <div class="card-footer text-center bg-white border-0">
-                        @* SỬA 2: Chuẩn bị form cho chức năng "Add to Cart" *@
-                        <form asp-area="Customer" asp-controller="ShoppingCart" asp-action="AddToCart" method="post">
-                            <input type="hidden" name="productId" value="@item.Id" />
-                            <input type="hidden" name="quantity" value="1" />
-                            <button type="submit" class="btn btn-primary">Add to Cart</button>
-                        </form>
-                    </div>
-                </div>
-            </div>
+            <partial name="_ProductCardPartial" model="item" />
         }
     </div>
+    <hr class="my-5" style="border-color: var(--gfl-border-color);" />
 }
-else
+
+@* ================================================================ *@
+@* KHU VỰC SẢN PHẨM GIẢM GIÁ                                      *@
+@* ================================================================ *@
+@if (Model.SaleProducts.Any())
 {
-    <div class="alert alert-info text-center">
-        There are no products to display at the moment. Please check back later!
+    <h2 class="section-title">ON SALE</h2>
+    <div class="row">
+        @foreach (var item in Model.SaleProducts)
+        {
+            <partial name="_ProductCardPartial" model="item" />
+        }
+    </div>
+    <hr class="my-5" style="border-color: var(--gfl-border-color);" />
+}
+
+@* ================================================================ *@
+@* KHU VỰC SẢN PHẨM MỚI NHẤT                                     *@
+@* ================================================================ *@
+@if (Model.NewestProducts.Any())
+{
+    <h2 class="section-title">NEWEST ARRIVALS</h2>
+    <div class="row">
+        @foreach (var item in Model.NewestProducts)
+        {
+            <partial name="_ProductCardPartial" model="item" />
+        }
     </div>
 }
