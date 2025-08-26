@@ -1,4 +1,4 @@
-#  Horizon 🚀 - E-commerce Website for Gamers
+#  Horizon 🚀 - E-commerce Website for Gamers.
 
 ![Horizon Showcase]([link_den_anh_banner_dep_nhat_cua_ban])
 
