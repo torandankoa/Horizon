@@ -55,3 +55,19 @@
 
 <hr class="my-5" style="border-color: var(--gfl-border-color);" />
 
+@* --- KHU VỰC SẢN PHẨM LIÊN QUAN --- *@
+@if (ViewBag.RelatedProducts != null && ViewBag.RelatedProducts.Count > 0)
+{
+    <h2 class="section-title">RELATED PRODUCTS</h2>
+    <div class="row">
+        @foreach (var item in ViewBag.RelatedProducts)
+        {
+            @* Tái sử dụng Partial View card sản phẩm một cách hiệu quả *@
+            <partial name="_ProductCardPartial" model="item" />
+        }
+    </div>
+}
+@* ---------------------------------- *@
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
