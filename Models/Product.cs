@@ -29,5 +29,8 @@ namespace Horizon.Models
         public bool IsFeature {  get; set; } = false;//Danh dau san pham noi bat
         [Column(TypeName ="decimal(18,2)")]
         public decimal? SalePrice { get; set; }//Gia sau khi giam
+
+        // Navigation property: Một Product có thể có nhiều Review
+        public virtual List<Review> Reviews { get; set; } = new();
     }
 }

@@ -351,3 +351,8 @@ h1, h2, h3, h4, h5, h6 {
     font-size: 0.9rem;
     color: var(--gfl-text-secondary);
 }
+
+.star {
+    color: var(--gfl-accent-yellow);
+    font-size: 1.2rem;
+}

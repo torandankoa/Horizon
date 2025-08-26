@@ -63,6 +63,54 @@
         }
     </div>
 }
+
+@if (User.Identity.IsAuthenticated)
+{
+    <div class="card my-4">
+        <h5 class="card-header">Leave a Review</h5>
+        <div class="card-body">
+            <form asp-area="Customer" asp-controller="Reviews" asp-action="AddReview" method="post">
+                @Html.AntiForgeryToken()
+                <input type="hidden" name="productId" value="@Model.Id" />
+                <div class="mb-3">
+                    <label for="rating" class="form-label">Your Rating (1-5):</label>
+                    <input type="number" name="rating" id="rating" class="form-control" min="1" max="5" required />
+                </div>
+                <div class="mb-3">
+                    <label for="comment" class="form-label">Your Comment:</label>
+                    <textarea name="comment" id="comment" rows="3" class="form-control"></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">Submit Review</button>
+            </form>
+        </div>
+    </div>
+}
+
+<h4 class="mt-4">Customer Reviews</h4>
+@if (Model.Reviews != null && Model.Reviews.Any())
+{
+    foreach (var review in Model.Reviews.OrderByDescending(r => r.ReviewDate))
+    {
+        <div class="card card-body mb-3">
+            <div>
+                @for (int i = 1; i <= 5; i++)
+                {
+                    <span class="star">@(i <= review.Rating ? "★" : "☆")</span>
+                }
+                <span class="ms-2 fw-bold">@review.User.UserName</span>
+                <small class="text-muted float-end">@review.ReviewDate.ToShortDateString()</small>
+            </div>
+            <p class="mt-2 mb-0">@review.Comment</p>
+        </div>
+    }
+}
+else
+{
+    <p>No reviews yet. Be the first to leave a review!</p>
+}
+
+
+
 @* ---------------------------------- *@
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />

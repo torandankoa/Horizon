@@ -61,6 +61,8 @@ namespace Horizon.Areas.Customer.Controllers // Namespace phải đúng
             // Lấy sản phẩm chính mà người dùng đang xem
             var product = await _context.Products
                 .Include(p => p.Category)
+                .Include(p => p.Reviews)
+                    .ThenInclude(r => r.User)
                 .FirstOrDefaultAsync(m => m.Id == id);
 
             if (product == null)
