@@ -58,27 +58,7 @@ namespace Horizon.Areas.Customer.Controllers // Namespace phải đúng
                 return NotFound();
             }
 
-            // Lấy sản phẩm chính mà người dùng đang xem
-            var product = await _context.Products
-                .Include(p => p.Category)
-                .FirstOrDefaultAsync(m => m.Id == id);
-
-            if (product == null)
-            {
-                return NotFound();
-            }
-
-            // Lấy danh sách các sản phẩm liên quan
-            // Tiêu chí: Cùng danh mục, không phải là chính nó, lấy ngẫu nhiên 4 sản phẩm
-            var relatedProducts = await _context.Products
-                .AsNoTracking()
-                .Include(p => p.Category)
-                .Where(p => p.CategoryId == product.CategoryId && p.Id != product.Id)
-                .Take(4)
-                .ToListAsync();
-
-            // Gửi danh sách sản phẩm liên quan sang View bằng ViewBag
-            ViewBag.RelatedProducts = relatedProducts;
+            
 
             return View(product);
         }
