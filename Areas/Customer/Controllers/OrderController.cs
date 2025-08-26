@@ -107,5 +107,47 @@ namespace Horizon.Areas.Customer.Controllers
             // Hiển thị trang cảm ơn
             return View();
         }
+
+        // GET: /Customer/Order/History
+        public async Task<IActionResult> History()
+        {
+            // Lấy UserId của người dùng đang đăng nhập
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            // Truy vấn tất cả các đơn hàng của người dùng đó, sắp xếp theo ngày mới nhất
+            var orders = await _context.Orders
+                                   .Where(o => o.UserId == userId)
+                                   .OrderByDescending(o => o.OrderDate)
+                                   .ToListAsync();
+
+            return View(orders);
+        }
+
+        // GET: /Customer/Order/Details/5
+        public async Task<IActionResult> Details(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            // Lấy UserId của người dùng đang đăng nhập
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            // Truy vấn đơn hàng, bao gồm cả chi tiết (OrderDetails) và thông tin sản phẩm (Product)
+            var order = await _context.Orders
+                .Include(o => o.OrderDetails)
+                    .ThenInclude(od => od.Product) // Quan trọng: Lấy cả thông tin sản phẩm trong chi tiết
+                .Where(o => o.Id == id && o.UserId == userId) // Đảm bảo user chỉ xem được đơn hàng của chính mình
+                .FirstOrDefaultAsync();
+
+            if (order == null)
+            {
+                return NotFound(); // Không tìm thấy đơn hàng hoặc không phải của user này
+            }
+
+            return View(order);
+        }
+
     }
 }

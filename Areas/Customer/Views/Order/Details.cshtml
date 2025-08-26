@@ -1,0 +1,53 @@
+﻿@model Order
+
+@{
+    ViewData["Title"] = $"Order Details #{Model.Id}";
+}
+
+<h1>@ViewData["Title"]</h1>
+<hr />
+
+<div class="row">
+    <div class="col-md-6">
+        <h4>Shipping Information</h4>
+        <p>
+            <strong>Recipient:</strong> @Model.CustomerName <br />
+            <strong>Address:</strong> @Model.ShippingAddress <br />
+            <strong>Phone:</strong> @Model.PhoneNumber
+        </p>
+    </div>
+    <div class="col-md-6 text-md-end">
+        <h4>Order Summary</h4>
+        <p>
+            <strong>Order Date:</strong> @Model.OrderDate.ToString("g") <br />
+            <strong>Total Amount:</strong> <span class="fw-bold">@Model.TotalAmount.ToString("C")</span> <br />
+            <strong>Status:</strong> <span class="badge bg-info">@Model.Status</span>
+        </p>
+    </div>
+</div>
+
+<h4 class="mt-4">Items in this Order</h4>
+<table class="table table-cart">
+    <thead>
+        <tr>
+            <th colspan="2">Product</th>
+            <th class="text-center">Quantity</th>
+            <th class="text-end">Price</th>
+            <th class="text-end">Subtotal</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var detail in Model.OrderDetails)
+        {
+            <tr>
+                <td style="width: 80px;"><img src="@(detail.Product.ImageUrl ?? "/images/placeholder.png")" class="img-fluid rounded" /></td>
+                <td>@detail.Product.Name</td>
+                <td class="text-center">@detail.Quantity</td>
+                <td class="text-end">@detail.Price.ToString("C")</td>
+                <td class="text-end">@((detail.Quantity * detail.Price).ToString("C"))</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<a asp-action="History" class="btn btn-secondary mt-3">Back to Order History</a>
