@@ -1,93 +1,98 @@
-# Đồ án Cuối kỳ: Website E-commerce Horizon
+#  Horizon 🚀 - E-commerce Website for Gamers
 
-**Horizon** là một dự án website thương mại điện tử được xây dựng trong 10 ngày, lấy cảm hứng từ vũ trụ và thiết kế của trò chơi "Girl's Frontline". Trang web cho phép người dùng xem, tìm kiếm, mua sắm các sản phẩm (hư cấu) và cung cấp một trang quản trị mạnh mẽ để quản lý toàn bộ hệ thống.
+![Horizon Showcase]([link_den_anh_banner_dep_nhat_cua_ban])
 
-## 🚀 Demo & Hình ảnh
+**Horizon** is a final-term project, a fully functional e-commerce web application built in 10 days using ASP.NET Core 8. The project is designed for selling gaming consoles, game discs, and accessories, with a unique UI/UX inspired by the high-tech, dark-mode aesthetic of the Binance trading platform.
 
-*(Mẹo: Hãy chụp vài bức ảnh đẹp nhất của trang web - trang chủ, trang chi tiết sản phẩm, trang giỏ hàng, trang dashboard admin - và chèn vào đây để README thêm phần sống động)*
+---
 
-![Trang chủ Horizon](link_den_anh_trang_chu.png)
-*Giao diện trang chủ với phong cách dark-mode và các sản phẩm mới nhất.*
+## ✨ Key Features
 
-![Dashboard Admin](link_den_anh_dashboard.png)
-*Trang Dashboard của Admin với các thống kê và biểu đồ trực quan.*
+The application is architected with a clean separation between the customer-facing storefront and the powerful admin panel, utilizing ASP.NET Core's **Areas**.
 
-## ✨ Các Chức năng Nổi bật
+### 👤 Customer Area
 
-Dự án được phân chia thành 2 khu vực chính với các chức năng riêng biệt cho Khách hàng và Quản trị viên.
+- **Themed UI/UX:** A complete visual overhaul inspired by Binance, featuring a dark-mode interface with a black and gold accent color palette for a premium, modern feel.
+- **Interactive Homepage:**
+    - Displays curated sections for **Featured Collections**, **On Sale Items**, and **Newest Arrivals**.
+    - A unique **Chibi Animation Stage** where animated characters patrol. Clicking on a character reveals a dialogue box.
+    - **Background Music Player** with a toggle button to enhance the immersive experience.
+- **Seamless Shopping Flow:**
+    - **Product Browsing:** A dedicated Shop page to view all products.
+    - **Related Products:** The product details page suggests other items from the same category to encourage further exploration.
+    - **Shopping Cart:** Fully functional cart using `Session` storage, allowing users to add, update quantities, and remove items.
+    - **Order Placement:** A secure checkout process that requires authentication, records the order in the database, and updates product stock in real-time.
+- **User Authentication:**
+    - Secure user Registration and Login system powered by ASP.NET Core Identity.
+    - Custom-designed, visually appealing Login and Register pages with animated video backgrounds.
+- **Live Interaction:** Integrated **Tawk.to** live chat widget for instant customer support.
 
-### I. Khu vực Khách hàng (Customer Area)
+### 🔐 Admin Area
 
-- **Giao diện Chủ đề:** Toàn bộ giao diện được "lột xác" theo phong cách sci-fi military, sử dụng tông màu tối và màu vàng hổ phách làm điểm nhấn, mang lại cảm giác công nghệ cao.
-- **Trang chủ Động:**
-    - Hiển thị danh sách các sản phẩm mới nhất.
-    - **Chibi Animation:** Một "sân khấu" nhỏ với các nhân vật chibi di chuyển qua lại, khi click vào sẽ hiển thị lời thoại đặc trưng, tạo sự sống động và thú vị.
-- **Xem Sản phẩm:**
-    - Trang `/Shop` hiển thị tất cả sản phẩm dưới dạng card.
-    - Trang chi tiết sản phẩm với bố cục 2 cột (hình ảnh/video và thông tin chi tiết).
-- **Tìm kiếm & Lọc:** Cho phép tìm kiếm sản phẩm theo tên và lọc theo danh mục.
-- **Giỏ hàng (Shopping Cart):**
-    - Sử dụng `Session` để lưu trữ giỏ hàng cho người dùng.
-    - Các chức năng: Thêm vào giỏ, Cập nhật số lượng, Xóa sản phẩm.
-- **Luồng Đặt hàng:**
-    - Yêu cầu đăng nhập để tiến hành thanh toán.
-    - Form điền thông tin giao hàng.
-    - Tự động trừ kho và lưu lịch sử đơn hàng vào cơ sở dữ liệu.
-- **Xác thực Người dùng:**
-    - Đăng ký và Đăng nhập tài khoản.
-    - Giao diện đăng nhập/đăng ký được tùy chỉnh với video nền ấn tượng.
-- **Tương tác:** Tích hợp cửa sổ chat live Tawk.to.
+- **Secure & Role-Based Access:** The entire admin panel is protected. Only users with the "Admin" role can access its functionalities.
+- **Comprehensive Dashboard:**
+    - **At-a-glance Statistics:** Displays key metrics like Total Revenue, Total Orders, Total Products, and Total Customers.
+    - **Data Visualization:** Utilizes **Chart.js** to render interactive charts: a doughnut chart for product distribution by category and a bar chart for daily revenue over the last 7 days.
+- **Content Management (CRUD):**
+    - **Product Management:** Full CRUD capabilities for products, including a flexible image uploader (local file or external URL).
+    - **Category Management:** Full CRUD for product categories.
+    - **Order Management:** A dedicated interface for admins to view all customer orders, check details, and update their status (e.g., from "Processing" to "Shipped").
+- **Advanced Filtering:** Admins can filter the order list by month and year to easily track past transactions.
 
-### II. Khu vực Quản trị (Admin Area)
+---
 
-- **Bảo mật & Phân quyền:** Toàn bộ khu vực Admin được bảo vệ, chỉ những tài khoản có vai trò "Admin" mới có thể truy cập.
-- **Dashboard Thống kê:**
-    - Hiển thị các số liệu tổng quan: Tổng doanh thu, Tổng đơn hàng, Tổng sản phẩm, Tổng số khách hàng.
-    - **Biểu đồ trực quan:** Sử dụng Chart.js để vẽ biểu đồ tròn (phân loại sản phẩm) và biểu đồ cột (doanh thu theo ngày).
-- **Quản lý Sản phẩm (CRUD):**
-    - Chức năng Thêm, Sửa, Xóa, Xem danh sách sản phẩm.
-    - Hỗ trợ upload ảnh từ máy tính hoặc dùng URL từ bên ngoài.
-    - Tự động xóa file ảnh trên server khi sản phẩm bị xóa.
-- **Quản lý Danh mục (CRUD):** Chức năng Thêm, Sửa, Xóa danh mục sản phẩm.
+## 🛠️ Technology Stack
 
-## 🛠️ Công nghệ Sử dụng
+| Category | Technology / Tool |
+| :--- | :--- |
+| **Backend** | .NET 8, ASP.NET Core 8 MVC, ASP.NET Core Identity, Entity Framework Core 8 |
+| **Frontend** | HTML5, CSS3, JavaScript, Bootstrap 5, Chart.js, jQuery |
+| **Database** | Microsoft SQL Server |
+| **Dev Tools** | Visual Studio 2022, Git & GitHub, IIS Express |
+| **Third-party**| Tawk.to Live Chat |
 
-### Backend
-- **Framework:** ASP.NET Core 8 MVC
-- **Database:** Microsoft SQL Server
-- **ORM:** Entity Framework Core 8
-- **Authentication:** ASP.NET Core Identity (Hỗ trợ Roles: Admin, Customer)
+---
 
-### Frontend
-- **Styling:** HTML5, CSS3, Bootstrap 5
-- **JavaScript:**
-    - Vanilla JS
-    - **Chart.js** cho việc vẽ biểu đồ
+## ⚙️ Setup and Installation
 
-### Công cụ & Quy trình
-- **IDE:** Visual Studio 2022
-- **Version Control:** Git & GitHub (sử dụng quy trình Feature Branch)
-- **Project Management:** ClickUp (theo dõi tiến độ cá nhân)
+To run this project locally, follow these steps:
 
-## 🔧 Hướng dẫn Cài đặt và Chạy thử
-
-1.  **Clone repository:**
+1.  **Clone the repository:**
     ```bash
     git clone https://github.com/your-username/Horizon.git
     ```
-2.  **Mở project** bằng Visual Studio 2022.
-3.  **Cấu hình Chuỗi kết nối:**
-    - Mở file `appsettings.json`.
-    - Thay đổi chuỗi kết nối trong `ConnectionStrings` cho phù hợp với môi trường SQL Server của bạn.
-4.  **Tạo Cơ sở dữ liệu:**
-    - Mở `Package Manager Console`.
-    - Chạy lệnh: `Update-Database`.
-5.  **Chạy ứng dụng:**
-    - Nhấn `F5` hoặc nút "Start Debugging".
-    - Ứng dụng sẽ tự động chạy `SeedData` để tạo vai trò và tài khoản Admin mặc định.
-    - **Tài khoản Admin:**
-        - **Email:** `admin@horizon.com`
-        - **Password:** `Admin@123`
+2.  **Open the project** in Visual Studio 2022.
+3.  **Configure the Connection String:**
+    - Open the `appsettings.json` file.
+    - Modify the `DefaultConnection` string under `ConnectionStrings` to match your local SQL Server instance.
+4.  **Create and Seed the Database:**
+    - Open the **Package Manager Console**.
+    - Run the command: `Update-Database`. This will create the database and all necessary tables.
+5.  **Run the application:**
+    - Press `F5` or the "Start Debugging" button.
+    - The application will automatically seed the database with "Admin" and "Customer" roles, and a default admin account will be created.
 
 ---
-Cảm ơn đã xem qua đồ án của tôi!
+
+### 🔑 Default Admin Account
+
+-   **Email:** `admin@horizon.com`
+-   **Password:** `Admin@123`
+
+---
+
+## 📸 Screenshots
+
+*(This is the perfect place to showcase your hard work!)*
+
+**Customer Homepage**
+![Customer Homepage]([link_den_anh_trang_chu])
+
+**Product Details Page**
+![Product Details Page]([link_den_anh_trang_chi_tiet])
+
+**Admin Dashboard**
+![Admin Dashboard]([link_den_anh_dashboard])
+
+**Shopping Cart**
+![Shopping Cart]([link_den_anh_gio_hang])
