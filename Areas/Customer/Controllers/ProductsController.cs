@@ -3,7 +3,9 @@ using Horizon.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using X.PagedList;
 using System.Threading.Tasks;
+
 
 namespace Horizon.Areas.Customer.Controllers // Namespace phải đúng
 {
@@ -25,27 +27,27 @@ namespace Horizon.Areas.Customer.Controllers // Namespace phải đúng
                                                orderby c.Name
                                                select c.Name;
 
-            // 2. Lấy danh sách Products và chuẩn bị áp dụng bộ lọc
-            var products = from p in _context.Products.Include(p => p.Category)
-                           select p;
+            // 2. Lấy danh sách Products và áp dụng bộ lọc
+            var productsQuery = from p in _context.Products.Include(p => p.Category)
+                                select p;
 
-            // 3. Áp dụng bộ lọc nếu có
             if (!string.IsNullOrEmpty(searchString))
             {
-                products = products.Where(s => s.Name.Contains(searchString));
+                productsQuery = productsQuery.Where(s => s.Name.Contains(searchString));
             }
 
             if (!string.IsNullOrEmpty(productCategory))
             {
-                products = products.Where(x => x.Category.Name == productCategory);
+                productsQuery = productsQuery.Where(x => x.Category.Name == productCategory);
             }
 
-            // 4. Truyền dữ liệu tìm kiếm và lọc lên View để "nhớ" lựa chọn
+            // 3. Truyền dữ liệu lên View
             ViewBag.ProductCategory = new SelectList(await categoryQuery.Distinct().ToListAsync());
             ViewData["CurrentSearchString"] = searchString;
+            ViewData["CurrentCategory"] = productCategory;
 
-            // 5. Trả về View với danh sách sản phẩm đã được lọc
-            return View(await products.ToListAsync());
+            // Trả về View với danh sách sản phẩm đã được lọc
+            return View(await productsQuery.ToListAsync());
         }
 
         // GET: /Customer/Products/Details/5
@@ -56,6 +58,7 @@ namespace Horizon.Areas.Customer.Controllers // Namespace phải đúng
                 return NotFound();
             }
 
+            // Lấy sản phẩm chính mà người dùng đang xem
             var product = await _context.Products
                 .Include(p => p.Category)
                 .FirstOrDefaultAsync(m => m.Id == id);
@@ -65,7 +68,19 @@ namespace Horizon.Areas.Customer.Controllers // Namespace phải đúng
                 return NotFound();
             }
 
-            return View(product); // View này phải nằm ở /Areas/Customer/Views/Products/Details.cshtml
+            // Lấy danh sách các sản phẩm liên quan
+            // Tiêu chí: Cùng danh mục, không phải là chính nó, lấy ngẫu nhiên 4 sản phẩm
+            var relatedProducts = await _context.Products
+                .AsNoTracking()
+                .Include(p => p.Category)
+                .Where(p => p.CategoryId == product.CategoryId && p.Id != product.Id)
+                .Take(4)
+                .ToListAsync();
+
+            // Gửi danh sách sản phẩm liên quan sang View bằng ViewBag
+            ViewBag.RelatedProducts = relatedProducts;
+
+            return View(product);
         }
     }
 }
