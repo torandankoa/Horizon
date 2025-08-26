@@ -2,10 +2,39 @@
 
 @{
     ViewData["Title"] = $"Order Details #{Model.Id}";
+
+    // Logic nhỏ để gán màu sắc cho Status Badge
+    var statusBgClass = "bg-secondary";
+    switch (Model.Status)
+    {
+        case "Processing":
+            statusBgClass = "bg-primary";
+            break;
+        case "Shipped":
+            statusBgClass = "bg-info";
+            break;
+        case "Completed":
+            statusBgClass = "bg-success";
+            break;
+        case "Cancelled":
+            statusBgClass = "bg-danger";
+            break;
+    }
 }
 
-<h1>@ViewData["Title"]</h1>
-<hr />
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a asp-area="Admin" asp-action="Index">Manage Orders</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Order #@Model.Id</li>
+    </ol>
+</nav>
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h1 class="h3">@ViewData["Title"]</h1>
+    <div>
+        <span class="badge @statusBgClass fs-6">@Model.Status</span>
+    </div>
+</div>
 
 @if (TempData["Success"] != null)
 {
@@ -13,59 +42,92 @@
 }
 
 <div class="row">
-    @* Thông tin Khách hàng & Giao hàng *@
-    <div class="col-md-6">
-        <h4>Customer & Shipping Info</h4>
-        <dl class="row">
-            <dt class="col-sm-4">Customer Email</dt>
-            <dd class="col-sm-8">@Model.User?.Email</dd>
-            <dt class="col-sm-4">Recipient Name</dt>
-            <dd class="col-sm-8">@Model.CustomerName</dd>
-            <dt class="col-sm-4">Shipping Address</dt>
-            <dd class="col-sm-8">@Model.ShippingAddress</dd>
-            <dt class="col-sm-4">Phone Number</dt>
-            <dd class="col-sm-8">@Model.PhoneNumber</dd>
-        </dl>
+    @* --- CỘT BÊN TRÁI: THÔNG TIN KHÁCH HÀNG VÀ ĐƠN HÀNG --- *@
+    <div class="col-lg-7">
+        <div class="card mb-4">
+            <div class="card-header">
+                Customer & Shipping Information
+            </div>
+            <div class="card-body">
+                <dl class="row mb-0">
+                    <dt class="col-sm-4">Customer Email</dt>
+                    <dd class="col-sm-8">@Model.User?.Email</dd>
+
+                    <dt class="col-sm-4">Recipient Name</dt>
+                    <dd class="col-sm-8">@Model.CustomerName</dd>
+
+                    <dt class="col-sm-4">Shipping Address</dt>
+                    <dd class="col-sm-8">@Model.ShippingAddress</dd>
+
+                    <dt class="col-sm-4">Phone Number</dt>
+                    <dd class="col-sm-8">@Model.PhoneNumber</dd>
+
+                    <dt class="col-sm-4">Order Date</dt>
+                    <dd class="col-sm-8">@Model.OrderDate.ToString("g")</dd>
+                </dl>
+            </div>
+        </div>
     </div>
 
-    @* Cập nhật Trạng thái Đơn hàng *@
-    <div class="col-md-6">
-        <h4>Update Status</h4>
-        <form asp-action="UpdateStatus" asp-route-id="@Model.Id" method="post">
-            <div class="input-group">
-                <select name="status" class="form-select">
-                    <option selected="@(Model.Status == "Processing")">Processing</option>
-                    <option selected="@(Model.Status == "Shipped")">Shipped</option>
-                    <option selected="@(Model.Status == "Completed")">Completed</option>
-                    <option selected="@(Model.Status == "Cancelled")">Cancelled</option>
-                </select>
-                <button type="submit" class="btn btn-primary">Update</button>
+    @* --- CỘT BÊN PHẢI: CẬP NHẬT TRẠNG THÁI VÀ TÓM TẮT --- *@
+    <div class="col-lg-5">
+        <div class="card mb-4">
+            <div class="card-header">
+                Update Status
             </div>
-        </form>
+            <div class="card-body">
+                <form asp-action="UpdateStatus" asp-route-id="@Model.Id" method="post">
+                    <div class="input-group">
+                        <select name="status" class="form-select">
+                            <option selected="@(Model.Status == "Processing")">Processing</option>
+                            <option selected="@(Model.Status == "Shipped")">Shipped</option>
+                            <option selected="@(Model.Status == "Completed")">Completed</option>
+                            <option selected="@(Model.Status == "Cancelled")">Cancelled</option>
+                        </select>
+                        <button type="submit" class="btn btn-primary">Update</button>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
 </div>
 
-<h4 class="mt-4">Items in this Order</h4>
-<table class="table table-bordered">
-    <thead>
-        <tr>
-            <th>Product Name</th>
-            <th class="text-center">Quantity</th>
-            <th class="text-end">Price (at time of purchase)</th>
-            <th class="text-end">Subtotal</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var detail in Model.OrderDetails)
-        {
-            <tr>
-                <td>@detail.Product.Name</td>
-                <td class="text-center">@detail.Quantity</td>
-                <td class="text-end">@detail.Price.ToString("C")</td>
-                <td class="text-end">@((detail.Quantity * detail.Price).ToString("C"))</td>
-            </tr>
-        }
-    </tbody>
-</table>
+@* --- BẢNG CHI TIẾT SẢN PHẨM TRONG ĐƠN HÀNG --- *@
+<div class="card shadow mb-4">
+    <div class="card-header">
+        <h6 class="m-0 font-weight-bold">Items in this Order</h6>
+    </div>
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table mb-0">
+                <thead>
+                    <tr>
+                        <th>Product Name</th>
+                        <th class="text-center">Quantity</th>
+                        <th class="text-end">Price (at time of purchase)</th>
+                        <th class="text-end">Subtotal</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var detail in Model.OrderDetails)
+                    {
+                        <tr>
+                            <td>@detail.Product.Name</td>
+                            <td class="text-center">@detail.Quantity</td>
+                            <td class="text-end">@detail.Price.ToString("C")</td>
+                            <td class="text-end">@((detail.Quantity * detail.Price).ToString("C"))</td>
+                        </tr>
+                    }
+                </tbody>
+                <tfoot>
+                    <tr class="fw-bold">
+                        <td colspan="3" class="text-end">Total Amount:</td>
+                        <td class="text-end">@Model.TotalAmount.ToString("C")</td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+</div>
 
 <a asp-action="Index" class="btn btn-secondary mt-3">Back to Orders List</a>

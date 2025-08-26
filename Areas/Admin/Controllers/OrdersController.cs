@@ -1,5 +1,6 @@
 ﻿using Horizon.Data;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 
 namespace Horizon.Areas.Admin.Controllers
@@ -15,14 +16,43 @@ namespace Horizon.Areas.Admin.Controllers
         }
 
         // GET: /Admin/Orders
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int? month, int? year)
         {
-            // Lấy tất cả đơn hàng, bao gồm cả thông tin người dùng liên quan
-            // Sắp xếp đơn hàng mới nhất lên đầu
-            var orders = await _context.Orders
-                                   .Include(o => o.User)
-                                   .OrderByDescending(o => o.OrderDate)
-                                   .ToListAsync();
+            // Bắt đầu với một truy vấn cơ sở lấy tất cả đơn hàng
+            var ordersQuery = _context.Orders
+                                      .Include(o => o.User)
+                                      .AsQueryable();
+
+            // Lấy năm hiện tại để làm giá trị mặc định cho dropdown
+            int currentYear = DateTime.UtcNow.Year;
+            var yearList = Enumerable.Range(currentYear - 5, 6).Reverse();
+
+            // Nếu không có năm nào được chọn, mặc định là năm hiện tại
+            if (!year.HasValue)
+            {
+                year = currentYear;
+            }
+
+            // Áp dụng bộ lọc theo NĂM
+            if (year.HasValue && year > 0)
+            {
+                ordersQuery = ordersQuery.Where(o => o.OrderDate.Year == year.Value);
+            }
+
+            // Áp dụng bộ lọc theo THÁNG
+            if (month.HasValue && month > 0)
+            {
+                ordersQuery = ordersQuery.Where(o => o.OrderDate.Month == month.Value);
+            }
+
+            // Sắp xếp và thực thi truy vấn
+            var orders = await ordersQuery.OrderByDescending(o => o.OrderDate).ToListAsync();
+
+            // Gửi các giá trị lọc và danh sách năm về cho View để hiển thị trên form
+            ViewBag.SelectedMonth = month;
+            ViewBag.SelectedYear = year;
+            ViewBag.YearList = new SelectList(yearList);
+
             return View(orders);
         }
 

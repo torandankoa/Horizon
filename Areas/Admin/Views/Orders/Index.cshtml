@@ -4,32 +4,114 @@
     ViewData["Title"] = "Manage Orders";
 }
 
-<h1>@ViewData["Title"]</h1>
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a asp-area="Admin" asp-controller="Home" asp-action="Index">Dashboard</a></li>
+        <li class="breadcrumb-item active" aria-current="page">@ViewData["Title"]</li>
+    </ol>
+</nav>
 
-<table class="table table-hover">
-    <thead>
-        <tr>
-            <th>Order ID</th>
-            <th>Customer</th>
-            <th>Order Date</th>
-            <th class="text-end">Total Amount</th>
-            <th>Status</th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var order in Model)
-        {
-            <tr>
-                <td>#@order.Id</td>
-                <td>@order.User?.Email</td> @* Hiển thị email người đặt *@
-                <td>@order.OrderDate.ToString("g")</td>
-                <td class="text-end">@order.TotalAmount.ToString("C")</td>
-                <td><span class="badge bg-primary">@order.Status</span></td>
-                <td class="text-end">
-                    <a asp-action="Details" asp-route-id="@order.Id" class="btn btn-sm btn-info">View Details</a>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+<h1 class="h3">@ViewData["Title"]</h1>
+<p class="mb-4">A list of all orders placed by customers.</p>
+
+@* --- FORM LỌC ĐÃ ĐƯỢC SỬA LỖI --- *@
+<div class="card card-body mb-4">
+    <form asp-area="Admin" asp-action="Index" method="get">
+        <div class="row align-items-end">
+
+            @* === DROPDOWN CHO THÁNG (ĐÃ SỬA LẠI ĐÚNG) === *@
+            <div class="col-md-5">
+                <label for="month" class="form-label">Filter by Month</label>
+                <select name="month" id="month" class="form-select">
+                    <option value="">-- All Months --</option>
+                    @for (int i = 1; i <= 12; i++)
+                    {
+                        <option value="@i" selected="@(ViewBag.SelectedMonth == i)">@System.Globalization.CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(i)</option>
+                    }
+                </select>
+            </div>
+
+            @* === DROPDOWN CHO NĂM (ĐÃ SỬA LẠI ĐÚNG) === *@
+            <div class="col-md-5">
+                <label for="year" class="form-label">Filter by Year</label>
+                @* Tag helper này sẽ tự động đọc SelectList và chọn đúng giá trị *@
+                <select name="year" id="year" class="form-select" asp-items="ViewBag.YearList">
+                    @* Có thể thêm một lựa chọn mặc định nếu cần *@
+                </select>
+            </div>
+
+            <div class="col-md-2">
+                <button type="submit" class="btn btn-primary w-100">Filter</button>
+            </div>
+        </div>
+    </form>
+</div>
+@* ---------------------------------- *@
+
+
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">All Orders</h6>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-hover" id="ordersTable">
+                <thead>
+                    <tr>
+                        <th>Order ID</th>
+                        <th>Customer</th>
+                        <th>Order Date</th>
+                        <th class="text-end">Total Amount</th>
+                        <th class="text-center">Status</th>
+                        <th class="text-end">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var order in Model)
+                    {
+                        // Logic nhỏ để gán màu sắc cho Status Badge
+                        var statusBgClass = "bg-secondary";
+                        switch (order.Status)
+                        {
+                            case "Processing":
+                                statusBgClass = "bg-primary";
+                                break;
+                            case "Shipped":
+                                statusBgClass = "bg-info";
+                                break;
+                            case "Completed":
+                                statusBgClass = "bg-success";
+                                break;
+                            case "Cancelled":
+                                statusBgClass = "bg-danger";
+                                break;
+                        }
+
+                        <tr>
+                            <td>#@order.Id</td>
+                            <td>@order.User?.Email</td>
+                            <td>@order.OrderDate.ToString("g")</td>
+                            <td class="text-end">@order.TotalAmount.ToString("C")</td>
+                            <td class="text-center">
+                                <span class="badge @statusBgClass">@order.Status</span>
+                            </td>
+                            <td class="text-end">
+                                <a asp-action="Details" asp-route-id="@order.Id" class="btn btn-sm btn-outline-info">View Details</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+@* (Tùy chọn) Thêm script để có thể tìm kiếm và sắp xếp bảng nếu muốn *@
+@section Scripts {
+    <script>
+        // Có thể thêm DataTables.js vào đây sau này để có bảng nâng cao
+        // $(document).ready(function () {
+        //     $('#ordersTable').DataTable();
+        // });
+    </script>
+}
