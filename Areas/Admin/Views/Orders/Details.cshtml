@@ -1,0 +1,71 @@
+﻿@model Order
+
+@{
+    ViewData["Title"] = $"Order Details #{Model.Id}";
+}
+
+<h1>@ViewData["Title"]</h1>
+<hr />
+
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success">@TempData["Success"]</div>
+}
+
+<div class="row">
+    @* Thông tin Khách hàng & Giao hàng *@
+    <div class="col-md-6">
+        <h4>Customer & Shipping Info</h4>
+        <dl class="row">
+            <dt class="col-sm-4">Customer Email</dt>
+            <dd class="col-sm-8">@Model.User?.Email</dd>
+            <dt class="col-sm-4">Recipient Name</dt>
+            <dd class="col-sm-8">@Model.CustomerName</dd>
+            <dt class="col-sm-4">Shipping Address</dt>
+            <dd class="col-sm-8">@Model.ShippingAddress</dd>
+            <dt class="col-sm-4">Phone Number</dt>
+            <dd class="col-sm-8">@Model.PhoneNumber</dd>
+        </dl>
+    </div>
+
+    @* Cập nhật Trạng thái Đơn hàng *@
+    <div class="col-md-6">
+        <h4>Update Status</h4>
+        <form asp-action="UpdateStatus" asp-route-id="@Model.Id" method="post">
+            <div class="input-group">
+                <select name="status" class="form-select">
+                    <option selected="@(Model.Status == "Processing")">Processing</option>
+                    <option selected="@(Model.Status == "Shipped")">Shipped</option>
+                    <option selected="@(Model.Status == "Completed")">Completed</option>
+                    <option selected="@(Model.Status == "Cancelled")">Cancelled</option>
+                </select>
+                <button type="submit" class="btn btn-primary">Update</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<h4 class="mt-4">Items in this Order</h4>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Product Name</th>
+            <th class="text-center">Quantity</th>
+            <th class="text-end">Price (at time of purchase)</th>
+            <th class="text-end">Subtotal</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var detail in Model.OrderDetails)
+        {
+            <tr>
+                <td>@detail.Product.Name</td>
+                <td class="text-center">@detail.Quantity</td>
+                <td class="text-end">@detail.Price.ToString("C")</td>
+                <td class="text-end">@((detail.Quantity * detail.Price).ToString("C"))</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<a asp-action="Index" class="btn btn-secondary mt-3">Back to Orders List</a>
