@@ -5,56 +5,56 @@
 }
 
 <div class="d-sm-flex align-items-center justify-content-between mb-4">
-    <h1 class="h3 mb-0 text-gray-800">@ViewData["Title"]</h1>
+    <h1 class="h3 mb-0">@ViewData["Title"]</h1>
 </div>
 
 @* ================================================================ *@
-@* HÀNG THỨ NHẤT: DÀNH CHO CÁC CARD THỐNG KÊ SỐ LIỆU            *@
+@* HÀNG THỨ NHẤT: CÁC CARD THỐNG KÊ SỐ LIỆU                        *@
 @* ================================================================ *@
 <div class="row">
     <div class="col-xl-3 col-md-6 mb-4">
-        <div class="card border-left-primary shadow h-100 py-2">
+        <div class="card shadow h-100 py-2">
             <div class="card-body">
                 <div class="row no-gutters align-items-center">
                     <div class="col mr-2">
                         <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Total Revenue</div>
-                        <div class="h5 mb-0 font-weight-bold text-gray-800">@Model.TotalRevenue.ToString("C")</div>
+                        <div class="h5 mb-0 font-weight-bold">@Model.TotalRevenue.ToString("C")</div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
     <div class="col-xl-3 col-md-6 mb-4">
-        <div class="card border-left-success shadow h-100 py-2">
+        <div class="card shadow h-100 py-2">
             <div class="card-body">
                 <div class="row no-gutters align-items-center">
                     <div class="col mr-2">
                         <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Total Orders</div>
-                        <div class="h5 mb-0 font-weight-bold text-gray-800">@Model.TotalOrders</div>
+                        <div class="h5 mb-0 font-weight-bold">@Model.TotalOrders</div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
     <div class="col-xl-3 col-md-6 mb-4">
-        <div class="card border-left-info shadow h-100 py-2">
+        <div class="card shadow h-100 py-2">
             <div class="card-body">
                 <div class="row no-gutters align-items-center">
                     <div class="col mr-2">
                         <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Total Products</div>
-                        <div class="h5 mb-0 font-weight-bold text-gray-800">@Model.TotalProducts</div>
+                        <div class="h5 mb-0 font-weight-bold">@Model.TotalProducts</div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
     <div class="col-xl-3 col-md-6 mb-4">
-        <div class="card border-left-warning shadow h-100 py-2">
+        <div class="card shadow h-100 py-2">
             <div class="card-body">
                 <div class="row no-gutters align-items-center">
                     <div class="col mr-2">
                         <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">Total Customers</div>
-                        <div class="h5 mb-0 font-weight-bold text-gray-800">@Model.TotalUsers</div>
+                        <div class="h5 mb-0 font-weight-bold">@Model.TotalUsers</div>
                     </div>
                 </div>
             </div>
@@ -63,68 +63,100 @@
 </div>
 
 @* ================================================================ *@
-@* HÀNG THỨ HAI: DÀNH CHO CÁC BIỂU ĐỒ                            *@
+@* HÀNG THỨ HAI: CÁC BIỂU ĐỒ                                       *@
 @* ================================================================ *@
 <div class="row">
 
-    @* CỘT BÊN TRÁI: BIỂU ĐỒ TRÒN (Products by Category) *@
+    @* Cột bên trái cho BIỂU ĐỒ TRÒN (Top Selling Categories) *@
     <div class="col-lg-6">
         <div class="card shadow mb-4">
             <div class="card-header py-3">
-                <h6 class="m-0 font-weight-bold text-primary">Products by Category</h6>
+                <h6 class="m-0 font-weight-bold">Top Selling Categories (by Quantity)</h6>
             </div>
             <div class="card-body">
-                <canvas id="productsByCategoryChart"></canvas>
+                <canvas id="salesByCategoryChart"></canvas>
             </div>
         </div>
     </div>
 
-    @* CỘT BÊN PHẢI: BIỂU ĐỒ CỘT (Daily Revenue) *@
+    @* Cột bên phải cho BIỂU ĐỒ CỘT (Monthly Revenue) *@
     <div class="col-lg-6">
         <div class="card shadow mb-4">
-            <div class="card-header py-3">
-                <h6 class="m-0 font-weight-bold text-success">Daily Revenue (Last 7 Days)</h6>
+            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                <h6 class="m-0 font-weight-bold">Monthly Revenue</h6>
+                <form asp-area="Admin" asp-action="Index" method="get" class="d-inline-block">
+                    <select name="year" class="form-select form-select-sm" onchange="this.form.submit()" asp-items="@(ViewBag.YearList as SelectList)">
+                    </select>
+                </form>
             </div>
             <div class="card-body">
-                <canvas id="dailyRevenueChart"></canvas>
+                <canvas id="monthlyRevenueChart"></canvas>
             </div>
         </div>
     </div>
 </div>
 
+@* ================================================================ *@
+@* HÀNG THỨ BA: CẢNH BÁO TỒN KHO THẤP                             *@
+@* ================================================================ *@
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-danger">Low Stock Alerts (<= 5 items)</h6>
+    </div>
+    <div class="card-body">
+        @if (Model.LowStockProducts.Any())
+        {
+            <div class="table-responsive">
+                <table class="table table-hover mb-0">
+                    <thead> <tr> <th>Product</th> <th class="text-center">Remaining Quantity</th> <th></th> </tr> </thead>
+                    <tbody>
+                        @foreach (var product in Model.LowStockProducts)
+                        {
+                            <tr>
+                                <td>@product.Name</td>
+                                <td class="text-center fw-bold text-danger">@product.Quantity</td>
+                                <td class="text-end"><a asp-area="Admin" asp-controller="Products" asp-action="Edit" asp-route-id="@product.Id" class="btn btn-sm btn-outline-warning">Restock</a></td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+        else
+        {
+            <p class="text-success mb-0">Great! No products are currently low in stock.</p>
+        }
+    </div>
+</div>
 
-@* SECTION SCRIPT GIỮ NGUYÊN NHƯ CŨ *@
+
+@* SECTION SCRIPT ĐỂ VẼ BIỂU ĐỒ *@
 @section Scripts {
     <script>
         document.addEventListener("DOMContentLoaded", function () {
-            // --- BIỂU ĐỒ 1: PRODUCTS BY CATEGORY (BIỂU ĐỒ TRÒN) ---
-            const pieCtx = document.getElementById('productsByCategoryChart').getContext('2d');
-            const categoryNames = @Html.Raw(Json.Serialize(Model.ProductCategoryNames));
-            const productCounts = @Html.Raw(Json.Serialize(Model.ProductCategoryCounts));
+            // --- BIỂU ĐỒ 1: TOP SELLING CATEGORIES (BIỂU ĐỒ TRÒN) ---
+            const pieCtx = document.getElementById('salesByCategoryChart').getContext('2d');
+            const catNames = @Html.Raw(Json.Serialize(Model.SalesByCategoryNames));
+            const catCounts = @Html.Raw(Json.Serialize(Model.SalesByCategoryCounts));
             new Chart(pieCtx, {
                 type: 'doughnut',
                 data: {
-                    labels: categoryNames,
+                    labels: catNames,
                     datasets: [{
-                        label: '# of Products',
-                        data: productCounts,
+                        label: '# of Items Sold',
+                        data: catCounts,
                         backgroundColor: ['#4e73df', '#1cc88a', '#36b9cc', '#f6c23e', '#e74a3b', '#858796'],
-                        hoverBackgroundColor: ['#2e59d9', '#17a673', '#2c9faf', '#dda20a', '#be2617', '#60616f'],
-                        borderColor: 'white',
-                        borderWidth: 2
+                        borderColor: '#1e2029', // Match card background
+                        borderWidth: 3
                     }]
                 },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: { legend: { position: 'right' } }
-                }
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'right', labels: { color: '#e6e6e6' } } } }
             });
 
-            // --- BIỂU ĐỒ 2: DAILY REVENUE (BIỂU ĐỒ CỘT) ---
-            const barCtx = document.getElementById('dailyRevenueChart').getContext('2d');
-            const revenueLabels = @Html.Raw(Json.Serialize(Model.DailyRevenueLabels));
-            const revenueValues = @Html.Raw(Json.Serialize(Model.DailyRevenueValues));
+            // --- BIỂU ĐỒ 2: MONTHLY REVENUE (BIỂU ĐỒ CỘT) ---
+            const barCtx = document.getElementById('monthlyRevenueChart').getContext('2d');
+            const revenueLabels = @Html.Raw(Json.Serialize(Model.MonthlyRevenueLabels));
+            const revenueValues = @Html.Raw(Json.Serialize(Model.MonthlyRevenueValues));
             new Chart(barCtx, {
                 type: 'bar',
                 data: {
@@ -139,7 +171,10 @@
                 },
                 options: {
                     maintainAspectRatio: false,
-                    scales: { y: { beginAtZero: true, ticks: { callback: function(value) { return '$' + value.toLocaleString(); } } } },
+                    scales: {
+                        y: { beginAtZero: true, ticks: { callback: function(value) { return '$' + value.toLocaleString(); }, color: '#e6e6e6' }, grid: { color: 'rgba(255,255,255,0.1)' } },
+                        x: { ticks: { color: '#e6e6e6' }, grid: { display: false } }
+                    },
                     plugins: { legend: { display: false } }
                 }
             });
