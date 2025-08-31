@@ -16,6 +16,9 @@ namespace Horizon.Models
         [Column(TypeName = "decimal(18, 2)")]
         public decimal Price { get; set; } // Giá tại thời điểm mua
 
+        [NotMapped] // Quan trọng: Báo cho EF Core không tạo cột này trong CSDL
+        public decimal Subtotal => Quantity * Price;
+
         // Khóa ngoại đến Đơn hàng
         [Required]
         public int OrderId { get; set; }
