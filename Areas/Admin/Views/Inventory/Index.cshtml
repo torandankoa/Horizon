@@ -6,7 +6,27 @@
 
 <h1>@ViewData["Title"]</h1>
 <p>History of all product stock receipts.</p>
-
+@* --- FORM LỌC NÂNG CAO --- *@
+<div class="card card-body mb-4">
+    <form asp-action="Index" method="get">
+        <div class="row align-items-end">
+            <div class="col-md-5">
+                <label for="searchString" class="form-label">Search by Product Name</label>
+                <input type="text" name="searchString" id="searchString" class="form-control" value="@ViewData["CurrentSearchString"]" />
+            </div>
+            <div class="col-md-5">
+                <label for="categoryId" class="form-label">Filter by Category</label>
+                <select name="categoryId" id="categoryId" class="form-select" asp-items="ViewBag.CategoryList">
+                    <option value="">-- All Categories --</option>
+                </select>
+            </div>
+            <div class="col-md-2">
+                <button type="submit" class="btn btn-primary w-100">Filter</button>
+            </div>
+        </div>
+    </form>
+</div>
+@* ------------------------- *@
 <div class="card shadow mb-4">
     <div class="card-header">
         Receipt List

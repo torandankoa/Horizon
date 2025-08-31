@@ -2,6 +2,7 @@
 using Horizon.Data;
 using Horizon.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 
 [Area("Admin")]
@@ -11,12 +12,33 @@ public class InventoryController : AdminBaseController
     public InventoryController(MyDbContext context) { _context = context; }
 
     // GET: /Admin/Inventory
-    public async Task<IActionResult> Index()
+    public async Task<IActionResult> Index(int? categoryId, string searchString)
     {
-        var history = await _context.ProductReceipts
-                                .Include(p => p.Product)
-                                .OrderByDescending(p => p.ReceiptDate)
-                                .ToListAsync();
+        // Bắt đầu với một truy vấn cơ sở lấy tất cả lịch sử nhập hàng
+        var historyQuery = _context.ProductReceipts
+                                   .Include(p => p.Product)
+                                       .ThenInclude(prod => prod.Category) // Join thêm bảng Category
+                                   .AsQueryable();
+
+        // Áp dụng bộ lọc theo Tên sản phẩm
+        if (!string.IsNullOrEmpty(searchString))
+        {
+            historyQuery = historyQuery.Where(p => p.Product.Name.Contains(searchString));
+        }
+
+        // Áp dụng bộ lọc theo Danh mục
+        if (categoryId.HasValue && categoryId > 0)
+        {
+            historyQuery = historyQuery.Where(p => p.Product.CategoryId == categoryId.Value);
+        }
+
+        // Sắp xếp và thực thi truy vấn
+        var history = await historyQuery.OrderByDescending(p => p.ReceiptDate).ToListAsync();
+
+        // Chuẩn bị dữ liệu cho các dropdown lọc
+        ViewBag.CategoryList = new SelectList(await _context.Categories.OrderBy(c => c.Name).ToListAsync(), "Id", "Name", categoryId);
+        ViewData["CurrentSearchString"] = searchString;
+
         return View(history);
     }
 
