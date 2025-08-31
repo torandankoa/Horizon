@@ -1,0 +1,39 @@
+﻿@model IEnumerable<ProductReceipt>
+
+@{
+    ViewData["Title"] = "Receipt History";
+}
+
+<h1>@ViewData["Title"]</h1>
+<p>History of all product stock receipts.</p>
+
+<div class="card shadow mb-4">
+    <div class="card-header">
+        Receipt List
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>Receipt Date</th>
+                        <th>Product Name</th>
+                        <th class="text-center">Quantity Added</th>
+                        <th class="text-end">Cost Price (per item)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>@item.ReceiptDate.ToString("g")</td>
+                            <td>@item.Product?.Name</td>
+                            <td class="text-center">@item.Quantity</td>
+                            <td class="text-end">@item.CostPrice.ToString("C")</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

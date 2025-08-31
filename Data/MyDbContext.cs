@@ -12,6 +12,7 @@ namespace Horizon.Data
         public DbSet<Order> Orders { get; set; }
         public DbSet<OrderDetail> OrderDetails { get; set; }
         public DbSet<Review> Reviews { get; set; }
+        public DbSet<ProductReceipt> ProductReceipts { get; set; }
         public MyDbContext(DbContextOptions<MyDbContext> options) : base(options) { }
     }
 }

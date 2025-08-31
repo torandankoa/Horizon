@@ -91,7 +91,8 @@
                     <td>
                         @Html.DisplayFor(modelItem => item.Category.Name)
                     </td>
-                    <td>
+                    <td class="text-end">
+                        <a asp-area="Admin" asp-controller="Inventory" asp-action="AddStock" asp-route-productId="@item.Id" class="btn btn-sm btn-outline-success">Add Stock</a>
                         <a asp-area="Admin" asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-outline-primary">Edit</a>
                         <a asp-area="Admin" asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-outline-info">Details</a>
                         <a asp-area="Admin" asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-outline-danger">Delete</a>

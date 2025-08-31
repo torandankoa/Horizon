@@ -1,0 +1,36 @@
+﻿@model ProductReceipt
+
+@{
+    // Lấy thông tin sản phẩm từ ViewBag
+    var product = ViewBag.Product as Product;
+    ViewData["Title"] = $"Add Stock for {product?.Name}";
+}
+
+<h1>@ViewData["Title"]</h1>
+<hr />
+<div class="row">
+    <div class="col-md-6">
+        <form asp-action="AddStock">
+            <div asp-validation-summary="All" class="text-danger"></div>
+
+            @* Trường ProductId được ẩn đi vì đã có giá trị *@
+            <input type="hidden" asp-for="ProductId" />
+
+            <div class="form-group mb-3">
+                <label asp-for="Quantity" class="control-label">Quantity to Add</label>
+                <input asp-for="Quantity" class="form-control" type="number" min="1" />
+                <span asp-validation-for="Quantity" class="text-danger"></span>
+            </div>
+            <div class="form-group mb-3">
+                <label asp-for="CostPrice" class="control-label">Cost Price (per item)</label>
+                <input asp-for="CostPrice" class="form-control" />
+                <span asp-validation-for="CostPrice" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <input type="submit" value="Add to Inventory" class="btn btn-primary" />
+                <a asp-controller="Products" asp-action="Index" class="btn btn-secondary">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
