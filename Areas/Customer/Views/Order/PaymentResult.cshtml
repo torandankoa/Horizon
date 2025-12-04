@@ -1,0 +1,10 @@
+﻿@{
+    ViewData["Title"] = "Payment Result";
+}
+
+<div class="text-center">
+    <h1>@ViewData["Title"]</h1>
+    <p class="lead">@ViewBag.Message</p>
+    <hr />
+    <a asp-area="Customer" asp-controller="Order" asp-action="History" class="btn btn-primary">View Your Order History</a>
+</div>
