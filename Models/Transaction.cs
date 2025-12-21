@@ -7,9 +7,7 @@ namespace Horizon.Models
     {
         [Key]
         public long Id { get; set; } // Dùng long để khớp với kiểu dữ liệu của VNPAY
-
         public string TransactionType { get; set; } = "VNPAY";
-
         public int OrderId { get; set; }
         [ForeignKey("OrderId")]
         public virtual Order Order { get; set; }

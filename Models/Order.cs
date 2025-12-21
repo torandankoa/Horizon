@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Horizon.Models
 {
-    [Table("Orders")] // Đặt tên bảng là "Orders" (số nhiều)
+    [Table("Orders")]
     public class Order
     {
         [Key] // Khóa chính

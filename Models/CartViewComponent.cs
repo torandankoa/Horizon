@@ -7,7 +7,7 @@ namespace Horizon.Models
 {
     public class CartViewComponent : ViewComponent
     {
-        private const string CartSessionKey = "Cart"; // Đặt tên cho key của giỏ hàng trong session
+        private const string CartSessionKey = "Cart";
 
         public IViewComponentResult Invoke(HttpContext httpContext)
         {

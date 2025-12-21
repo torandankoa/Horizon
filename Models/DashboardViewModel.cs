@@ -6,8 +6,6 @@
         public int TotalCategories { get; set; }
         public int TotalOrders { get; set; }
         public decimal TotalRevenue { get; set; }
-
-        // <<< THÊM DÒNG NÀY VÀO ĐÂY >>>
         public int TotalUsers { get; set; }
 
         // Dữ liệu cho BIỂU ĐỒ TRÒN MỚI: Doanh số theo danh mục
