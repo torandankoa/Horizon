@@ -1,14 +1,15 @@
-﻿using Horizon.Models;
-using Horizon.Data;
+﻿using Horizon.Data;
+using Horizon.Infrastructure;
+using Horizon.Models;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using System.IO;
 namespace Horizon.Areas.Admin.Controllers
 {
     [Area("Admin")]
@@ -88,6 +89,11 @@ namespace Horizon.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Name,Description,Price,Quantity,CategoryId,ImageUrl,IsFeature,SalePrice")] Product product, IFormFile? imageFile)
         {
+            // TỰ SINH SLUG TỪ TÊN
+            product.Slug = product.Name.ToSlug();
+            // 2. Xóa lỗi kiểm tra của Slug vì chúng ta đã tự sinh nó ở trên, không cần người dùng nhập
+            ModelState.Remove("Slug");
+            ModelState.Remove("Category"); // Xóa luôn Category nếu nó báo lỗi null
             // Bây giờ chúng ta bind cả ImageUrl, nên không cần Remove khỏi ModelState
 
             if (ModelState.IsValid)
@@ -148,6 +154,11 @@ namespace Horizon.Areas.Admin.Controllers
             {
                 return NotFound();
             }
+            // 1.CẬP NHẬT LẠI SLUG KHI ĐỔI TÊN
+            product.Slug = product.Name.ToSlug();
+            // 2. Xóa lỗi kiểm tra cho Slug và Category
+            ModelState.Remove("Slug");
+            ModelState.Remove("Category");
 
             if (ModelState.IsValid)
             {

@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using X.PagedList;
 using System.Threading.Tasks;
-
+using Horizon.Infrastructure;
 
 namespace Horizon.Areas.Customer.Controllers
 {
@@ -51,24 +51,18 @@ namespace Horizon.Areas.Customer.Controllers
         }
 
         // GET: /Customer/Products/Details/5
-        public async Task<IActionResult> Details(int? id)
+        // GET: /Customer/Products/Details/m4a1-tactical-rifle
+        [Route("product/{slug}")] // Thêm Route để URL trông đẹp hơn
+        public async Task<IActionResult> Details(string slug)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            if (string.IsNullOrEmpty(slug)) return NotFound();
 
-            // Lấy sản phẩm chính mà người dùng đang xem
             var product = await _context.Products
                 .Include(p => p.Category)
-                .Include(p => p.Reviews)
-                    .ThenInclude(r => r.User)
-                .FirstOrDefaultAsync(m => m.Id == id);
+                .Include(p => p.Reviews).ThenInclude(r => r.User)
+                .FirstOrDefaultAsync(m => m.Slug == slug); // Tìm theo Slug thay vì ID
 
-            if (product == null)
-            {
-                return NotFound();
-            }
+            if (product == null) return NotFound();
 
             // Lấy danh sách các sản phẩm liên quan
             // Tiêu chí: Cùng danh mục, không phải là chính nó, lấy ngẫu nhiên 4 sản phẩm
