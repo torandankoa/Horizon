@@ -2,7 +2,7 @@
 using System.Net;
 using System.Security.Cryptography;
 using System.Text;
-
+// ReSharper disable InconsistentNaming
 namespace Horizon.Infrastructure
 {
     public class VnPayLibrary

@@ -1,6 +1,6 @@
-﻿using System.Text.Json; // Cần thiết để làm việc với JSON
+﻿using System.Text.Json; 
 
-namespace Horizon.Infrastructure // Namespace phải khớp với vị trí file
+namespace Horizon.Infrastructure
 {
     public static class SessionExtensions
     {

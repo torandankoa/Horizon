@@ -80,7 +80,7 @@ namespace Horizon.Data
                     PhoneNumber = "0123456789"
                 };
 
-                // Thêm 1-5 sản phẩm ngẫu nhiên vào mỗi đơn hàng
+                // Thêm 1-5 sản phẩm ngẫu nhiên vào mỗi đơn hàng.
                 decimal totalAmount = 0;
                 int itemsInOrder = random.Next(1, 6);
                 var productCache = new HashSet<int>(); // Đảm bảo không thêm trùng sản phẩm trong 1 đơn hàng
