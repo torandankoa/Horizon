@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// ========== PHẦN 1: ĐĂNG KÝ CÁC SERVICE ==========
+// ========== 1: ĐĂNG KÝ CÁC SERVICE ==========
 
 builder.Services.AddControllersWithViews();
 
@@ -16,11 +16,9 @@ builder.Services.AddDbContext<MyDbContext>(options =>
 });
 
 // Cấu hình Identity với hỗ trợ Roles
-// Thay thế dòng AddDefaultIdentity cũ của bạn bằng dòng này
 builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = false)
     .AddRoles<IdentityRole>() // <<< BẬT CHỨC NĂNG QUẢN LÝ VAI TRÒ
     .AddEntityFrameworkStores<MyDbContext>();
-
 
 // Đăng ký dịch vụ cho Session
 builder.Services.AddDistributedMemoryCache();
@@ -31,11 +29,10 @@ builder.Services.AddSession(options =>
     options.Cookie.IsEssential = true;
 });
 
-
-// ========== PHẦN 2: XÂY DỰNG ỨNG DỤNG ==========
+// ========== 2: XÂY DỰNG ỨNG DỤNG ==========
 var app = builder.Build();
 
-// ========== PHẦN 3: CẤU HÌNH HTTP REQUEST PIPELINE ==========
+// ========== 3: CẤU HÌNH HTTP REQUEST PIPELINE ==========
 
 if (!app.Environment.IsDevelopment())
 {
@@ -59,14 +56,11 @@ app.MapControllerRoute(
 // Map các trang Razor Pages của Identity <<< THÊM DÒNG NÀY
 app.MapRazorPages();
 
-
-// Khối code để chạy SeedData (đã đúng)
+// Khối code SeedData 
 using (var scope = app.Services.CreateScope())
 {
-    // Không cần 'using Horizon.Data;' ở đây nữa
     await SeedData.InitializeAsync(scope.ServiceProvider);
 }
-
 
 // ========== PHẦN 4: CHẠY ỨNG DỤNG ==========
 app.Run();
