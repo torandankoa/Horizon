@@ -81,7 +81,7 @@ namespace Horizon.Areas.Customer.Controllers
             // Chuyển hướng người dùng về trang họ vừa ở (hoặc trang Shop)
             return RedirectToAction("Shop", "Products");
         }
-        //Fix
+
         [HttpGet] // Chỉ chấp nhận GET
         public IActionResult AddToCart()
         {
@@ -118,7 +118,7 @@ namespace Horizon.Areas.Customer.Controllers
         }
 
         // Các action Remove
-        [HttpGet] // Dùng GET cho đơn giản, vì đây là link
+        [HttpGet] 
         public IActionResult RemoveFromCart(int productId)
         {
             List<CartItem> cart = GetCartItems();
