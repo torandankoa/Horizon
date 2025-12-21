@@ -7,6 +7,29 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Areas\Admin\Data\**" />
+    <Compile Remove="Areas\Admin\Models\**" />
+    <Compile Remove="Areas\Customer\Data\**" />
+    <Compile Remove="Areas\Customer\Models\**" />
+    <Compile Remove="Controllers\**" />
+    <Content Remove="Areas\Admin\Data\**" />
+    <Content Remove="Areas\Admin\Models\**" />
+    <Content Remove="Areas\Customer\Data\**" />
+    <Content Remove="Areas\Customer\Models\**" />
+    <Content Remove="Controllers\**" />
+    <EmbeddedResource Remove="Areas\Admin\Data\**" />
+    <EmbeddedResource Remove="Areas\Admin\Models\**" />
+    <EmbeddedResource Remove="Areas\Customer\Data\**" />
+    <EmbeddedResource Remove="Areas\Customer\Models\**" />
+    <EmbeddedResource Remove="Controllers\**" />
+    <None Remove="Areas\Admin\Data\**" />
+    <None Remove="Areas\Admin\Models\**" />
+    <None Remove="Areas\Customer\Data\**" />
+    <None Remove="Areas\Customer\Models\**" />
+    <None Remove="Controllers\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.11" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="8.0.11" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.19" />
@@ -22,11 +45,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Areas\Admin\Data\" />
-    <Folder Include="Areas\Admin\Models\" />
-    <Folder Include="Areas\Customer\Data\" />
-    <Folder Include="Areas\Customer\Models\" />
-    <Folder Include="Controllers\" />
     <Folder Include="wwwroot\images\products\" />
     <Folder Include="wwwroot\videos\" />
   </ItemGroup>

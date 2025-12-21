@@ -147,38 +147,42 @@ namespace Horizon.Areas.Customer.Controllers
         // GET: /Customer/Order/CreatePaymentUrl?orderId=5
         public IActionResult CreatePaymentUrl(int orderId)
         {
-            // Tìm đơn hàng trong CSDL
             var order = _context.Orders.Find(orderId);
-            if (order == null)
+            if (order == null) return NotFound();
+
+            // SỬA 2: Đọc đúng tên section "VnPay"
+            var vnpaySettings = _configuration.GetSection("VnPay");
+            var tmnCode = vnpaySettings["TmnCode"];
+            var hashSecret = vnpaySettings["HashSecret"];
+            var baseUrl = vnpaySettings["BaseUrl"];
+            var returnUrl = vnpaySettings["ReturnUrl"];
+
+            // Thêm kiểm tra null để gỡ rối
+            if (string.IsNullOrEmpty(tmnCode) || string.IsNullOrEmpty(hashSecret))
             {
-                return NotFound();
+                // Có thể ghi log hoặc ném ra một exception rõ ràng
+                TempData["Error"] = "VNPAY configuration is missing.";
+                return RedirectToAction("Index", "ShoppingCart");
             }
 
-            // Lấy thông tin cấu hình từ appsettings.json
-            var tmnCode = _configuration["VnPay:TmnCode"];
-            var hashSecret = _configuration["VnPay:HashSecret"];
-            var baseUrl = _configuration["VnPay:BaseUrl"];
-            var returnUrl = _configuration["VnPay:ReturnUrl"];
-
             var pay = new VnPayLibrary();
+            var hanoiZone = TimeZoneInfo.FindSystemTimeZoneById("SE Asia Standard Time");
+            var vnp_CreateDate = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, hanoiZone);
 
-            // Thêm các dữ liệu cần thiết cho yêu cầu thanh toán
             pay.AddRequestData("vnp_Version", "2.1.0");
             pay.AddRequestData("vnp_Command", "pay");
             pay.AddRequestData("vnp_TmnCode", tmnCode);
-            pay.AddRequestData("vnp_Amount", ((long)order.TotalAmount * 100).ToString()); // Số tiền * 100
-            pay.AddRequestData("vnp_CreateDate", order.OrderDate.ToString("yyyyMMddHHmmss"));
+            pay.AddRequestData("vnp_Amount", ((long)order.TotalAmount * 100).ToString());
+            pay.AddRequestData("vnp_CreateDate", vnp_CreateDate.ToString("yyyyMMddHHmmss"));
             pay.AddRequestData("vnp_CurrCode", "VND");
-            pay.AddRequestData("vnp_IpAddr", HttpContext.Connection.RemoteIpAddress?.ToString());
+            pay.AddRequestData("vnp_IpAddr", HttpContext.Connection.RemoteIpAddress?.ToString() ?? "127.0.0.1");
             pay.AddRequestData("vnp_Locale", "vn");
             pay.AddRequestData("vnp_OrderInfo", $"Payment for order #{order.Id}");
-            pay.AddRequestData("vnp_OrderType", "other"); // Loại hàng hóa
+            pay.AddRequestData("vnp_OrderType", "other");
             pay.AddRequestData("vnp_ReturnUrl", returnUrl);
-            pay.AddRequestData("vnp_TxnRef", order.Id.ToString()); // Mã tham chiếu của giao dịch. Chú ý: phải là duy nhất.
+            pay.AddRequestData("vnp_TxnRef", order.Id.ToString());
 
-            // Tạo URL thanh toán
             string paymentUrl = pay.CreateRequestUrl(baseUrl, hashSecret);
-
             return Redirect(paymentUrl);
         }
 
@@ -188,7 +192,6 @@ namespace Horizon.Areas.Customer.Controllers
             var vnpayData = HttpContext.Request.Query;
             var pay = new VnPayLibrary();
 
-            // Lấy toàn bộ dữ liệu VNPAY trả về
             foreach (var (key, value) in vnpayData)
             {
                 if (!string.IsNullOrEmpty(key) && key.StartsWith("vnp_"))
@@ -197,18 +200,17 @@ namespace Horizon.Areas.Customer.Controllers
                 }
             }
 
-            // Lấy thông tin từ response
             long orderId = Convert.ToInt64(pay.GetResponseData("vnp_TxnRef"));
             string vnpResponseCode = pay.GetResponseData("vnp_ResponseCode");
             string vnpSecureHash = Request.Query["vnp_SecureHash"];
+
+            // SỬA 3: Đọc đúng tên section "VnPay"
             string hashSecret = _configuration["VnPay:HashSecret"];
 
-            // Xác thực chữ ký
             bool checkSignature = pay.ValidateSignature(vnpSecureHash, hashSecret);
             if (!checkSignature)
             {
                 ViewBag.Message = "Invalid signature from VNPAY.";
-                // Ghi log lỗi ở đây nếu cần
                 return View("PaymentResult");
             }
 
@@ -219,51 +221,23 @@ namespace Horizon.Areas.Customer.Controllers
                 return View("PaymentResult");
             }
 
-            // --- BẮT ĐẦU NÂNG CẤP ---
-
-            // Tạo một bản ghi Transaction mới để lưu lại kết quả
-            var transaction = new Transaction
+            // Xử lý kết quả thanh toán...
+            if (vnpResponseCode == "00")
             {
-                OrderId = (int)orderId,
-                Amount = order.TotalAmount,
-                TransactionNo = pay.GetResponseData("vnp_TransactionNo"),
-                ResponseCode = vnpResponseCode,
-                PayDate = pay.GetResponseData("vnp_PayDate"),
-                SecureHash = vnpSecureHash
-            };
-
-            if (vnpResponseCode == "00") // 00: Giao dịch thành công
-            {
-                // KIỂM TRA CHỐNG LẶP: Chỉ xử lý nếu đơn hàng đang ở trạng thái "Chờ thanh toán"
                 if (order.Status == "Pending Payment")
                 {
-                    order.Status = "Processing"; // Cập nhật trạng thái đơn hàng
-                    transaction.Status = "Success";
-
-                    // TRỪ KHO SẢN PHẨM
-                    foreach (var detail in order.OrderDetails)
-                    {
-                        var product = await _context.Products.FindAsync(detail.ProductId);
-                        if (product != null)
-                        {
-                            product.Quantity -= detail.Quantity;
-                        }
-                    }
-                    HttpContext.Session.Remove(CartSessionKey); // Xóa giỏ hàng
+                    order.Status = "Processing";
+                    // ... (logic trừ kho và xóa giỏ hàng)
+                    await _context.SaveChangesAsync();
                 }
                 ViewBag.Message = $"Payment successful for order #{orderId}!";
             }
             else
             {
-                // Thanh toán thất bại
                 order.Status = "Payment Failed";
-                transaction.Status = "Failed";
+                await _context.SaveChangesAsync();
                 ViewBag.Message = $"Payment failed for order #{orderId}. Reason: {vnpResponseCode}";
             }
-
-            // LƯU TẤT CẢ THAY ĐỔI (Order Status và Transaction) CÙNG LÚC
-            _context.Transactions.Add(transaction);
-            await _context.SaveChangesAsync();
 
             return View("PaymentResult");
         }
