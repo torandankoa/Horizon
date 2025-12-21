@@ -7,7 +7,7 @@ using X.PagedList;
 using System.Threading.Tasks;
 
 
-namespace Horizon.Areas.Customer.Controllers // Namespace phải đúng
+namespace Horizon.Areas.Customer.Controllers
 {
     [Area("Customer")] // Đánh dấu đây là controller của Area Customer
     public class ProductsController : Controller

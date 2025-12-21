@@ -5,7 +5,6 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Horizon.Areas.Admin.Controllers
 {
-    // Kế thừa từ AdminBaseController để được bảo vệ
     public class OrdersController : AdminBaseController
     {
         private readonly MyDbContext _context;

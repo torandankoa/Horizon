@@ -11,7 +11,7 @@ public class InventoryController : AdminBaseController
     private readonly MyDbContext _context;
     public InventoryController(MyDbContext context) { _context = context; }
 
-    // GET: /Admin/Inventory
+    // GET: /Admin/Inventory/Index
     public async Task<IActionResult> Index(int? categoryId, string searchString)
     {
         // Bắt đầu với một truy vấn cơ sở lấy tất cả lịch sử nhập hàng

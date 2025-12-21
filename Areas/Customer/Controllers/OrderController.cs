@@ -241,6 +241,5 @@ namespace Horizon.Areas.Customer.Controllers
 
             return View("PaymentResult");
         }
-
     }
 }

@@ -92,7 +92,6 @@ namespace Horizon.Areas.Admin.Controllers
 
             if (ModelState.IsValid)
             {
-                // Quy tắc ưu tiên:
                 // 1. Ưu tiên file upload nếu có
                 if (imageFile != null && imageFile.Length > 0)
                 {

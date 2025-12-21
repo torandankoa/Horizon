@@ -5,7 +5,6 @@ using Microsoft.EntityFrameworkCore; // <<< THÊM DÒNG NÀY VÀO
 using System.Linq;
 using System.Threading.Tasks;
 
-
 namespace Horizon.Areas.Customer.Controllers
 {
     [Area("Customer")]

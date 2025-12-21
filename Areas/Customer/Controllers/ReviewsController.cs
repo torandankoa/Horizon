@@ -27,11 +27,6 @@ namespace Horizon.Areas.Customer.Controllers
         public async Task<IActionResult> AddReview(int productId, int rating, string comment)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-
-            // TODO (Nâng cao): Kiểm tra xem user đã thực sự mua sản phẩm này chưa
-            // var hasPurchased = _context.OrderDetails.Any(od => od.Order.UserId == userId && od.ProductId == productId);
-            // if (!hasPurchased) { return Forbid(); }
-
             var review = new Review
             {
                 ProductId = productId,

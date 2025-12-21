@@ -9,7 +9,7 @@ namespace Horizon.Areas.Admin.Controllers
         private readonly MyDbContext _context;
         public TransactionsController(MyDbContext context) { _context = context; }
 
-        // GET: /Admin/Transactions
+        // GET: /Admin/Transactions/Index
         public async Task<IActionResult> Index()
         {
             var transactions = await _context.Transactions

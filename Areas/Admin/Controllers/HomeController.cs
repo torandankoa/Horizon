@@ -8,7 +8,6 @@ using Microsoft.EntityFrameworkCore;
 namespace Horizon.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    // Kế thừa từ AdminBaseController để được bảo vệ bởi [Authorize(Roles = "Admin")]
     public class HomeController : AdminBaseController
     {
         private readonly MyDbContext _context;
