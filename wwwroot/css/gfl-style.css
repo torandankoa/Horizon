@@ -274,3 +274,8 @@ body {
     z-index: 100;
     box-shadow: 0 4px 15px rgba(37, 99, 235, 0.3);
 }
+
+.price-tag.text-danger {
+    color: #dc3545 !important;
+    font-size: 1.15rem;
+}

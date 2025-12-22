@@ -1,22 +1,39 @@
 ﻿@model Product
 
-<div class="product-card">
-    @* Bắt đầu thẳng từ class product-card luôn *@
+<div class="product-card position-relative">
+    @* Thêm Badge Sale nếu có giảm giá *@
+    @if (Model.SalePrice.HasValue && Model.SalePrice < Model.Price)
+    {
+        <span class="badge bg-danger position-absolute top-0 start-0 m-2 shadow-sm" style="z-index: 10;">SALE</span>
+    }
+
     <div class="img-container">
-        <a asp-action="Details" asp-route-slug="@Model.Slug">
+        <a asp-area="Customer" asp-controller="Products" asp-action="Details" asp-route-slug="@Model.Slug">
             <img src="@(Model.ImageUrl ?? "/images/placeholder.png")" alt="@Model.Name">
         </a>
     </div>
+
     <div class="card-body">
         <p class="text-muted small mb-1">@Model.Category?.Name</p>
         <h5 class="card-title">
-            <a asp-action="Details" asp-route-slug="@Model.Slug" class="text-decoration-none text-dark">
+            <a asp-area="Customer" asp-controller="Products" asp-action="Details" asp-route-slug="@Model.Slug" class="text-decoration-none text-dark">
                 @Model.Name
             </a>
         </h5>
+
+        @* --- LOGIC HIỂN THỊ GIÁ ĐÃ FIX --- *@
         <div class="d-flex align-items-center mb-3">
-            <span class="price-tag text-primary">@Model.Price.ToString("N0")₫</span>
+            @if (Model.SalePrice.HasValue && Model.SalePrice < Model.Price)
+            {
+                <span class="price-tag text-danger fw-bold">@Model.SalePrice.Value.ToString("N0")₫</span>
+                <span class="text-muted text-decoration-line-through small ms-2">@Model.Price.ToString("N0")₫</span>
+            }
+            else
+            {
+                <span class="price-tag text-primary fw-bold">@Model.Price.ToString("N0")₫</span>
+            }
         </div>
+
         <form asp-area="Customer" asp-controller="ShoppingCart" asp-action="AddToCart" method="post">
             <input type="hidden" name="productId" value="@Model.Id" />
             <button type="submit" class="btn btn-primary w-100">
