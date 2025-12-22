@@ -1,46 +1,27 @@
 ﻿@model Product
 
-<div class="col-lg-3 col-md-6 mb-4">
-    <div class="card h-100 shadow-sm gfl-card">
-        @* THAY ĐỔI: asp-route-id="@Model.Id" thành asp-route-slug="@Model.Slug" *@
-        <a asp-area="Customer" asp-controller="Products" asp-action="Details" asp-route-slug="@Model.Slug">
-            <img class="card-img-top" src="@(Model.ImageUrl ?? "/images/placeholder.png")" alt="@Model.Name">
+<div class="product-card">
+    @* Bắt đầu thẳng từ class product-card luôn *@
+    <div class="img-container">
+        <a asp-action="Details" asp-route-slug="@Model.Slug">
+            <img src="@(Model.ImageUrl ?? "/images/placeholder.png")" alt="@Model.Name">
         </a>
-
-        <div class="card-body d-flex flex-column">
-            <h5 class="card-title">
-                @* THAY ĐỔI: asp-route-id="@Model.Id" thành asp-route-slug="@Model.Slug" *@
-                <a class="text-decoration-none" asp-area="Customer" asp-controller="Products" asp-action="Details" asp-route-slug="@Model.Slug">
-                    @Model.Name
-                </a>
-            </h5>
-
-            @* Hiển thị tên danh mục (Sử dụng Safe Navigation ? đề phòng null) *@
-            <p class="card-text text-muted small">@Model.Category?.Name</p>
-
-            <div class="mt-auto">
-                <p class="product-price">
-                    @if (Model.SalePrice != null && Model.SalePrice < Model.Price)
-                    {
-                        <span class="sale-price">@Model.SalePrice?.ToString("C")</span>
-                        <del class="original-price">@Model.Price.ToString("C")</del>
-                    }
-                    else
-                    {
-                        <span>@Model.Price.ToString("C")</span>
-                    }
-                </p>
-            </div>
+    </div>
+    <div class="card-body">
+        <p class="text-muted small mb-1">@Model.Category?.Name</p>
+        <h5 class="card-title">
+            <a asp-action="Details" asp-route-slug="@Model.Slug" class="text-decoration-none text-dark">
+                @Model.Name
+            </a>
+        </h5>
+        <div class="d-flex align-items-center mb-3">
+            <span class="price-tag text-primary">@Model.Price.ToString("N0")₫</span>
         </div>
-
-        <div class="card-footer">
-            <form asp-area="Customer" asp-controller="ShoppingCart" asp-action="AddToCart" method="post">
-                @* Giữ nguyên ID ở đây để Backend xử lý giỏ hàng *@
-                <input type="hidden" name="productId" value="@Model.Id" />
-                <div class="d-grid">
-                    <button type="submit" class="btn btn-primary">Add to Cart</button>
-                </div>
-            </form>
-        </div>
+        <form asp-area="Customer" asp-controller="ShoppingCart" asp-action="AddToCart" method="post">
+            <input type="hidden" name="productId" value="@Model.Id" />
+            <button type="submit" class="btn btn-primary w-100">
+                <i class="bi bi-cart-plus me-2"></i>Add to Cart
+            </button>
+        </form>
     </div>
 </div>

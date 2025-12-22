@@ -1,6 +1,101 @@
 ﻿@{
-    ViewData["Title"] = "Privacy Policy";
+    ViewData["Title"] = "Privacy Protocol - Secure Link";
+    Layout = "~/Areas/Customer/Views/Shared/_PublicLayout.cshtml";
 }
-<h1>@ViewData["Title"]</h1>
 
-<p>Use this page to detail your site's privacy policy.</p>
+@* --- HERO SECTION: SECURITY HUB --- *@
+<div class="privacy-hero py-5 mb-5 bg-white border-bottom shadow-sm">
+    <div class="container text-center">
+        <div class="d-inline-block p-3 bg-primary bg-opacity-10 rounded-circle mb-3">
+            <i class="bi bi-shield-lock-fill fs-1 text-primary"></i>
+        </div>
+        <h1 class="display-4 fw-bold text-dark mb-3">SECURE <span class="text-primary">LINK</span></h1>
+        <p class="lead text-muted mx-auto" style="max-width: 800px;">
+            "Trong tác chiến, rò rỉ thông tin là thất bại. Tại Horizon, chúng tôi áp dụng các giao thức bảo mật cấp cao nhất để bảo vệ danh tính và dữ liệu của mọi chỉ huy."
+        </p>
+    </div>
+</div>
+
+<div class="container pb-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            @* --- PROTOCOL 01: INTEL GATHERING --- *@
+            <div class="protocol-card mb-5">
+                <div class="d-flex align-items-center mb-3">
+                    <span class="badge bg-primary me-3">PROTOCOL ALPHA</span>
+                    <h3 class="fw-bold mb-0">Thu Thập Tình Báo (Data Collection)</h3>
+                </div>
+                <div class="ps-md-5 border-start border-3 border-light">
+                    <p class="text-muted">Chúng tôi chỉ thu thập những thông tin cần thiết để thiết lập đường truyền cung ứng giữa Horizon và khách hàng:</p>
+                    <ul class="list-unstyled">
+                        <li><i class="bi bi-check2-square text-primary me-2"></i> <strong>Định danh Operative:</strong> Tên, email và mã số liên lạc.</li>
+                        <li><i class="bi bi-check2-square text-primary me-2"></i> <strong>Tọa độ triển khai:</strong> Địa chỉ giao hàng và nhận hóa đơn.</li>
+                        <li><i class="bi bi-check2-square text-primary me-2"></i> <strong>Dấu vết kỹ thuật:</strong> Địa chỉ IP và Beacons (Cookies) để tối ưu hóa hệ thống.</li>
+                    </ul>
+                </div>
+            </div>
+
+            @* --- PROTOCOL 02: ENCRYPTION --- *@
+            <div class="protocol-card mb-5">
+                <div class="d-flex align-items-center mb-3">
+                    <span class="badge bg-primary me-3">PROTOCOL BRAVO</span>
+                    <h3 class="fw-bold mb-0">Mã Hóa Tác Chiến (Data Protection)</h3>
+                </div>
+                <div class="ps-md-5 border-start border-3 border-light">
+                    <p class="text-muted">Mọi luồng dữ liệu truyền đi đều được bảo vệ bởi lớp giáp mã hóa:</p>
+                    <ul class="list-unstyled">
+                        <li><i class="bi bi-shield-shaded text-primary me-2"></i> <strong>SSL Encryption:</strong> Đường truyền được bảo mật tuyệt đối 256-bit.</li>
+                        <li><i class="bi bi-shield-shaded text-primary me-2"></i> <strong>VnPay Firewall:</strong> Thông tin thanh toán không bao giờ được lưu trữ trên máy chủ của chúng tôi mà được xử lý trực tiếp qua cổng thanh toán quốc gia.</li>
+                    </ul>
+                </div>
+            </div>
+
+            @* --- PROTOCOL 03: COMMAND AUTHORITY --- *@
+            <div class="protocol-card mb-5">
+                <div class="d-flex align-items-center mb-3">
+                    <span class="badge bg-primary me-3">PROTOCOL CHARLIE</span>
+                    <h3 class="fw-bold mb-0">Quyền Hạn Chỉ Huy (Your Rights)</h3>
+                </div>
+                <div class="ps-md-5 border-start border-3 border-light">
+                    <p class="text-muted">Bạn có toàn quyền kiểm soát "Hồ sơ Operative" của mình:</p>
+                    <ul class="list-unstyled">
+                        <li><i class="bi bi-person-gear text-primary me-2"></i> Quyền truy xuất và chỉnh sửa thông tin bất cứ lúc nào.</li>
+                        <li><i class="bi bi-person-x text-primary me-2"></i> Quyền yêu cầu "Xóa dấu vết" (Tẩy bỏ toàn bộ dữ liệu cá nhân khỏi hệ thống).</li>
+                        <li><i class="bi bi-bell-slash text-primary me-2"></i> Quyền từ chối nhận các bản tin Intel (Newsletter) không mong muốn.</li>
+                    </ul>
+                </div>
+            </div>
+
+            @* --- FOOTNOTE --- *@
+            <div class="alert alert-light border shadow-sm rounded-4 p-4 mt-5">
+                <div class="d-flex">
+                    <div class="flex-shrink-0 text-primary">
+                        <i class="bi bi-info-circle-fill fs-3"></i>
+                    </div>
+                    <div class="ms-3">
+                        <h6 class="fw-bold">XÁC NHẬN GIAO THỨC</h6>
+                        <p class="small text-muted mb-0">Bằng việc tiếp tục truy cập vào hệ thống Horizon, bạn chính thức xác nhận đồng ý với các giao thức bảo mật nêu trên. Horizon có quyền cập nhật các giao thức này để đối phó với các thách thức an ninh mới.</p>
+                        <p class="small fw-bold mt-2">CẬP NHẬT LẦN CUỐI: @DateTime.Now.ToString("dd/MM/yyyy")</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <style>
+        .privacy-hero {
+            background-image: radial-gradient(#e2e8f0 1px, transparent 1px);
+            background-size: 30px 30px;
+        }
+
+        .protocol-card {
+            transition: all 0.3s ease;
+        }
+
+            .protocol-card:hover {
+                transform: translateX(10px);
+            }
+    </style>
+}

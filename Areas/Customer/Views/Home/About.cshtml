@@ -1,8 +1,120 @@
-﻿
-@{
-    ViewData["Title"] = "About";
+﻿@{
+    ViewData["Title"] = "Operation: Horizon Mission";
     Layout = "~/Areas/Customer/Views/Shared/_PublicLayout.cshtml";
 }
 
-<h1>About</h1>
+@* --- HERO SECTION: MISSION BRIEFING --- *@
+<div class="mission-hero py-5 mb-5 bg-white border-bottom shadow-sm">
+    <div class="container text-center">
+        <span class="badge bg-primary px-3 py-2 mb-3 rounded-0 tracking-widest">TOP SECRET // EYES ONLY</span>
+        <h1 class="display-3 fw-bold text-dark mb-3">MISSION: <span class="text-primary">HORIZON</span></h1>
+        <p class="lead text-muted mx-auto" style="max-width: 700px;">
+            "Phía sau mỗi chiến dịch thành công là sự chuẩn bị kỹ lưỡng về trang bị.
+            Tại Horizon, sứ mệnh của chúng tôi là định nghĩa lại giới hạn của sự sẵn sàng."
+        </p>
+    </div>
+</div>
 
+<div class="container">
+    @* --- PHẦN 1: TẦM NHÌN CHIẾN LƯỢC --- *@
+    <div class="row align-items-center mb-5 pb-5">
+        <div class="col-md-6">
+            <h6 class="text-primary fw-bold text-uppercase">01. Strategic Vision</h6>
+            <h2 class="fw-bold mb-4 text-dark">Vượt Qua Mọi Giới Hạn</h2>
+            <p class="text-muted">
+                Horizon không chỉ bán trang bị. Chúng tôi cung cấp sự an tâm. Bắt đầu từ những ý tưởng sơ khai về một hệ thống hỗ trợ chỉ huy, Horizon đã phát triển thành biểu tượng của sự tin cậy trong cộng đồng Tactical toàn cầu.
+            </p>
+            <p class="text-muted">
+                Tầm nhìn của chúng tôi là trở thành nhà cung cấp giải pháp tác chiến hàng đầu, nơi công nghệ hiện đại gặp gỡ tinh thần bền bỉ của những chiến binh thực thụ.
+            </p>
+        </div>
+        <div class="col-md-6">
+            <div class="p-4 bg-light border-start border-primary border-4 shadow-sm">
+                <i class="bi bi-quote fs-1 text-primary opacity-25"></i>
+                <h4 class="fst-italic fw-light">"Sự khác biệt giữa người sống sót và người chiến thắng nằm ở chất lượng trang bị họ mang theo."</h4>
+                <p class="text-end mb-0 fw-bold">- Horizon Tactical Command</p>
+            </div>
+        </div>
+    </div>
+
+    @* --- PHẦN 2: 3 TRỤ CỘT CỐT LÕI (CORE PILLARS) --- *@
+    <div class="row g-4 mb-5 pb-5">
+        <div class="col-md-4">
+            <div class="card h-100 border-0 shadow-sm p-4 text-center">
+                <div class="mx-auto mb-3 d-flex align-items-center justify-content-center bg-primary text-white rounded-circle" style="width: 70px; height: 70px;">
+                    <i class="bi bi-crosshair fs-2"></i>
+                </div>
+                <h5 class="fw-bold">PRECISION</h5>
+                <p class="text-muted small">Mọi chi tiết, từ đường kim mũi chỉ đến vật liệu cấu thành, đều được tính toán với độ chính xác tuyệt đối.</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card h-100 border-0 shadow-sm p-4 text-center">
+                <div class="mx-auto mb-3 d-flex align-items-center justify-content-center bg-primary text-white rounded-circle" style="width: 70px; height: 70px;">
+                    <i class="bi bi-shield-shaded fs-2"></i>
+                </div>
+                <h5 class="fw-bold">RELIABILITY</h5>
+                <p class="text-muted small">Trang bị của bạn sẽ không bao giờ phản bội bạn. Chúng tôi kiểm thử trong những điều kiện khắc nghiệt nhất.</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card h-100 border-0 shadow-sm p-4 text-center">
+                <div class="mx-auto mb-3 d-flex align-items-center justify-content-center bg-primary text-white rounded-circle" style="width: 70px; height: 70px;">
+                    <i class="bi bi-cpu fs-2"></i>
+                </div>
+                <h5 class="fw-bold">INNOVATION</h5>
+                <p class="text-muted small">Luôn đi trước một bước. Chúng tôi không ngừng cập nhật công nghệ vật liệu mới nhất từ tương lai.</p>
+            </div>
+        </div>
+    </div>
+
+    @* --- PHẦN 3: TIMELINE / OPERATIONAL HISTORY --- *@
+    <div class="bg-dark text-white p-5 rounded-4 shadow-lg mb-5">
+        <div class="row">
+            <div class="col-lg-4 mb-4 mb-lg-0">
+                <h2 class="fw-bold text-primary">OPERATIONAL HISTORY</h2>
+                <p class="text-light opacity-50">Nhật ký hành trình thiết lập trật tự mới.</p>
+            </div>
+            <div class="col-lg-8">
+                <div class="border-start border-secondary ps-4">
+                    <div class="mb-4">
+                        <span class="badge bg-primary">PHASE 01: FOUNDATION</span>
+                        <h5 class="mt-2">Khởi tạo hệ thống cốt lõi</h5>
+                        <p class="small text-light opacity-75">Thiết lập nền tảng Horizon DB và cấu trúc logic sơ khai.</p>
+                    </div>
+                    <div class="mb-4">
+                        <span class="badge bg-primary">PHASE 02: DEPLOYMENT</span>
+                        <h5 class="mt-2">Mở rộng mạng lưới cung ứng</h5>
+                        <p class="small text-light opacity-75">Tích hợp hệ thống quản lý sản phẩm và quy trình thanh toán bảo mật VnPay.</p>
+                    </div>
+                    <div>
+                        <span class="badge bg-primary">PHASE 03: OPTIMIZATION</span>
+                        <h5 class="mt-2">Tối ưu hóa trải nghiệm chỉ huy</h5>
+                        <p class="small text-light opacity-75">Nâng cấp giao diện hiện đại và hệ thống định vị URL thân thiện với SEO.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @* --- PHẦN 4: CALL TO ACTION --- *@
+    <div class="text-center py-5">
+        <h3 class="fw-bold mb-4">SẴN SÀNG CHO NHIỆM VỤ TIẾP THEO?</h3>
+        <a asp-controller="Products" asp-action="Shop" class="btn btn-primary btn-lg px-5 py-3 fw-bold shadow">
+            TRUY CẬP KHO VŨ KHÍ <i class="bi bi-chevron-right ms-2"></i>
+        </a>
+    </div>
+</div>
+
+@section Scripts {
+    <style>
+        .tracking-widest {
+            letter-spacing: 0.2em;
+        }
+
+        .mission-hero {
+            background-image: radial-gradient(#e2e8f0 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+    </style>
+}

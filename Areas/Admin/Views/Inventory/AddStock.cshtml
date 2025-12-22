@@ -1,36 +1,129 @@
 ﻿@model ProductReceipt
 
 @{
-    // Lấy thông tin sản phẩm từ ViewBag
     var product = ViewBag.Product as Product;
-    ViewData["Title"] = $"Add Stock for {product?.Name}";
+    ViewData["Title"] = $"Supply Dispatch: {product?.Name}";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
 }
 
-<h1>@ViewData["Title"]</h1>
-<hr />
-<div class="row">
-    <div class="col-md-6">
-        <form asp-action="AddStock">
-            <div asp-validation-summary="All" class="text-danger"></div>
-
-            @* Trường ProductId được ẩn đi vì đã có giá trị *@
-            <input type="hidden" asp-for="ProductId" />
-
-            <div class="form-group mb-3">
-                <label asp-for="Quantity" class="control-label">Quantity to Add</label>
-                <input asp-for="Quantity" class="form-control" type="number" min="1" />
-                <span asp-validation-for="Quantity" class="text-danger"></span>
-            </div>
-            <div class="form-group mb-3">
-                <label asp-for="CostPrice" class="control-label">Cost Price (per item)</label>
-                <input asp-for="CostPrice" class="form-control" />
-                <span asp-validation-for="CostPrice" class="text-danger"></span>
-            </div>
-
-            <div class="form-group">
-                <input type="submit" value="Add to Inventory" class="btn btn-primary" />
-                <a asp-controller="Products" asp-action="Index" class="btn btn-secondary">Cancel</a>
-            </div>
-        </form>
+@* --- BREADCRUMB --- *@
+<div class="py-3 bg-white border-bottom mb-4">
+    <div class="container-fluid px-4">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-0 small">
+                <li class="breadcrumb-item"><a asp-area="Admin" asp-controller="Products" asp-action="Index" class="text-decoration-none">Products</a></li>
+                <li class="breadcrumb-item active fw-bold text-primary" aria-current="page">Add Stock</li>
+            </ol>
+        </nav>
     </div>
 </div>
+
+<div class="container pb-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="d-flex align-items-center mb-4">
+                <div class="bg-success text-white p-2 rounded-3 me-3">
+                    <i class="bi bi-box-arrow-in-down fs-4"></i>
+                </div>
+                <div>
+                    <h1 class="h3 fw-bold mb-0 text-dark">SUPPLY DISPATCH</h1>
+                    <p class="text-muted small mb-0">Cập nhật số lượng vật tư vào kho lưu trữ hệ thống.</p>
+                </div>
+            </div>
+
+            <div class="row g-4">
+                @* --- THÔNG TIN SẢN PHẨM HIỆN TẠI --- *@
+                <div class="col-md-5">
+                    <div class="card border-0 shadow-sm h-100 rounded-4 overflow-hidden">
+                        <div class="card-header bg-light border-0 py-3 text-center">
+                            <h6 class="fw-bold mb-0 small text-uppercase tracking-widest text-muted">Current Status</h6>
+                        </div>
+                        <div class="card-body text-center p-4">
+                            <img src="@(string.IsNullOrEmpty(product?.ImageUrl) ? "/images/placeholder.png" : product.ImageUrl)"
+                                 class="rounded border mb-3 shadow-sm"
+                                 style="width: 120px; height: 120px; object-fit: cover;" />
+                            <h5 class="fw-bold text-dark mb-1">@product?.Name</h5>
+                            <p class="text-muted small mb-3">ID: #@product?.Id</p>
+
+                            <div class="p-3 bg-light rounded-3">
+                                <span class="small text-muted d-block text-uppercase fw-bold mb-1">In Stock</span>
+                                <h3 class="fw-bold text-primary mb-0">@product?.Quantity</h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                @* --- FORM NHẬP KHO --- *@
+                <div class="col-md-7">
+                    <div class="card border-0 shadow-sm h-100 rounded-4">
+                        <div class="card-header bg-white border-bottom py-3">
+                            <h6 class="fw-bold mb-0 small text-uppercase tracking-widest text-primary">Receipt Parameters</h6>
+                        </div>
+                        <div class="card-body p-4">
+                            <form asp-action="AddStock">
+                                <div asp-validation-summary="ModelOnly" class="text-danger small mb-3"></div>
+                                <input type="hidden" asp-for="ProductId" />
+
+                                @* Quantity *@
+                                <div class="mb-4">
+                                    <label asp-for="Quantity" class="form-label small fw-bold text-dark text-uppercase">Quantity to Add</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text bg-white border-end-0"><i class="bi bi-plus-circle text-success"></i></span>
+                                        <input asp-for="Quantity" class="form-control border-start-0 ps-0 bg-light" type="number" min="1" placeholder="e.g. 50" />
+                                    </div>
+                                    <span asp-validation-for="Quantity" class="text-danger small"></span>
+                                </div>
+
+                                @* Cost Price *@
+                                <div class="mb-4">
+                                    <label asp-for="CostPrice" class="form-label small fw-bold text-dark text-uppercase">Cost Price (Unit)</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text bg-white border-end-0"><i class="bi bi-currency-dollar text-primary"></i></span>
+                                        <input asp-for="CostPrice" class="form-control border-start-0 ps-0 bg-light" placeholder="Nhập giá vốn tại thời điểm này..." />
+                                    </div>
+                                    <span asp-validation-for="CostPrice" class="text-danger small"></span>
+                                    <div class="form-text small mt-2">Giá nhập kho dùng để tính toán lợi nhuận ròng.</div>
+                                </div>
+
+                                <div class="d-grid gap-2 mt-5">
+                                    <button type="submit" class="btn btn-primary btn-lg py-3 fw-bold shadow">
+                                        <i class="bi bi-check-lg me-2"></i>CONFIRM RECEIPT
+                                    </button>
+                                    <a asp-controller="Products" asp-action="Index" class="btn btn-light btn-sm text-muted">Cancel Mission</a>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            @* --- GỢI Ý --- *@
+            <div class="mt-4 p-3 bg-white rounded border border-dashed text-center">
+                <p class="small text-muted mb-0">
+                    <i class="bi bi-info-circle me-1"></i>
+                    Lưu ý: Sau khi xác nhận, số lượng kho của sản phẩm sẽ được cộng dồn ngay lập tức.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .tracking-widest {
+        letter-spacing: 0.15em;
+    }
+
+    .border-dashed {
+        border-style: dashed !important;
+    }
+
+    .form-control:focus {
+        background-color: #fff !important;
+        box-shadow: 0 0 0 0.25rem rgba(37, 99, 235, 0.1) !important;
+        border-color: var(--primary-color) !important;
+    }
+
+    .input-group-text {
+        border-color: #dee2e6;
+    }
+</style>

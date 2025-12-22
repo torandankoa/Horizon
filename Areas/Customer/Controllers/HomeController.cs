@@ -57,5 +57,10 @@ namespace Horizon.Areas.Customer.Controllers
         {
             return View();
         }
+        // GET: /Customer/Home/Privacy  
+        public IActionResult Privacy()
+        {
+            return View();
+        }
     }
 }

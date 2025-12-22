@@ -1,117 +1,113 @@
 ﻿@model IEnumerable<Order>
 
 @{
-    ViewData["Title"] = "Manage Orders";
+    ViewData["Title"] = "Order Management Center";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
 }
 
-<nav aria-label="breadcrumb">
-    <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a asp-area="Admin" asp-controller="Home" asp-action="Index">Dashboard</a></li>
-        <li class="breadcrumb-item active" aria-current="page">@ViewData["Title"]</li>
-    </ol>
-</nav>
-
-<h1 class="h3">@ViewData["Title"]</h1>
-<p class="mb-4">A list of all orders placed by customers.</p>
-
-@* --- FORM LỌC ĐÃ ĐƯỢC SỬA LỖI --- *@
-<div class="card card-body mb-4">
-    <form asp-area="Admin" asp-action="Index" method="get">
-        <div class="row align-items-end">
-
-            @* === DROPDOWN CHO THÁNG (ĐÃ SỬA LẠI ĐÚNG) === *@
-            <div class="col-md-5">
-                <label for="month" class="form-label">Filter by Month</label>
-                <select name="month" id="month" class="form-select">
-                    <option value="">-- All Months --</option>
-                    @for (int i = 1; i <= 12; i++)
-                    {
-                        <option value="@i" selected="@(ViewBag.SelectedMonth == i)">@System.Globalization.CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(i)</option>
-                    }
-                </select>
-            </div>
-
-            @* === DROPDOWN CHO NĂM (ĐÃ SỬA LẠI ĐÚNG) === *@
-            <div class="col-md-5">
-                <label for="year" class="form-label">Filter by Year</label>
-                @* Tag helper này sẽ tự động đọc SelectList và chọn đúng giá trị *@
-                <select name="year" id="year" class="form-select" asp-items="ViewBag.YearList">
-                    @* Có thể thêm một lựa chọn mặc định nếu cần *@
-                </select>
-            </div>
-
-            <div class="col-md-2">
-                <button type="submit" class="btn btn-primary w-100">Filter</button>
-            </div>
-        </div>
-    </form>
-</div>
-@* ---------------------------------- *@
-
-
-<div class="card shadow mb-4">
-    <div class="card-header py-3">
-        <h6 class="m-0 font-weight-bold text-primary">All Orders</h6>
+@* --- HEADER --- *@
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb small mb-1">
+                <li class="breadcrumb-item"><a asp-area="Admin" asp-controller="Home" asp-action="Index" class="text-decoration-none">Dashboard</a></li>
+                <li class="breadcrumb-item active">Orders</li>
+            </ol>
+        </nav>
+        <h2 class="fw-bold mb-0 text-dark">Order Management</h2>
     </div>
-    <div class="card-body">
-        <div class="table-responsive">
-            <table class="table table-hover" id="ordersTable">
-                <thead>
-                    <tr>
-                        <th>Order ID</th>
-                        <th>Customer</th>
-                        <th>Order Date</th>
-                        <th class="text-end">Total Amount</th>
-                        <th class="text-center">Status</th>
-                        <th class="text-end">Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var order in Model)
-                    {
-                        // Logic nhỏ để gán màu sắc cho Status Badge
-                        var statusBgClass = "bg-secondary";
-                        switch (order.Status)
+    <div class="text-end">
+        <span class="badge bg-primary px-3 py-2 shadow-sm">Total: @Model.Count() Orders</span>
+    </div>
+</div>
+
+@* --- BỘ LỌC THÁNG/NĂM --- *@
+<div class="card border-0 shadow-sm mb-4">
+    <div class="card-body p-3">
+        <form asp-area="Admin" asp-action="Index" method="get">
+            <div class="row g-3 align-items-end">
+                <div class="col-md-5">
+                    <label class="form-label small fw-bold text-muted">FILTER BY MONTH</label>
+                    <select name="month" class="form-select bg-light">
+                        <option value="">-- All Months --</option>
+                        @for (int i = 1; i <= 12; i++)
                         {
-                            case "Processing":
-                                statusBgClass = "bg-primary";
-                                break;
-                            case "Shipped":
-                                statusBgClass = "bg-info";
-                                break;
-                            case "Completed":
-                                statusBgClass = "bg-success";
-                                break;
-                            case "Cancelled":
-                                statusBgClass = "bg-danger";
-                                break;
+                            if (ViewBag.SelectedMonth == i)
+                            {
+                                <option value="@i" selected>@System.Globalization.CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(i)</option>
+                            }
+                            else
+                            {
+                                <option value="@i">@System.Globalization.CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(i)</option>
+                            }
                         }
-
-                        <tr>
-                            <td>#@order.Id</td>
-                            <td>@order.User?.Email</td>
-                            <td>@order.OrderDate.ToString("g")</td>
-                            <td class="text-end">@order.TotalAmount.ToString("C")</td>
-                            <td class="text-center">
-                                <span class="badge @statusBgClass">@order.Status</span>
-                            </td>
-                            <td class="text-end">
-                                <a asp-action="Details" asp-route-id="@order.Id" class="btn btn-sm btn-outline-info">View Details</a>
-                            </td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
-        </div>
+                    </select>
+                </div>
+                <div class="col-md-5">
+                    <label class="form-label small fw-bold text-muted">FILTER BY YEAR</label>
+                    <select name="year" class="form-select bg-light" asp-items="ViewBag.YearList"></select>
+                </div>
+                <div class="col-md-2">
+                    <button type="submit" class="btn btn-dark w-100">
+                        <i class="bi bi-funnel me-2"></i>Filter
+                    </button>
+                </div>
+            </div>
+        </form>
     </div>
 </div>
 
-@* (Tùy chọn) Thêm script để có thể tìm kiếm và sắp xếp bảng nếu muốn *@
-@section Scripts {
-    <script>
-        // Có thể thêm DataTables.js vào đây sau này để có bảng nâng cao
-        // $(document).ready(function () {
-        //     $('#ordersTable').DataTable();
-        // });
-    </script>
-}
+@* --- BẢNG ĐƠN HÀNG --- *@
+<div class="card border-0 shadow-sm overflow-hidden">
+    <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+            <thead class="bg-light">
+                <tr>
+                    <th class="ps-4 py-3">ID</th>
+                    <th class="py-3">Customer</th>
+                    <th class="py-3">Date Deployed</th>
+                    <th class="text-end py-3">Total Funding</th>
+                    <th class="text-center py-3">Status</th>
+                    <th class="pe-4 py-3 text-end">Intel</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var order in Model)
+                {
+                    string statusBg = order.Status switch
+                    {
+                        "Processing" => "bg-primary",
+                        "Shipped" => "bg-info text-white",
+                        "Completed" => "bg-success",
+                        "Cancelled" => "bg-danger",
+                        "Pending Payment" => "bg-warning text-dark",
+                        _ => "bg-secondary"
+                    };
+
+                    <tr>
+                        <td class="ps-4 fw-bold">#@order.Id</td>
+                        <td>
+                            <div class="fw-bold">@order.CustomerName</div>
+                            <div class="text-muted small">@order.User?.Email</div>
+                        </td>
+                        <td>
+                            <div class="small">@order.OrderDate.ToString("dd/MM/yyyy")</div>
+                            <div class="text-muted small">@order.OrderDate.ToString("HH:mm")</div>
+                        </td>
+                        <td class="text-end fw-bold text-dark">
+                            @order.TotalAmount.ToString("N0")₫
+                        </td>
+                        <td class="text-center">
+                            <span class="badge @statusBg px-3 py-2 rounded-pill small">@order.Status.ToUpper()</span>
+                        </td>
+                        <td class="pe-4 text-end">
+                            <a asp-action="Details" asp-route-id="@order.Id" class="btn btn-sm btn-white border shadow-sm px-3">
+                                <i class="bi bi-eye-fill me-1"></i> Details
+                            </a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

@@ -1,109 +1,78 @@
 ﻿<!DOCTYPE html>
-@using Microsoft.AspNetCore.Identity
-@inject SignInManager<IdentityUser> SignInManager
-@inject UserManager<IdentityUser> UserManager
-
 <html lang="en">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - Horizon</title>
-
-    @* Import Font chữ Google Fonts *@
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@400;700&display=swap" rel="stylesheet">
+    <title>@ViewData["Title"] - Horizon Admin</title>
 
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/css/gfl-style.css" asp-append-version="true" /> @* Đảm bảo file style tùy chỉnh được gọi *@
-    <link rel="stylesheet" href="~/Horizon.styles.css" asp-append-version="true" />
-    @await RenderSectionAsync("HeaderMetas", required: false)
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="~/css/admin-style.css" asp-append-version="true" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 </head>
-<body class="d-flex flex-column min-vh-100">
-    @* Sửa lỗi Footer "trôi nổi" *@
-    <header class="sticky-top">
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="Customer" asp-controller="Home" asp-action="Index">Horizon</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link" asp-area="Customer" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" asp-area="Customer" asp-controller="Products" asp-action="Shop">Shop</a>
-                        </li>
-                        @* <li class="nav-item">
-                            <a class="nav-link" asp-area="Customer" asp-controller="ShoppingCart" asp-action="Index">Cart</a>
-                        </li> *@
-                        @await Component.InvokeAsync("Cart", this.Context)
-                    </ul>
+<body class="bg-light">
 
-                    @* Hiển thị Đăng nhập/Đăng xuất *@
-                    <partial name="_LoginPartial" />
-
-                </div>
+    <div class="d-flex" id="wrapper">
+        @* --- SIDEBAR --- *@
+        <div class="bg-white border-end" id="sidebar-wrapper">
+            <div class="sidebar-heading border-bottom p-4">
+                <h4 class="fw-bold text-primary mb-0">HORIZON <small class="text-muted fs-6">Admin</small></h4>
             </div>
-        </nav>
-    </header>
-
-    <div class="container">
-        <main role="main" class="pb-3 flex-grow-1">
-            @* Sửa lỗi Footer "trôi nổi" *@
-            @if (TempData["Error"] != null)
-            {
-                <div class="alert alert-danger">@TempData["Error"]</div>
-            }
-            @if (TempData["Info"] != null)
-            {
-                <div class="alert alert-info">@TempData["Info"]</div>
-            }
-            @RenderBody()
-        </main>
-    </div>
-
-    <footer class="border-top footer">
-        <div class="container">
-            &copy; 2025 - Horizon -
-            <a asp-area="Customer" asp-controller="Home" asp-action="About">About Us</a> -
-            <a asp-area="Customer" asp-controller="Home" asp-action="Contact">Contact</a>
+            <div class="list-group list-group-flush p-2">
+                <a asp-area="Admin" asp-controller="Home" asp-action="Index" class="list-group-item list-group-item-action border-0 rounded py-3">
+                    <i class="bi bi-speedometer2 me-2"></i> Dashboard
+                </a>
+                <a asp-area="Admin" asp-controller="Orders" asp-action="Index" class="list-group-item list-group-item-action border-0 rounded py-3">
+                    <i class="bi bi-cart-check me-2"></i> Orders
+                </a>
+                <a asp-area="Admin" asp-controller="Products" asp-action="Index" class="list-group-item list-group-item-action border-0 rounded py-3">
+                    <i class="bi bi-box-seam me-2"></i> Products
+                </a>
+                <a asp-area="Admin" asp-controller="Categories" asp-action="Index" class="list-group-item list-group-item-action border-0 rounded py-3">
+                    <i class="bi bi-tags me-2"></i> Categories
+                </a>
+                <a asp-area="Admin" asp-controller="Inventory" asp-action="Index" class="list-group-item list-group-item-action border-0 rounded py-3">
+                    <i class="bi bi-house-door me-2"></i> Inventory
+                </a>
+                <a asp-area="Admin" asp-controller="Transactions" asp-action="Index" class="list-group-item list-group-item-action border-0 rounded py-3">
+                    <i class="bi bi-currency-exchange me-2"></i> Transactions
+                </a>
+                <hr />
+                <a asp-area="Customer" asp-controller="Home" asp-action="Index" class="list-group-item list-group-item-action border-0 rounded py-3 text-danger">
+                    <i class="bi bi-box-arrow-left me-2"></i> Back to Shop
+                </a>
+            </div>
         </div>
-    </footer>
 
-    @* --- MÁY PHÁT NHẠC NỀN --- *@
-    <audio id="bg-music" loop>
-        <source src="~/audio/background-music.mp3" type="audio/mpeg">
-        Your browser does not support the audio element.
-    </audio>
+        @* --- PAGE CONTENT --- *@
+        <div id="page-content-wrapper" class="flex-grow-1">
+            @* Top Navigation *@
+            <nav class="navbar navbar-expand-lg navbar-white bg-white border-bottom py-3 px-4 shadow-sm">
+                <button class="btn btn-light border" id="menu-toggle"><i class="bi bi-list"></i></button>
+                <div class="ms-auto d-flex align-items-center">
+                    <span class="me-3 small text-muted">Hello, <strong>@User.Identity.Name</strong></span>
+                    <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center" style="width: 35px; height: 35px;">
+                        <i class="bi bi-person-fill"></i>
+                    </div>
+                </div>
+            </nav>
 
-    <div id="music-control" title="Toggle Music">
-        🎵
+            @* Main Content Area *@
+            <div class="container-fluid p-4">
+                @RenderBody()
+            </div>
+        </div>
     </div>
-    @* ------------------------- *@
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
-
-    @await RenderSectionAsync("Scripts", required: false)
-
-    <!--Start of Tawk.to Script-->
-    <script type="text/javascript">
-        var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
-        (function(){
-        var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
-        s1.async=true;
-        s1.src='https://embed.tawk.to/689c5078ed02831924d200f2/1j2hagn1v';
-        s1.charset='UTF-8';
-        s1.setAttribute('crossorigin','*');
-        s0.parentNode.insertBefore(s1,s0);
-        })();
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> @* Dùng cho Dashboard *@
+    <script>
+        $("#menu-toggle").click(function(e) {
+            e.preventDefault();
+            $("#wrapper").toggleClass("toggled");
+        });
     </script>
-    <!--End of Tawk.to Script-->
+    @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

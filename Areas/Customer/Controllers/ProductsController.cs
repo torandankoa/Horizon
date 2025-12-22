@@ -19,34 +19,45 @@ namespace Horizon.Areas.Customer.Controllers
             _context = context;
         }
 
-        // GET: /Customer/Products/Shop
-        public async Task<IActionResult> Shop(string productCategory, string searchString)
+        public async Task<IActionResult> Shop(string productCategory, string searchString, decimal? minPrice, decimal? maxPrice)
         {
-            // 1. Lấy danh sách Categories để đưa lên Dropdown
-            IQueryable<string> categoryQuery = from c in _context.Categories
-                                               orderby c.Name
-                                               select c.Name;
+            // 1. Lấy toàn bộ sản phẩm (kèm category)
+            var productsQuery = _context.Products.Include(p => p.Category).AsQueryable();
 
-            // 2. Lấy danh sách Products và áp dụng bộ lọc
-            var productsQuery = from p in _context.Products.Include(p => p.Category)
-                                select p;
-
+            // 2. Lọc theo tên (Search)
             if (!string.IsNullOrEmpty(searchString))
             {
-                productsQuery = productsQuery.Where(s => s.Name.Contains(searchString));
+                productsQuery = productsQuery.Where(p => p.Name.Contains(searchString));
             }
 
+            // 3. Lọc theo danh mục
             if (!string.IsNullOrEmpty(productCategory))
             {
-                productsQuery = productsQuery.Where(x => x.Category.Name == productCategory);
+                productsQuery = productsQuery.Where(p => p.Category.Name == productCategory);
             }
 
-            // 3. Truyền dữ liệu lên View
-            ViewBag.ProductCategory = new SelectList(await categoryQuery.Distinct().ToListAsync());
+            // 4. Lọc theo giá thấp nhất
+            if (minPrice.HasValue)
+            {
+                productsQuery = productsQuery.Where(p => p.Price >= minPrice.Value);
+            }
+
+            // 5. Lọc theo giá cao nhất
+            if (maxPrice.HasValue)
+            {
+                productsQuery = productsQuery.Where(p => p.Price <= maxPrice.Value);
+            }
+
+            // 6. Lấy lại danh sách Category cho Sidebar
+            var categories = await _context.Categories.OrderBy(c => c.Name).ToListAsync();
+            ViewBag.ProductCategory = new SelectList(categories, "Name", "Name", productCategory);
+
+            // 7. Lưu lại giá trị lọc để hiển thị lại lên form sau khi load trang
             ViewData["CurrentSearchString"] = searchString;
             ViewData["CurrentCategory"] = productCategory;
+            ViewData["MinPrice"] = minPrice;
+            ViewData["MaxPrice"] = maxPrice;
 
-            // Trả về View với danh sách sản phẩm đã được lọc
             return View(await productsQuery.ToListAsync());
         }
 

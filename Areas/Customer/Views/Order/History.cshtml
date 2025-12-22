@@ -1,42 +1,133 @@
 ﻿@model IEnumerable<Order>
 
 @{
-    ViewData["Title"] = "Order History";
+    ViewData["Title"] = "Deployment Logs - Horizon Tactical";
 }
 
-<h1>@ViewData["Title"]</h1>
-<p>Here you can find all the orders you have placed with us.</p>
-<hr />
+@* --- BREADCRUMB --- *@
+<div class="py-3 bg-white border-bottom mb-4">
+    <div class="container">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-0 small">
+                <li class="breadcrumb-item"><a asp-area="Customer" asp-controller="Home" asp-action="Index" class="text-decoration-none">Home Base</a></li>
+                <li class="breadcrumb-item active fw-bold text-primary" aria-current="page">Deployment Logs</li>
+            </ol>
+        </nav>
+    </div>
+</div>
 
-@if (Model.Any())
-{
-    <table class="table table-hover table-cart">
-        <thead>
-            <tr>
-                <th>Order ID</th>
-                <th>Order Date</th>
-                <th class="text-end">Total Amount</th>
-                <th>Status</th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var order in Model)
-            {
-                <tr>
-                    <td>#@order.Id</td>
-                    <td>@order.OrderDate.ToShortDateString()</td>
-                    <td class="text-end">@order.TotalAmount.ToString("C")</td>
-                    <td><span class="badge bg-info">@order.Status</span></td>
-                    <td class="text-end">
-                        <a asp-action="Details" asp-route-id="@order.Id" class="btn btn-sm btn-primary">View Details</a>
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
-}
-else
-{
-    <div class="alert alert-info">You have not placed any orders yet.</div>
-}
+<div class="container pb-5">
+    @* --- HEADER --- *@
+    <div class="mb-5">
+        <div class="d-flex align-items-center mb-2">
+            <div class="bg-primary text-white p-2 rounded-3 me-3">
+                <i class="bi bi-journal-text fs-4"></i>
+            </div>
+            <h1 class="h3 fw-bold mb-0 text-uppercase">Deployment Logs</h1>
+        </div>
+        <p class="text-muted">Truy xuất danh sách toàn bộ các chiến dịch và đơn hàng đã được khởi tạo trong hệ thống.</p>
+    </div>
+
+    @if (Model != null && Model.Any())
+    {
+        @* --- LOGS TABLE --- *@
+        <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="bg-light small fw-bold text-uppercase">
+                        <tr>
+                            <th class="ps-4 py-3">Operation ID</th>
+                            <th class="py-3">Date Deployed</th>
+                            <th class="text-end py-3">Funding (Total)</th>
+                            <th class="text-center py-3">Mission Status</th>
+                            <th class="pe-4 py-3 text-end">Intel</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var order in Model)
+                        {
+                            // Logic màu sắc cho Badge trạng thái
+                            string statusClass = order.Status switch
+                            {
+                                "Pending Payment" => "bg-warning text-dark",
+                                "Processing" => "bg-primary",
+                                "Shipped" => "bg-info text-white",
+                                "Completed" => "bg-success",
+                                "Cancelled" => "bg-danger",
+                                "Payment Failed" => "bg-danger",
+                                _ => "bg-secondary"
+                            };
+
+                            <tr>
+                                <td class="ps-4 py-4">
+                                    <span class="fw-bold text-dark">#@order.Id</span>
+                                </td>
+                                <td>
+                                    <div class="small fw-medium">@order.OrderDate.ToString("dd/MM/yyyy")</div>
+                                    <div class="text-muted" style="font-size: 0.75rem;">@order.OrderDate.ToString("HH:mm")</div>
+                                </td>
+                                <td class="text-end fw-bold text-primary">
+                                    @order.TotalAmount.ToString("N0")₫
+                                </td>
+                                <td class="text-center">
+                                    <span class="badge @statusClass rounded-pill px-3 py-2 small shadow-xs">
+                                        @order.Status.ToUpper()
+                                    </span>
+                                </td>
+                                <td class="pe-4 text-end">
+                                    <a asp-action="Details" asp-route-id="@order.Id"
+                                       class="btn btn-sm btn-white border shadow-sm px-3 fw-bold">
+                                        ACCESS INTEL <i class="bi bi-chevron-right ms-1"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="mt-4 p-3 bg-light rounded-3 border border-dashed text-center">
+            <p class="small text-muted mb-0">
+                <i class="bi bi-info-circle me-1"></i>
+                Nếu có bất kỳ sai lệch nào trong nhật ký, vui lòng liên hệ <b>Đội phản ứng nhanh (QRF)</b> ngay lập tức.
+            </p>
+        </div>
+    }
+    else
+    {
+        @* --- EMPTY STATE --- *@
+        <div class="text-center py-5 bg-white rounded-4 shadow-sm border mt-4">
+            <div class="mb-4">
+                <i class="bi bi-journal-x text-muted opacity-25" style="font-size: 5rem;"></i>
+            </div>
+            <h4 class="fw-bold text-dark">No Mission Records Found</h4>
+            <p class="text-muted mb-4">Hệ thống chưa ghi nhận bất kỳ chiến dịch triển khai nào từ tài khoản của bạn.</p>
+            <a asp-area="Customer" asp-controller="Products" asp-action="Shop" class="btn btn-primary btn-lg px-5 fw-bold shadow">
+                START FIRST MISSION
+            </a>
+        </div>
+    }
+</div>
+
+<style>
+    .shadow-xs {
+        box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+
+    .btn-white {
+        background-color: #ffffff;
+        color: var(--text-main);
+        transition: all 0.2s;
+    }
+
+        .btn-white:hover {
+            background-color: #f8fafc;
+            border-color: var(--primary-color) !important;
+            color: var(--primary-color);
+        }
+
+    .border-dashed {
+        border-style: dashed !important;
+    }
+</style>

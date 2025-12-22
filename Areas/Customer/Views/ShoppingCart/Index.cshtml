@@ -1,82 +1,176 @@
 ﻿@model List<Horizon.Models.CartItem>
 
 @{
-    ViewData["Title"] = "Shopping Cart";
+    ViewData["Title"] = "Cargo Manifest - Horizon Tactical";
     decimal total = Model?.Sum(item => item.Subtotal) ?? 0;
 }
 
-<nav aria-label="breadcrumb">
-    <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a asp-area="Customer" asp-controller="Home" asp-action="Index">Home</a></li>
-        <li class="breadcrumb-item active" aria-current="page">Shopping Cart</li>
-    </ol>
-</nav>
+@* --- BREADCRUMB --- *@
+<div class="py-3 bg-white border-bottom mb-4">
+    <div class="container">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-0 small">
+                <li class="breadcrumb-item"><a asp-area="Customer" asp-controller="Home" asp-action="Index" class="text-decoration-none">Home Base</a></li>
+                <li class="breadcrumb-item active fw-bold" aria-current="page">Cargo Manifest</li>
+            </ol>
+        </nav>
+    </div>
+</div>
 
-<h1>@ViewData["Title"]</h1>
-
-@if (Model != null && Model.Any())
-{
-    <div class="row">
-        <div class="col-lg-8">
-            <table class="table table-cart">
-                <thead class="table-light">
-                    <tr>
-                        <th colspan="2">Product</th>
-                        <th class="text-center">Quantity</th>
-                        <th class="text-end">Price</th>
-                        <th class="text-end">Subtotal</th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var item in Model)
-                    {
-                        <tr>
-                            <td style="width: 100px;">
-                                <img src="@(item.ImageUrl ?? "/images/placeholder.png")" class="img-fluid rounded" alt="@item.ProductName" />
-                            </td>
-                            <td class="product-name">@item.ProductName</td>
-                            <td style="width: 150px;">
-                                @* FORM NÀY SẼ GỌI ACTION "UpdateCart" *@
-                                <form asp-action="UpdateCart" method="post" class="d-flex">
-                                    <input type="hidden" name="productId" value="@item.ProductId" />
-                                    <input type="number" name="quantity" value="@item.Quantity" class="form-control form-control-sm" min="1" />
-                                    <button type="submit" class="btn btn-sm btn-outline-primary ms-2" title="Update quantity">✓</button>
-                                </form>
-                            </td>
-                            <td class="text-end">@item.Price.ToString("C")</td>
-                            <td class="text-end">@item.Subtotal.ToString("C")</td>
-                            <td>
-                                @* LINK NÀY SẼ GỌI ACTION "RemoveFromCart" *@
-                                <a asp-action="RemoveFromCart" asp-route-productId="@item.ProductId" class="btn btn-sm btn-outline-danger" title="Remove item">&times;</a>
-                            </td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
+<div class="container pb-5">
+    <div class="d-flex align-items-center mb-4">
+        <div class="bg-primary text-white p-2 rounded-3 me-3">
+            <i class="bi bi-box-seam fs-4"></i>
         </div>
-        <div class="col-lg-4">
-            <div class="card">
-                <div class="card-header">
-                    <h5 class="mb-0">Cart Summary</h5>
-                </div>
-                <div class="card-body">
-                    <div class="d-flex justify-content-between">
-                        <span>Total</span>
-                        <strong>@total.ToString("C")</strong>
+        <div>
+            <h1 class="h3 fw-bold mb-0">CARGO MANIFEST</h1>
+            <p class="text-muted small mb-0">Review your tactical loadout before deployment.</p>
+        </div>
+    </div>
+
+    @if (Model != null && Model.Any())
+    {
+        <div class="row g-4">
+            @* --- DANH SÁCH HÀNG HÓA (Cột trái) --- *@
+            <div class="col-lg-8">
+                <div class="card border-0 shadow-sm overflow-hidden">
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle mb-0">
+                            <thead class="bg-light text-uppercase small fw-bold">
+                                <tr>
+                                    <th class="ps-4 py-3">Equipment</th>
+                                    <th class="text-center py-3">Quantity</th>
+                                    <th class="text-end py-3">Unit Price</th>
+                                    <th class="text-end py-3">Subtotal</th>
+                                    <th class="text-center py-3">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td class="ps-4 py-4">
+                                            <div class="d-flex align-items-center">
+                                                <img src="@(item.ImageUrl ?? "/images/placeholder.png")"
+                                                     class="rounded border"
+                                                     style="width: 70px; height: 70px; object-fit: cover;"
+                                                     alt="@item.ProductName" />
+                                                <div class="ms-3">
+                                                    <h6 class="fw-bold mb-0">@item.ProductName</h6>
+                                                    <span class="badge bg-light text-dark border small mt-1">Serial: #@(item.ProductId)</span>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <form asp-action="UpdateCart" method="post" class="mx-auto" style="max-width: 120px;">
+                                                <input type="hidden" name="productId" value="@item.ProductId" />
+                                                <div class="input-group input-group-sm border rounded">
+                                                    <input type="number" name="quantity" value="@item.Quantity"
+                                                           class="form-control border-0 text-center fw-bold bg-transparent" min="1" />
+                                                    <button type="submit" class="btn btn-white border-start text-primary" title="Update">
+                                                        <i class="bi bi-arrow-repeat"></i>
+                                                    </button>
+                                                </div>
+                                            </form>
+                                        </td>
+                                        <td class="text-end fw-medium">@item.Price.ToString("N0")₫</td>
+                                        <td class="text-end fw-bold text-primary">@item.Subtotal.ToString("N0")₫</td>
+                                        <td class="text-center">
+                                            <a asp-action="RemoveFromCart" asp-route-productId="@item.ProductId"
+                                               class="btn btn-sm btn-outline-danger border-0"
+                                               onclick="return confirm('Eject this item from cargo?')">
+                                                <i class="bi bi-trash3"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
                     </div>
                 </div>
-                <div class="card-footer">
-                    <div class="d-grid">
-                        <a asp-area="Customer" asp-controller="Order" asp-action="Checkout" class="btn btn-primary">Proceed to Checkout</a>
+
+                <div class="mt-4">
+                    <a asp-area="Customer" asp-controller="Products" asp-action="Shop" class="text-decoration-none small fw-bold text-primary">
+                        <i class="bi bi-chevron-left me-1"></i> ADD MORE EQUIPMENT
+                    </a>
+                </div>
+            </div>
+
+            @* --- TỔNG KẾT VẬN CHUYỂN (Cột phải) --- *@
+            <div class="col-lg-4">
+                <div class="card border-0 shadow-sm sticky-top" style="top: 100px;">
+                    <div class="card-header bg-white border-bottom py-3">
+                        <h5 class="fw-bold mb-0">ORDER SUMMARY</h5>
+                    </div>
+                    <div class="card-body p-4">
+                        <div class="d-flex justify-content-between mb-3">
+                            <span class="text-muted">Cargo Subtotal</span>
+                            <span class="fw-bold">@total.ToString("N0")₫</span>
+                        </div>
+                        <div class="d-flex justify-content-between mb-3">
+                            <span class="text-muted">Estimated Shipping</span>
+                            <span class="text-success fw-bold">FREE</span>
+                        </div>
+                        <div class="d-flex justify-content-between mb-3">
+                            <span class="text-muted">Strategic Tax (Included)</span>
+                            <span class="fw-bold">0₫</span>
+                        </div>
+                        <hr class="my-4 border-dashed">
+                        <div class="d-flex justify-content-between align-items-center mb-4">
+                            <span class="h6 fw-bold mb-0">TOTAL AMOUNT</span>
+                            <span class="h4 fw-bold text-primary mb-0">@total.ToString("N0")₫</span>
+                        </div>
+
+                        <div class="d-grid gap-2">
+                            <a asp-area="Customer" asp-controller="Order" asp-action="Checkout" class="btn btn-primary btn-lg py-3 fw-bold shadow">
+                                <i class="bi bi-shield-lock me-2"></i>PROCEED TO DEPLOYMENT
+                            </a>
+                        </div>
+
+                        <div class="mt-4 text-center">
+                            <p class="text-muted small mb-0">
+                                <i class="bi bi-info-circle me-1"></i>
+                                Secure Checkout by VnPay Protocol
+                            </p>
+                        </div>
+                    </div>
+                    @* Payment Icons *@
+                    <div class="card-footer bg-light border-0 py-3 text-center opacity-50">
+                        <i class="bi bi-credit-card fs-4 mx-2"></i>
+                        <i class="bi bi-wallet2 fs-4 mx-2"></i>
+                        <i class="bi bi-qr-code fs-4 mx-2"></i>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-}
-else
-{
-    <div class="alert alert-info">Your shopping cart is empty.</div>
-    <a asp-area="Customer" asp-controller="Products" asp-action="Shop" class="btn btn-primary">Continue Shopping</a>
-}
+    }
+    else
+    {
+        @* --- EMPTY STATE --- *@
+        <div class="text-center py-5 bg-white rounded shadow-sm border mt-4">
+            <div class="mb-4">
+                <i class="bi bi-box-seam text-muted opacity-25" style="font-size: 5rem;"></i>
+            </div>
+            <h4 class="fw-bold text-dark">Cargo Bay Empty</h4>
+            <p class="text-muted mb-4">No tactical gear detected in your current manifest.</p>
+            <a asp-area="Customer" asp-controller="Products" asp-action="Shop" class="btn btn-primary btn-lg px-5 fw-bold">
+                BROWSE ARSENAL
+            </a>
+        </div>
+    }
+</div>
+
+<style>
+    .table-cart .product-name {
+        font-weight: 700;
+        color: var(--text-main);
+    }
+
+    .border-dashed {
+        border-style: dashed !important;
+    }
+
+    .btn-white:hover {
+        background-color: #f8fafc;
+    }
+</style>

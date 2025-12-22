@@ -1,34 +1,20 @@
 ﻿// Logic cho Chibi Animation
 document.addEventListener('DOMContentLoaded', function () {
-    const stage = document.getElementById('chibi-stage');
-    if (stage) {
-        const dialogueBox = document.getElementById('dialogue-box');
-        const characters = document.querySelectorAll('.chibi-character');
+    const characters = document.querySelectorAll('.chibi-character');
+    const dialogueBox = document.getElementById('dialogue-box');
 
-        characters.forEach(char => {
-            char.addEventListener('click', function (event) {
-                const dialogue = this.dataset.dialogue;
+    characters.forEach(char => {
+        char.addEventListener('click', function () {
+            const dialogue = this.getAttribute('data-dialogue');
+            dialogueBox.textContent = dialogue;
+            dialogueBox.classList.remove('dialogue-hidden');
 
-                dialogueBox.textContent = dialogue;
-
-                // Lấy vị trí click tương đối so với sân khấu
-                const stageRect = stage.getBoundingClientRect();
-                const clickX = event.clientX - stageRect.left;
-                const clickY = event.clientY - stageRect.top;
-
-                // Đặt vị trí cho hộp thoại
-                dialogueBox.style.left = `${clickX}px`;
-                dialogueBox.style.top = `${clickY - 10}px`; // Hơi nhích lên trên một chút
-
-                dialogueBox.classList.remove('dialogue-hidden');
-
-                // Tự động ẩn hộp thoại sau 3 giây
-                setTimeout(() => {
-                    dialogueBox.classList.add('dialogue-hidden');
-                }, 3000);
-            });
+            // Tự động ẩn sau 1 giây
+            setTimeout(() => {
+                dialogueBox.classList.add('dialogue-hidden');
+            }, 1000);
         });
-    }
+    });
 });
 
 // --- LOGIC ĐIỀU KHIỂN NHẠC NỀN ---

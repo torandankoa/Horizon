@@ -204,7 +204,6 @@ namespace Horizon.Areas.Customer.Controllers
             string vnpResponseCode = pay.GetResponseData("vnp_ResponseCode");
             string vnpSecureHash = Request.Query["vnp_SecureHash"];
 
-            // SỬA 3: Đọc đúng tên section "VnPay"
             string hashSecret = _configuration["VnPay:HashSecret"];
 
             bool checkSignature = pay.ValidateSignature(vnpSecureHash, hashSecret);
@@ -214,6 +213,7 @@ namespace Horizon.Areas.Customer.Controllers
                 return View("PaymentResult");
             }
 
+            // Quan trọng: Phải nạp kèm OrderDetails để có danh sách sản phẩm cần trừ kho
             var order = await _context.Orders.Include(o => o.OrderDetails).FirstOrDefaultAsync(o => o.Id == orderId);
             if (order == null)
             {
@@ -224,18 +224,42 @@ namespace Horizon.Areas.Customer.Controllers
             // Xử lý kết quả thanh toán...
             if (vnpResponseCode == "00")
             {
+                // Chỉ xử lý nếu đơn hàng đang ở trạng thái chờ thanh toán
+                // Tránh việc trừ kho 2 lần nếu VnPay gọi lại nhiều lần
                 if (order.Status == "Pending Payment")
                 {
                     order.Status = "Processing";
-                    // ... (logic trừ kho và xóa giỏ hàng)
+
+                    // >>> LOGIC TRỪ KHO ĐÂY CẬU ƠI <<<
+                    foreach (var detail in order.OrderDetails)
+                    {
+                        var product = await _context.Products.FindAsync(detail.ProductId);
+                        if (product != null)
+                        {
+                            // Trừ số lượng tồn kho theo số lượng khách đã mua
+                            product.Quantity -= detail.Quantity;
+
+                            // Chống trường hợp số lượng bị âm (nếu cần)
+                            if (product.Quantity < 0) product.Quantity = 0;
+                        }
+                    }
+
+                    // Xóa giỏ hàng trong Session
+                    HttpContext.Session.Remove("Cart");
+
+                    // Lưu toàn bộ thay đổi (Status đơn hàng + Số lượng sản phẩm)
                     await _context.SaveChangesAsync();
                 }
-                ViewBag.Message = $"Payment successful for order #{orderId}!";
+                ViewBag.Message = $"Payment successful for order #{orderId}! Inventory has been updated.";
             }
             else
             {
-                order.Status = "Payment Failed";
-                await _context.SaveChangesAsync();
+                // Nếu đã từng xử lý rồi (Status không còn là Pending Payment) thì không cập nhật lại thành Failed
+                if (order.Status == "Pending Payment")
+                {
+                    order.Status = "Payment Failed";
+                    await _context.SaveChangesAsync();
+                }
                 ViewBag.Message = $"Payment failed for order #{orderId}. Reason: {vnpResponseCode}";
             }
 

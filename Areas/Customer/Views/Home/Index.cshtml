@@ -1,85 +1,148 @@
 ﻿@model HomeViewModel
 
 @{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Horizon - Premium Tactical Supplies";
 }
 
-<div class="text-center mb-5">
-    <h1 class="display-4">Welcome to Horizon</h1>
-    <p>Your one-stop shop for tactical gear inspired by Girl's Frontline.</p>
+@section HeaderMetas {
+    <meta name="description" content="Horizon Gameing Gear - Nhà cung cấp console, đĩa game, tay cầm, phụ kiện, figure." />
+    <meta name="keywords" content="gaming gear, horizon, gaming equipment, gameconsole, ps5, ps4, switch, game disk" />
+    <link rel="canonical" href="@($"{Context.Request.Scheme}://{Context.Request.Host}/")" />
+}
+
+@* --- SECTION 1: HERO BANNER (Đoạn giới thiệu chuyên nghiệp) --- *@
+<div class="hero-wrap bg-white border-bottom shadow-sm mb-5 py-5">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-7 text-center text-lg-start">
+                <span class="badge bg-primary mb-2 px-3 py-2 rounded-pill">EST. 2025</span>
+                <h1 class="display-3 fw-bold text-dark mb-3">Walk Past <span class="text-primary">The Horizon</span></h1>
+                <p class="lead text-muted mb-4">
+                    "Bring the Battlefield to Your Gaming Zone."
+                </p>
+                <div class="d-flex gap-3 justify-content-center justify-content-lg-start">
+                    <a asp-controller="Products" asp-action="Shop" class="btn btn-primary btn-lg px-4 shadow">Shop Collection</a>
+                    <a asp-action="About" class="btn btn-outline-secondary btn-lg px-4">Our Mission</a>
+                </div>
+            </div>
+            <div class="col-lg-5 d-none d-lg-block text-center">
+                @* Bạn có thể để một ảnh Banner lớn ở đây hoặc để trống để tạo không gian trắng *@
+                <img src="~/images/chibi/icon.jpg" class="img-fluid opacity-75" style="max-height: 300px;" alt="Horizon Banner">
+            </div>
+        </div>
+    </div>
 </div>
 
-@* --- SÂN KHẤU CHIBI ANIMATION (Giữ nguyên) --- *@
-<div id="chibi-stage" class="my-5">
-    @* ... Nội dung chibi của bạn ... *@
-    <div class="chibi-character" data-dialogue="I am all you need.">
-        <img src="~/images/chibi/HK416.gif" alt="HK416">
+
+
+@* --- SECTION 2: CHIBI STAGE (Hồn của website - Giữ nguyên logic) --- *@
+<div id="chibi-stage" class="my-5 shadow-sm rounded">
+    <div class="chibi-track">
+        @* --- Lần 1 --- *@
+        <div class="chibi-character" data-dialogue="I am all you need."><img src="~/images/chibi/HK416.gif" alt="HK416"></div>
+        <div class="chibi-character" data-dialogue="Customer, what do you think?!"><img src="~/images/chibi/KALINA.gif" alt="KALINA"></div>
+        <div class="chibi-character" data-dialogue="Welcome back Commander."><img src="~/images/chibi/M4A1.gif" alt="M4A1"></div>
+        <div class="chibi-character" data-dialogue="Let me take a look too!"><img src="~/images/chibi/SOP.gif" alt="SOP"></div>
+        <div class="chibi-character" data-dialogue="When is my turn?"><img src="~/images/chibi/STAR155.gif" alt="STAR15"></div>
+        <div class="chibi-character" data-dialogue="I've been waiting for you."><img src="~/images/chibi/UMP40.gif" alt="UMP40"></div>
+        <div class="chibi-character" data-dialogue="Oh I'm back, what's next?"><img src="~/images/chibi/UMP45.gif" alt="UMP45"></div>
+        <div class="chibi-character" data-dialogue="~La~La~La~"><img src="~/images/chibi/Vep.gif" alt="Vep"></div>
+
+        @* --- Lần 2 (Để tạo hiệu ứng lặp vô tận không bị khựng) --- *@
+        <div class="chibi-character" data-dialogue="I am all you need."><img src="~/images/chibi/HK416.gif" alt="HK416"></div>
+        <div class="chibi-character" data-dialogue="Customer, what do you think?!"><img src="~/images/chibi/KALINA.gif" alt="KALINA"></div>
+        <div class="chibi-character" data-dialogue="Welcome back Commander."><img src="~/images/chibi/M4A1.gif" alt="M4A1"></div>
+        <div class="chibi-character" data-dialogue="Let me take a look too!"><img src="~/images/chibi/SOP.gif" alt="SOP"></div>
+        <div class="chibi-character" data-dialogue="When is my turn?"><img src="~/images/chibi/STAR155.gif" alt="STAR15"></div>
+        <div class="chibi-character" data-dialogue="I've been waiting for you."><img src="~/images/chibi/UMP40.gif" alt="UMP40"></div>
+        <div class="chibi-character" data-dialogue="Oh I'm back, what's next?"><img src="~/images/chibi/UMP45.gif" alt="UMP45"></div>
+        <div class="chibi-character" data-dialogue="~La~La~La~"><img src="~/images/chibi/Vep.gif" alt="Vep"></div>
     </div>
-    <div class="chibi-character" data-dialogue="“Customer, what do you think?!.">
-        <img src="~/images/chibi/KALINA.gif" alt="KALINA">
-    </div>
-    <div class="chibi-character" data-dialogue="Welcome back Customer.">
-        <img src="~/images/chibi/M4A1.gif" alt="M4A1">
-    </div>
-    <div class="chibi-character" data-dialogue="What is it? Let me take a look too!">
-        <img src="~/images/chibi/SOP.gif" alt="SOP">
-    </div>
-    <div class="chibi-character" data-dialogue="When... will it be my turn?">
-        <img src="~/images/chibi/STAR155.gif" alt="STAR15">
-    </div>
-    <div class="chibi-character" data-dialogue="I've been waiting for you, Customer.">
-        <img src="~/images/chibi/UMP40.gif" alt="UMP40">
-    </div>
-    <div class="chibi-character" data-dialogue="Oh I'm back, what's next?.">
-        <img src="~/images/chibi/UMP45.gif" alt="UMP45">
-    </div>
-    <div class="chibi-character" data-dialogue="~La~La~La~.">
-        <img src="~/images/chibi/Vep.gif" alt="Vep">
-    </div>
-    <div id="dialogue-box" class="dialogue-hidden"></div>
+    <div id="dialogue-box" class="dialogue-hidden"> </div>
 </div>
-<hr class="my-5" style="border-color: var(--gfl-border-color);" />
 
-@* ================================================================ *@
-@* KHU VỰC SẢN PHẨM NỔI BẬT (BỘ SƯU TẬP)                         *@
-@* ================================================================ *@
-@if (Model.FeaturedProducts.Any())
-{
-    <h2 class="section-title">FEATURED COLLECTION</h2>
-    <div class="row">
-        @foreach (var item in Model.FeaturedProducts)
-        {
-            <partial name="_ProductCardPartial" model="item" />
-        }
-    </div>
-    <hr class="my-5" style="border-color: var(--gfl-border-color);" />
-}
+<div class="container">
+    @* ================================================================ *@
+    @* KHU VỰC SẢN PHẨM NỔI BẬT (FEATURED)                            *@
+    @* ================================================================ *@
+    @if (Model.FeaturedProducts.Any())
+    {
+        <div class="d-flex justify-content-between align-items-end mb-4">
+            <div>
+                <h2 class="fw-bold mb-0">Featured Collection</h2>
+                <p class="text-muted mb-0">The best gear handpicked for you.</p>
+            </div>
+            <a asp-controller="Products" asp-action="Shop" class="btn btn-link text-decoration-none">View All <i class="bi bi-arrow-right"></i></a>
+        </div>
+        <div class="row g-4 mb-5">
+            @foreach (var item in Model.FeaturedProducts)
+            {
+                <div class="col-lg-3 col-md-4 col-sm-6">
+                    <partial name="_ProductCardPartial" model="item" />
+                </div>
+            }
+        </div>
+    }
 
-@* ================================================================ *@
-@* KHU VỰC SẢN PHẨM GIẢM GIÁ                                      *@
-@* ================================================================ *@
-@if (Model.SaleProducts.Any())
-{
-    <h2 class="section-title">ON SALE</h2>
-    <div class="row">
-        @foreach (var item in Model.SaleProducts)
-        {
-            <partial name="_ProductCardPartial" model="item" />
-        }
-    </div>
-    <hr class="my-5" style="border-color: var(--gfl-border-color);" />
-}
+    @* ================================================================ *@
+    @* KHU VỰC SẢN PHẨM GIẢM GIÁ (ON SALE)                            *@
+    @* ================================================================ *@
+    @if (Model.SaleProducts.Any())
+    {
+        <div class="bg-primary bg-opacity-10 p-4 rounded-4 mb-5 border border-primary border-opacity-10">
+            <div class="d-flex justify-content-between align-items-end mb-4">
+                <div>
+                    <h2 class="fw-bold mb-0 text-primary">Flash Sales</h2>
+                    <p class="text-dark mb-0">Limited time offers. Don't miss out!</p>
+                </div>
+            </div>
+            <div class="row g-4">
+                @foreach (var item in Model.SaleProducts)
+                {
+                    <div class="col-lg-3 col-md-4 col-sm-6">
+                        <partial name="_ProductCardPartial" model="item" />
+                    </div>
+                }
+            </div>
+        </div>
+    }
 
-@* ================================================================ *@
-@* KHU VỰC SẢN PHẨM MỚI NHẤT                                     *@
-@* ================================================================ *@
-@if (Model.NewestProducts.Any())
-{
-    <h2 class="section-title">NEWEST ARRIVALS</h2>
-    <div class="row">
-        @foreach (var item in Model.NewestProducts)
-        {
-            <partial name="_ProductCardPartial" model="item" />
-        }
+    @* ================================================================ *@
+    @* KHU VỰC SẢN PHẨM MỚI NHẤT (NEW ARRIVALS)                       *@
+    @* ================================================================ *@
+    @if (Model.NewestProducts.Any())
+    {
+        <h2 class="fw-bold mb-4">Newest Arrivals</h2>
+        <div class="row g-4 mb-5">
+            @foreach (var item in Model.NewestProducts)
+            {
+                <div class="col-lg-3 col-md-4 col-sm-6">
+                    <partial name="_ProductCardPartial" model="item" />
+                </div>
+            }
+        </div>
+    }
+</div>
+
+@* --- SECTION 3: TRUST BADGES (Tăng uy tín thương mại) --- *@
+<div class="bg-white border-top py-5">
+    <div class="container">
+        <div class="row text-center g-4">
+            <div class="col-md-4">
+                <i class="bi bi-truck fs-1 text-primary mb-3"></i>
+                <h5 class="fw-bold">Global Shipping</h5>
+                <p class="text-muted small mb-0">Fast and secure delivery to your command center.</p>
+            </div>
+            <div class="col-md-4">
+                <i class="bi bi-shield-lock fs-1 text-primary mb-3"></i>
+                <h5 class="fw-bold">Secure Payment</h5>
+                <p class="text-muted small mb-0">100% encrypted transactions via VnPay & SSL.</p>
+            </div>
+            <div class="col-md-4">
+                <i class="bi bi-headset fs-1 text-primary mb-3"></i>
+                <h5 class="fw-bold">24/7 Support</h5>
+                <p class="text-muted small mb-0">Technical assistants ready to help you anytime.</p>
+            </div>
+        </div>
     </div>
-}
+</div>

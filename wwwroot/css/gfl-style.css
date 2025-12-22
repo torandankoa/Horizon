@@ -1,358 +1,276 @@
-﻿
-html {
-    font-size: 14px;
-}
+﻿/* 
+    HORIZON - MODERN CLEAN LIGHT THEME 
+    Professional E-commerce Design 2025
+*/
 
 :root {
-    /* --- BẢNG MÀU CHUẨN GF2 EXILIUM --- */
-    /* Nền và các yếu tố phụ */
-    --gfl-bg-dark: #0f1014; /* Gần như đen, màu nền chính */
-    --gfl-bg-secondary: #1e2029; /* Xám đậm cho card, navbar, footer */
-    --gfl-border-color: #3a3f50; /* Màu viền mặc định (xám xanh) */
-    /* Văn bản */
-    --gfl-text-primary: #e6e6e6; /* Màu chữ chính (trắng xám) */
-    --gfl-text-secondary: #8d93ab; /* Màu chữ phụ (mô tả, category) */
-    /* Màu nhấn - Yếu tố quan trọng nhất */
-    --gfl-accent-yellow: #e4ae3a; /* MÀU VÀNG đặc trưng */
-    --gfl-accent-yellow-glow: rgba(228, 174, 58, 0.5); /* Ánh sáng cho hiệu ứng glow */
-    /* Font chữ */
-    --gfl-font: 'Exo 2', sans-serif; /* Giữ nguyên font này vì nó rất hợp */
+    /* --- BẢNG MÀU HIỆN ĐẠI --- */
+    --primary-color: #2563eb; /* Xanh chuyên nghiệp (giống Azure/Facebook) */
+    --primary-hover: #1d4ed8;
+    --secondary-color: #64748b;
+    --bg-body: #f8fafc; /* Nền hơi xám nhạt để làm nổi bật Card trắng */
+    --bg-card: #ffffff;
+    --text-main: #1e293b; /* Xanh đen đậm cho chữ */
+    --text-muted: #64748b;
+    --border-color: #e2e8f0;
+    --accent-orange: #f59e0b; /* Màu nhấn cho Sale/Khuyến mãi */
+
+    --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+    --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+    --radius: 8px; /* Bo góc mềm mại */
 }
 
-/* --- NỀN VÀ TIÊU ĐỀ --- */
+/* --- TỔNG THỂ --- */
 body {
-    background-color: var(--gfl-bg-dark);
-    color: var(--gfl-text-primary);
-    font-family: var(--gfl-font);
+    background-color: var(--bg-body);
+    color: var(--text-main);
+    font-family: 'Inter', 'Segoe UI', sans-serif;
+    line-height: 1.5;
 }
 
-h1, h2, h3, h4, h5, h6 {
-    color: var(--gfl-text-primary); /* Tiêu đề giờ là màu chữ chính */
-    /* Có thể thêm một đường gạch chân màu vàng */
-    border-bottom: 2px solid var(--gfl-accent-yellow);
-    padding-bottom: 5px;
+/* --- HEADER & NAVBAR --- */
+.main-header {
+    background-color: #ffffff;
+    box-shadow: var(--shadow-sm);
 }
 
+.top-bar {
+    background-color: #f1f5f9;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    border-bottom: 1px solid var(--border-color);
+}
 
-/* --- SỬA THANH ĐIỀU HƯỚNG (NAVBAR) --- */
 .navbar {
-    background-color: var(--gfl-bg-secondary) !important;
-    border-bottom: 1px solid var(--gfl-border-color) !important;
+    background-color: #ffffff !important;
+    padding: 1rem 0;
 }
 
-    .navbar .navbar-brand {
-        color: var(--gfl-accent-yellow) !important; /* Logo màu vàng nổi bật */
-    }
-
-    .navbar .nav-link {
-        color: var(--gfl-text-primary) !important;
-    }
-
-        .navbar .nav-link:hover, .navbar .navbar-brand:hover {
-            color: var(--gfl-accent-yellow) !important;
-        }
-
-/* --- SỬA FOOTER --- */
-.footer {
-    background-color: var(--gfl-bg-secondary);
-    border-top: 1px solid var(--gfl-border-color) !important;
-    color: var(--gfl-text-secondary);
+.navbar-brand {
+    color: var(--primary-color) !important;
+    font-weight: 800;
+    font-size: 1.5rem;
+    letter-spacing: -0.5px;
 }
 
-/* --- THIẾT KẾ LẠI CARD SẢN PHẨM --- */
-.card {
-    background-color: var(--gfl-bg-secondary);
-    border: 1px solid var(--gfl-border-color);
-    border-radius: 2px; /* Một chút bo tròn rất nhỏ cho hiện đại */
-    transition: all 0.2s ease-in-out;
+.nav-link {
+    color: var(--text-main) !important;
+    font-weight: 500;
+    transition: color 0.2s;
 }
 
-    .card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 0 15px var(--gfl-accent-yellow-glow);
-        border-color: var(--gfl-accent-yellow);
+    .nav-link:hover {
+        color: var(--primary-color) !important;
     }
 
-    .card .card-title a {
-        color: var(--gfl-text-primary) !important; /* Giữ màu trắng xám */
-        /* QUAN TRỌNG: Ép buộc độ trong suốt là 100% (không bị mờ) */
-        opacity: 1 !important;
-        text-decoration: none;
-        font-weight: 700; /* Làm chữ đậm hơn một chút cho dễ đọc */
-        transition: color 0.2s ease-in-out;
+/* --- SEARCH BAR --- */
+.search-group .form-control {
+    border-radius: var(--radius) 0 0 var(--radius);
+    border: 1px solid var(--border-color);
+    background-color: #f1f5f9;
+}
+
+.search-group .btn {
+    border-radius: 0 var(--radius) var(--radius) 0;
+}
+
+/* --- CARD SẢN PHẨM  --- */
+.product-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius);
+    transition: transform 0.2s, box-shadow 0.2s;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+    .product-card:hover {
+        transform: translateY(-4px);
+        box-shadow: var(--shadow-md);
+        border-color: var(--primary-color);
     }
-        .card .card-title a:hover {
-            color: var(--gfl-accent-yellow);
-        }
 
-    .card .card-text {
-        color: var(--gfl-text-secondary);
+    .product-card .img-container {
+        aspect-ratio: 1/1;
+        overflow: hidden;
+        background-color: #f8fafc;
     }
 
-    .card .card-footer {
-        /* Chỉ định rõ màu nền giống hệt màu của card, thêm !important để đảm bảo ưu tiên */
-        background-color: var(--gfl-bg-secondary) !important;
-        /* Đồng bộ màu viền */
-        border-top: 1px solid var(--gfl-border-color) !important;
-        padding: 1rem;
+    .product-card img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.3s;
     }
 
-        .card .card-footer form {
-            margin-bottom: 0;
-        }
+    .product-card:hover img {
+        transform: scale(1.05);
+    }
 
-/* --- TÙY CHỈNH NÚT BẤM --- */
+    .product-card .card-body {
+        padding: 1.25rem;
+    }
+
+    .product-card .card-title {
+        font-size: 1rem;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        height: 3rem;
+    }
+
+/* --- GIÁ CẢ --- */
+.price-tag {
+    color: var(--primary-color);
+    font-size: 1.1rem;
+    font-weight: 700;
+}
+
+.old-price {
+    color: var(--text-muted);
+    text-decoration: line-through;
+    font-size: 0.85rem;
+    margin-left: 0.5rem;
+}
+
+/* --- NÚT BẤM --- */
 .btn-primary {
-    background-color: var(--gfl-accent-yellow);
-    border-color: var(--gfl-accent-yellow);
-    color: var(--gfl-bg-dark); /* Chữ màu tối trên nền vàng */
-    font-weight: bold;
-    border-radius: 2px;
+    background-color: var(--primary-color);
+    border: none;
+    border-radius: var(--radius);
+    font-weight: 600;
+    padding: 0.6rem 1.2rem;
 }
 
     .btn-primary:hover {
-        background-color: #f5c56a; /* Sáng hơn khi di chuột */
-        border-color: #f5c56a;
-        color: var(--gfl-bg-dark);
-        box-shadow: 0 0 10px var(--gfl-accent-yellow-glow);
+        background-color: var(--primary-hover);
     }
 
-/* --- TÙY CHỈNH FORM --- */
-.form-control, .form-select {
-    border-radius: 2px;
-    background-color: #2b2e3b;
-    border: 1px solid var(--gfl-border-color);
-    color: var(--gfl-text-primary);
+/* --- FOOTER --- */
+.main-footer {
+    background-color: #ffffff;
+    border-top: 1px solid var(--border-color);
+    color: var(--text-main);
 }
 
-    .form-control:focus {
-        background-color: #2b2e3b;
-        border-color: var(--gfl-accent-yellow);
-        color: var(--gfl-text-primary);
-        box-shadow: 0 0 5px var(--gfl-accent-yellow-glow);
-    }
-
-/* --- TÙY CHỈNH FORM NHẬP SỐ LƯỢNG TRÊN TRANG DETAILS --- */
-
-#quantity-input {
-    /* Ghi đè màu chữ và nền từ form mặc định */
-    background-color: var(--gfl-bg-dark) !important; /* Nền đen hơn */
-    color: var(--gfl-text-primary) !important; /* Chữ trắng sáng */
-    font-size: 1.2rem;
+.footer-title {
     font-weight: 700;
-    /* Ghi đè màu viền khi focus */
-    border-color: var(--gfl-border-color);
-    box-shadow: none; /* Bỏ hiệu ứng glow mặc định của form */
+    margin-bottom: 1.5rem;
+    color: var(--text-main);
 }
 
-    #quantity-input:focus {
-        border-color: var(--gfl-accent-yellow); /* Viền vàng khi được chọn */
-        box-shadow: 0 0 10px var(--gfl-accent-yellow-glow); /* Hiệu ứng glow */
-    }
-
-/* --- TÙY CHỈNH GIỎ HÀNG --- */
-
-.table-cart {
-    background-color: var(--gfl-bg-secondary);
-    border: 1px solid var(--gfl-border-color);
-    /* THAY ĐỔI QUAN TRỌNG: Ghi đè màu chữ mặc định của bảng */
-    color: var(--gfl-text-primary);
+.footer-link {
+    color: var(--text-muted);
+    text-decoration: none;
+    transition: color 0.2s;
 }
 
-    .table-cart thead {
-        color: var(--gfl-accent-yellow);
-        border-bottom: 2px solid var(--gfl-border-color);
+    .footer-link:hover {
+        color: var(--primary-color);
     }
 
-    /* Đảm bảo tất cả các ô trong thân bảng đều có màu chữ sáng */
-    .table-cart tbody td {
-        vertical-align: middle; /* Căn giữa các item theo chiều dọc */
-        color: var(--gfl-text-primary) !important; /* Ghi đè màu chữ */
-        opacity: 1 !important; /* Đảm bảo không bị làm mờ */
-        border-top: 1px solid var(--gfl-border-color); /* Thêm đường kẻ ngang giữa các sản phẩm */
-    }
+/* --- SIDEBAR SHOP --- */
+.filter-sidebar {
+    background: #ffffff;
+    border-radius: var(--radius);
+    border: 1px solid var(--border-color);
+    padding: 1.5rem;
+}
 
-    /* Định dạng cho tên sản phẩm trong giỏ hàng */
-    .table-cart .product-name {
-        font-weight: 700;
-    }
+.filter-title {
+    font-size: 0.9rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+    color: var(--text-main);
+}
 
-    /* ĐỊNH DẠNG Ô NHẬP SỐ LƯỢNG TRONG GIỎ HÀNG */
-    .table-cart input[type="number"] {
-        background-color: var(--gfl-bg-dark) !important;
-        color: var(--gfl-text-primary) !important;
-        border-color: var(--gfl-border-color);
-        text-align: center;
-        font-weight: bold;
-    }
+.product-card .card-body {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 180px; /* Đảm bảo các card có độ cao phần thân bằng nhau */
+}
 
-    /* Tùy chỉnh nút Update và Remove */
-    .table-cart .btn-outline-primary {
-        border-color: var(--gfl-accent-yellow);
-        color: var(--gfl-accent-yellow);
-    }
+.product-card img {
+    width: 100%;
+    aspect-ratio: 1/1; /* Ảnh luôn vuông cho đẹp */
+    object-fit: contain; /* Hoặc cover tùy cậu, contain sẽ không bị mất hình */
+    background: #fff;
+}
 
-        .table-cart .btn-outline-primary:hover {
-            background-color: var(--gfl-accent-yellow);
-            color: var(--gfl-bg-dark);
-        }
-
-    .table-cart .btn-outline-danger {
-        border-color: #e74c3c;
-        color: #e74c3c;
-    }
-
-        .table-cart .btn-outline-danger:hover {
-            background-color: #e74c3c;
-            color: white;
-        }
-
-/* =================================== */
-/* === CSS CHO SÂN KHẤU CHIBI ANIMATION === */
-/* =================================== */
-
+/* --- CẢI TIẾN SÂN KHẤU CHIBI (SLIDESHOW TRƯỢT NGANG) --- */
 #chibi-stage {
     position: relative;
-    height: 100px;
-    background-color: var(--gfl-bg-secondary);
-    border-top: 1px solid var(--gfl-border-color);
-    border-bottom: 1px solid var(--gfl-border-color);
-    overflow: hidden; /* Quan trọng: Ẩn các chibi khi chúng chạy ra ngoài */
+    height: 150px; /* Giới hạn chiều cao tổng thể */
+    background: #ffffff;
+    border: 1px solid var(--border-color);
+    overflow: hidden; /* Cực kỳ quan trọng để ẩn phần thừa */
+    display: flex;
+    align-items: center;
+    white-space: nowrap;
+}
+
+/* Container chứa các nhân vật để chạy slideshow */
+.chibi-track {
+    display: flex;
+    width: calc(250px * 16); /* Độ rộng ảo để lặp lại nhân vật */
+    animation: scroll-slideshow 40s linear infinite;
 }
 
 .chibi-character {
-    position: absolute;
-    bottom: -10px; /* Hơi lùi xuống để trông tự nhiên hơn */
-    height: 120px;
+    flex: 0 0 auto;
+    width: 200px; /* Khoảng cách giữa mỗi nhân vật */
+    text-align: center;
     cursor: pointer;
-    /* Animation: tên | thời gian hoàn thành 1 vòng | kiểu lặp | lặp vô tận */
-    animation: march-past 25s linear infinite;
-    /* Hiệu ứng mượt mà khi tạm dừng/chạy */
-    transition: transform 0.2s ease-out;
+    transition: transform 0.3s ease;
 }
 
-/* Khi di chuột vào, tạm dừng animation */
-#chibi-stage:hover .chibi-character {
+    /* LÀM NHỎ GIF LẠI */
+    .chibi-character img {
+        height: 100px; /* Cố định chiều cao nhân vật nhỏ lại */
+        width: auto; /* Tự động giữ tỉ lệ */
+        filter: drop-shadow(2px 4px 6px rgba(0,0,0,0.1));
+    }
+
+    .chibi-character:hover {
+        transform: scale(1.1) translateY(-10px);
+    }
+
+/* Dừng slideshow khi di chuột vào */
+#chibi-stage:hover .chibi-track {
     animation-play-state: paused;
 }
 
-/* Tạo độ trễ khác nhau để các chibi không xuất hiện cùng lúc */
-.chibi-character:nth-child(1) {
-    animation-delay: -6s;
-}
-.chibi-character:nth-child(2) {
-    animation-delay: -8s;
-}
-.chibi-character:nth-child(3) {
-    animation-delay: -10s;
-}
-.chibi-character:nth-child(4) {
-    animation-delay: -12s;
-}
-.chibi-character:nth-child(5) {
-    animation-delay: -14s;
-}
-.chibi-character:nth-child(6) {
-    animation-delay: -16s;
-}
-.chibi-character:nth-child(7) {
-    animation-delay: -18s;
-}
-.chibi-character:nth-child(8) {
-    animation-delay: -20s;
-}
-
-.chibi-character img {
-    height: 100%;
-    /* Lật ngược hình ảnh nếu GIF đang đi sai hướng */
-    /* transform: scaleX(-1); */
-}
-
-/* Định nghĩa Animation chạy từ phải sang trái */
-@keyframes march-past {
-    from {
-        /* Bắt đầu từ bên ngoài màn hình (phía bên phải) */
-        transform: translateX(105vw);
+/* Logic Animation trượt vô tận */
+@keyframes scroll-slideshow {
+    0% {
+        transform: translateX(0);
     }
 
-    to {
-        /* Kết thúc ở bên ngoài màn hình (phía bên trái) */
-        transform: translateX(-150px);
+    100% {
+        transform: translateX(calc(-200px * 8));
     }
+    /* Trượt hết 8 nhân vật rồi lặp lại */
 }
 
-/* CSS cho hộp thoại */
+/* Hộp thoại nhỏ gọn hơn */
 #dialogue-box {
     position: absolute;
-    z-index: 10;
-    background-color: rgba(15, 16, 20, 0.85); /* Dùng màu nền chính với độ trong suốt */
-    color: var(--gfl-text-primary);
-    padding: 8px 12px;
-    border-radius: 4px;
-    border: 1px solid var(--gfl-accent-yellow);
-    transition: opacity 0.3s ease-in-out;
-    pointer-events: none; /* Cho phép click "xuyên qua" nó */
-    transform: translate(-50%, -100%); /* Căn giữa và đặt ngay trên điểm click */
-    white-space: nowrap; /* Không cho xuống dòng */
-}
-
-.dialogue-hidden {
-    opacity: 0;
-}
-
-/* --- NÚT ĐIỀU KHIỂN ÂM THANH --- */
-#music-control {
-    position: fixed; /* Nằm cố định trên màn hình */
-    bottom: 20px;
-    left: 20px;
-    z-index: 1000; /* Nằm trên các phần tử khác */
-
-    width: 50px;
-    height: 50px;
-    background-color: var(--gfl-accent-yellow);
-    color: var(--gfl-bg-dark);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border-radius: 50%; /* Nút tròn */
-    font-size: 24px;
-    cursor: pointer;
-    box-shadow: 0 0 10px var(--gfl-accent-yellow-glow);
-    transition: transform 0.2s ease-in-out;
-}
-
-    #music-control:hover {
-        transform: scale(1.1);
-    }
-
-    /* Thêm một class để biểu thị trạng thái "đang tắt" */
-    #music-control.muted {
-        background-color: var(--gfl-border-color);
-        color: var(--gfl-text-secondary);
-    }
-/* --- CSS CHO TIÊU ĐỀ KHU VỰC (SECTION) --- */
-.section-title {
-    text-align: center;
-    margin-bottom: 2rem;
-    color: var(--gfl-accent-yellow);
-    font-weight: 700;
-    letter-spacing: 2px;
-}
-
-/* --- CSS CHO GIÁ GIẢM GIÁ TRONG CARD --- */
-.product-price .sale-price {
-    color: #e74c3c; /* Màu đỏ cho giá giảm */
-    font-size: 1.25rem;
-    font-weight: 700;
-    margin-right: 10px;
-}
-
-.product-price .original-price {
-    font-size: 0.9rem;
-    color: var(--gfl-text-secondary);
-}
-
-.star {
-    color: var(--gfl-accent-yellow);
-    font-size: 1.2rem;
+    top: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--primary-color);
+    color: white;
+    padding: 5px 15px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: bold;
+    z-index: 100;
+    box-shadow: 0 4px 15px rgba(37, 99, 235, 0.3);
 }

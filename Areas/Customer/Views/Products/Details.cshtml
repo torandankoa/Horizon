@@ -1,190 +1,231 @@
-﻿@model Horizon.Models.Product
+﻿
+@model Horizon.Models.Product
 
 @{
-    ViewData["Title"] = Model.Name;
+    ViewData["Title"] = Model.Name + " - Horizon Tactical";
 
-    // Tối ưu Meta Description: Xóa tag HTML, cắt 155 ký tự chuẩn SEO
+    // Tối ưu Meta Description cho SEO
     var metaDescription = string.IsNullOrEmpty(Model.Description) ? "" :
         System.Text.RegularExpressions.Regex.Replace(Model.Description, "<.*?>", string.Empty);
     metaDescription = metaDescription.Length > 155 ? metaDescription.Substring(0, 155) + "..." : metaDescription;
 
-    // URL tuyệt đối cho Social Sharing
     var absoluteUrl = $"{Context.Request.Scheme}://{Context.Request.Host}{Context.Request.Path}";
     var absoluteImageUrl = Model.ImageUrl?.StartsWith("http") == true ?
         Model.ImageUrl : $"{Context.Request.Scheme}://{Context.Request.Host}{Url.Content(Model.ImageUrl ?? "/images/placeholder.png")}";
 }
 
+
 @section HeaderMetas {
-    @* SEO Standard *@
-    <meta name="description" content="@metaDescription" />
-    <link rel="canonical" href="@absoluteUrl" />
+    @{
+        var cleanDescription = System.Text.RegularExpressions.Regex.Replace(Model.Description ?? "", "<.*?>", string.Empty);
+        var siteUrl = $"{Context.Request.Scheme}://{Context.Request.Host}";
+        var productUrl = $"{siteUrl}{Context.Request.Path}";
+    }
+    <meta name="description" content="Mua ngay @Model.Name tại Horizon. @(cleanDescription.Length > 100 ? cleanDescription.Substring(0, 100) : cleanDescription)..." />
 
-    @* Facebook Open Graph (OG) Tags *@
-    <meta property="og:type" content="product" />
-    <meta property="og:title" content="@Model.Name | Horizon Shop" />
-    <meta property="og:description" content="@metaDescription" />
-    <meta property="og:url" content="@absoluteUrl" />
-    <meta property="og:image" content="@absoluteImageUrl" />
-    <meta property="og:site_name" content="Horizon Gear" />
-
-    @* Twitter Card Tags (Thêm cái này để link trên X/Twitter cũng đẹp luôn) *@
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="@Model.Name" />
-    <meta name="twitter:description" content="@metaDescription" />
-    <meta name="twitter:image" content="@absoluteImageUrl" />
+    @* --- SCHEMA.ORG FOR GOOGLE RICH SNIPPETS --- *@
+    <script type="application/ld+json">
+        {
+          "@@context": "https://schema.org/",
+          "@@type": "Product",
+          "name": "@Model.Name",
+          "image": "@(siteUrl + Model.ImageUrl)",
+          "description": "@cleanDescription",
+          "brand": {
+            "@@type": "Brand",
+            "name": "Horizon"
+          },
+          "offers": {
+            "@@type": "Offer",
+            "url": "@productUrl",
+            "priceCurrency": "VND",
+            "price": "@(Model.SalePrice ?? Model.Price)",
+            "availability": "https://schema.org/@(Model.Quantity > 0 ? "InStock" : "OutOfStock")"
+          }
+        }
+    </script>
 }
 
-<nav aria-label="breadcrumb">
-    <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a asp-area="Customer" asp-controller="Home" asp-action="Index">Home</a></li>
-        <li class="breadcrumb-item"><a asp-area="Customer" asp-controller="Products" asp-action="Shop">Shop</a></li>
-        <li class="breadcrumb-item active" aria-current="page">@Model.Name</li>
+@* --- BREADCRUMB --- *@
+<nav aria-label="breadcrumb" class="py-2">
+    <ol class="breadcrumb mb-0 small">
+        <li class="breadcrumb-item"><a asp-area="Customer" asp-controller="Home" asp-action="Index" class="text-decoration-none">Home</a></li>
+        <li class="breadcrumb-item"><a asp-area="Customer" asp-controller="Products" asp-action="Shop" class="text-decoration-none">Shop</a></li>
+        <li class="breadcrumb-item active text-muted" aria-current="page">@Model.Name</li>
     </ol>
 </nav>
 
-<div class="row mt-4">
-    @* Cột hiển thị ảnh sản phẩm *@
-    <div class="col-md-6 mb-4">
-        <div class="card gfl-card p-2">
-            <img src="@(Model.ImageUrl ?? "/images/placeholder.png")" class="img-fluid rounded shadow-sm" alt="@Model.Name">
-        </div>
-    </div>
-
-    @* Cột hiển thị thông tin và nút mua hàng *@
+<div class="row mt-3 g-4">
+    @* --- CỘT TRÁI: ẢNH SẢN PHẨM --- *@
     <div class="col-md-6">
-        <h1 class="text-primary-gfl">@Model.Name</h1>
-        <p class="text-muted mb-2">
-            <span class="badge bg-secondary">@Model.Category?.Name</span>
-        </p>
-        <hr style="border-color: var(--gfl-border-color);">
-
-        <div class="product-description mb-4">
-            <p>@Model.Description</p>
+        <div class="bg-white border rounded p-3 text-center shadow-sm">
+            <img src="@(Model.ImageUrl ?? "/images/placeholder.png")"
+                 class="img-fluid rounded"
+                 alt="@Model.Name"
+                 style="max-height: 500px; width: auto; object-fit: contain;">
         </div>
+    </div>
 
-        <div class="price-box mb-4">
-            @if (Model.SalePrice != null && Model.SalePrice < Model.Price)
-            {
-                <h2 class="sale-price d-inline">@Model.SalePrice?.ToString("C")</h2>
-                <del class="original-price ms-3">@Model.Price.ToString("C")</del>
-            }
-            else
-            {
-                <h2 class="text-accent-yellow">@Model.Price.ToString("C")</h2>
-            }
-        </div>
+    @* --- CỘT PHẢI: THÔNG TIN MUA HÀNG --- *@
+    <div class="col-md-6">
+        <div class="ps-md-3">
+            <h6 class="text-primary fw-bold text-uppercase mb-1">@Model.Category?.Name</h6>
+            <h1 class="h2 fw-bold text-dark mb-3">@Model.Name</h1>
 
-        <form asp-area="Customer" asp-controller="ShoppingCart" asp-action="AddToCart" method="post" class="mb-4">
-            <input type="hidden" name="productId" value="@Model.Id" />
-
-            <div class="row align-items-center mb-3">
-                <div class="col-4 col-md-3">
-                    <label for="quantity-input" class="form-label fw-bold">Quantity:</label>
-                    <input id="quantity-input" type="number" name="quantity" class="form-control text-center" value="1" min="1" max="@Model.Quantity">
-                </div>
-                <div class="col-8 col-md-9 mt-4">
-                    <p class="text-muted small mb-0">In Stock: <span class="@(Model.Quantity < 5 ? "text-danger fw-bold" : "")">@Model.Quantity</span></p>
-                </div>
+            <div class="d-flex align-items-center mb-4">
+                @if (Model.SalePrice != null && Model.SalePrice < Model.Price)
+                {
+                    <h2 class="text-danger fw-bold mb-0">@Model.SalePrice?.ToString("N0")₫</h2>
+                    <span class="text-muted text-decoration-line-through ms-3 fs-5">@Model.Price.ToString("N0")₫</span>
+                    <span class="badge bg-danger ms-3">SALE</span>
+                }
+                else
+                {
+                    <h2 class="text-primary fw-bold mb-0">@Model.Price.ToString("N0")₫</h2>
+                }
             </div>
 
-            <div class="d-grid gap-2">
-                <button class="btn btn-primary btn-lg" type="submit">
-                    🛒 Add to Cart
-                </button>
+            <div class="product-description border-top border-bottom py-4 mb-4">
+                <h6 class="fw-bold">Description</h6>
+                <p class="text-muted mb-0">@Model.Description</p>
             </div>
-        </form>
 
-        @* Nút Chia sẻ Facebook chuyên nghiệp *@
-        <div class="mt-4 p-3 border rounded border-secondary bg-dark-subtle">
-            <h6 class="mb-2"><i class="bi bi-share"></i> Share this product:</h6>
-            <a id="facebook-share-btn" class="btn btn-sm btn-primary d-inline-flex align-items-center" href="#" target="_blank" style="background-color: #1877F2; border: none;">
-                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="white" class="bi bi-facebook me-2" viewBox="0 0 16 16">
-                    <path d="M16 8.049c0-4.446-3.582-8.05-8-8.05C3.58 0-.002 3.603-.002 8.05c0 4.017 2.926 7.347 6.75 7.951v-5.625h-2.03V8.05H6.75V6.275c0-2.017 1.195-3.131 3.022-3.131.876 0 1.791.157 1.791.157v1.98h-1.009c-.993 0-1.303.621-1.303 1.258v1.51h2.218l-.354 2.326H9.25V16c3.824-.604 6.75-3.934 6.75-7.951z" />
-                </svg>
-                Share on Facebook
-            </a>
+            @* Form mua hàng *@
+            <form asp-area="Customer" asp-controller="ShoppingCart" asp-action="AddToCart" method="post" class="mb-4">
+                <input type="hidden" name="productId" value="@Model.Id" />
+
+                <div class="row g-3 align-items-center mb-4">
+                    <div class="col-auto">
+                        <label for="quantity-input" class="fw-bold small">QUANTITY:</label>
+                    </div>
+                    <div class="col-3">
+                        <input id="quantity-input" type="number" name="quantity" class="form-control text-center fw-bold" value="1" min="1" max="@Model.Quantity">
+                    </div>
+                    <div class="col-auto">
+                        <span class="small text-muted">Stock: <b class="@(Model.Quantity <= 5 ? "text-danger" : "text-dark")">@Model.Quantity</b> items</span>
+                    </div>
+                </div>
+
+                <div class="d-grid gap-2">
+                    <button class="btn btn-primary btn-lg py-3 fw-bold" type="submit">
+                        <i class="bi bi-cart-plus me-2"></i>ADD TO CART
+                    </button>
+                </div>
+            </form>
+
+            @* Trust Badges & Sharing *@
+            <div class="p-3 bg-light rounded border border-dashed">
+                <div class="row text-center g-2 mb-3">
+                    <div class="col-4 border-end">
+                        <i class="bi bi-truck text-primary"></i>
+                        <p class="mb-0" style="font-size: 0.7rem;">Free Shipping</p>
+                    </div>
+                    <div class="col-4 border-end">
+                        <i class="bi bi-shield-check text-primary"></i>
+                        <p class="mb-0" style="font-size: 0.7rem;">Secure Payment</p>
+                    </div>
+                    <div class="col-4">
+                        <i class="bi bi-arrow-repeat text-primary"></i>
+                        <p class="mb-0" style="font-size: 0.7rem;">Easy Returns</p>
+                    </div>
+                </div>
+
+                <div class="d-flex align-items-center justify-content-center pt-2 border-top">
+                    <span class="small text-muted me-3">Share:</span>
+                    <a id="facebook-share-btn" href="#" target="_blank" class="btn btn-sm btn-outline-primary rounded-circle border-0">
+                        <i class="bi bi-facebook fs-5"></i>
+                    </a>
+                </div>
+            </div>
         </div>
     </div>
 </div>
-
-<div class="mt-4">
-    <a asp-action="Shop" class="text-decoration-none"><i class="bi bi-arrow-left"></i> Back to Shop</a>
-</div>
-
-<hr class="my-5" style="border-color: var(--gfl-border-color);" />
 
 @* --- SẢN PHẨM LIÊN QUAN --- *@
 @if (ViewBag.RelatedProducts != null)
 {
-    <h2 class="section-title text-start mb-4">RELATED PRODUCTS</h2>
-    <div class="row">
-        @foreach (var item in ViewBag.RelatedProducts)
-        {
-            <partial name="_ProductCardPartial" model="item" />
-        }
+    <div class="mt-5 pt-5 border-top">
+        <h4 class="fw-bold mb-4">Related Products</h4>
+        <div class="row g-4">
+            @foreach (var item in ViewBag.RelatedProducts)
+            {
+                <div class="col-lg-3 col-md-4 col-sm-6">
+                    <partial name="_ProductCardPartial" model="item" />
+                </div>
+            }
+        </div>
     </div>
 }
 
 @* --- ĐÁNH GIÁ SẢN PHẨM --- *@
-<div class="row mt-5">
-    <div class="col-12">
-        <h4 class="mb-4">Customer Reviews</h4>
+<div class="row mt-5 pt-5 border-top">
+    <div class="col-lg-8">
+        <h4 class="fw-bold mb-4">Customer Reviews</h4>
 
         @if (User.Identity.IsAuthenticated)
         {
-            <div class="card gfl-card mb-4">
-                <div class="card-header bg-secondary text-white">Leave a Review</div>
+            <div class="card mb-4 shadow-sm border-0 bg-light">
                 <div class="card-body">
+                    <h6 class="fw-bold mb-3">Write a review</h6>
                     <form asp-area="Customer" asp-controller="Reviews" asp-action="AddReview" method="post">
                         @Html.AntiForgeryToken()
                         <input type="hidden" name="productId" value="@Model.Id" />
-                        <div class="row">
-                            <div class="col-md-3 mb-3">
-                                <label class="form-label">Rating:</label>
-                                <select name="rating" class="form-select" required>
-                                    <option value="5">5 Stars - Excellent</option>
-                                    <option value="4">4 Stars - Good</option>
-                                    <option value="3">3 Stars - Average</option>
-                                    <option value="2">2 Stars - Poor</option>
-                                    <option value="1">1 Star - Terrible</option>
+                        <div class="row g-3">
+                            <div class="col-md-4">
+                                <select name="rating" class="form-select border-0 shadow-sm" required>
+                                    <option value="5">⭐⭐⭐⭐⭐ (5/5)</option>
+                                    <option value="4">⭐⭐⭐⭐ (4/5)</option>
+                                    <option value="3">⭐⭐⭐ (3/5)</option>
+                                    <option value="2">⭐⭐ (2/5)</option>
+                                    <option value="1">⭐ (1/5)</option>
                                 </select>
                             </div>
-                            <div class="col-md-9 mb-3">
-                                <label class="form-label">Your Comment:</label>
-                                <textarea name="comment" rows="2" class="form-control" placeholder="Share your thoughts..."></textarea>
+                            <div class="col-12">
+                                <textarea name="comment" rows="3" class="form-control border-0 shadow-sm" placeholder="Tell us what you think about this gear..."></textarea>
+                            </div>
+                            <div class="col-12">
+                                <button type="submit" class="btn btn-dark px-4">Post Review</button>
                             </div>
                         </div>
-                        <button type="submit" class="btn btn-primary">Submit Review</button>
                     </form>
                 </div>
             </div>
         }
 
-        @if (Model.Reviews != null && Model.Reviews.Any())
-        {
-            foreach (var review in Model.Reviews.OrderByDescending(r => r.ReviewDate))
+        <div class="review-list">
+            @if (Model.Reviews != null && Model.Reviews.Any())
             {
-                <div class="card gfl-card mb-3 p-3">
-                    <div class="d-flex justify-content-between">
-                        <div>
-                            @for (int i = 1; i <= 5; i++)
-                            {
-                                <span class="star">@(i <= review.Rating ? "★" : "☆")</span>
-                            }
-                            <span class="ms-2 fw-bold text-accent-yellow">@review.User?.UserName</span>
+                foreach (var review in Model.Reviews.OrderByDescending(r => r.ReviewDate))
+                {
+                    <div class="d-flex mb-4 pb-4 border-bottom">
+                        <div class="flex-shrink-0">
+                            <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center" style="width: 45px; height: 45px;">
+                                @review.User?.UserName.Substring(0, 1).ToUpper()
+                            </div>
                         </div>
-                        <small class="text-muted">@review.ReviewDate.ToString("dd/MM/yyyy")</small>
+                        <div class="flex-grow-1 ms-3">
+                            <div class="d-flex justify-content-between align-items-center mb-1">
+                                <h6 class="fw-bold mb-0">@review.User?.UserName</h6>
+                                <small class="text-muted">@review.ReviewDate.ToString("MMM dd, yyyy")</small>
+                            </div>
+                            <div class="mb-2">
+                                @for (int i = 1; i <= 5; i++)
+                                {
+                                    <i class="bi bi-star-fill @(i <= review.Rating ? "text-warning" : "text-light border")" style="font-size: 0.8rem;"></i>
+                                }
+                            </div>
+                            <p class="text-muted small mb-0">@review.Comment</p>
+                        </div>
                     </div>
-                    <p class="mt-2 mb-0">@review.Comment</p>
+                }
+            }
+            else
+            {
+                <div class="text-center py-4">
+                    <p class="text-muted">No reviews yet. Be the first commander to review this!</p>
                 </div>
             }
-        }
-        else
-        {
-            <div class="text-center p-4 bg-dark rounded border border-secondary">
-                <p class="text-muted mb-0">No reviews yet. Be the first to leave a review!</p>
-            </div>
-        }
+        </div>
     </div>
 </div>
 
@@ -194,7 +235,6 @@
         document.addEventListener("DOMContentLoaded", function () {
             var shareBtn = document.getElementById('facebook-share-btn');
             if (shareBtn) {
-                // Sử dụng URL hiện tại đã là slug-friendly
                 var currentUrl = encodeURIComponent(window.location.href);
                 shareBtn.href = `https://www.facebook.com/sharer/sharer.php?u=${currentUrl}`;
             }
