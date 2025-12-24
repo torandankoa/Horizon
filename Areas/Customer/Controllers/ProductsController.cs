@@ -19,40 +19,42 @@ namespace Horizon.Areas.Customer.Controllers
             _context = context;
         }
 
-        public async Task<IActionResult> Shop(string productCategory, string searchString, decimal? minPrice, decimal? maxPrice)
+        public async Task<IActionResult> Shop(string productCategory, string searchString, decimal? minPrice, decimal? maxPrice, string sortOrder)
         {
-            // 1. Lấy toàn bộ sản phẩm (kèm category)
-            var productsQuery = _context.Products.Include(p => p.Category).AsQueryable();
+            // 1. Lấy truy vấn cơ sở
+            var productsQuery = _context.Products.Include(p => p.Category).Include(p => p.Reviews).AsQueryable();
 
-            // 2. Lọc theo tên (Search)
-            if (!string.IsNullOrEmpty(searchString))
+            // 2. Áp dụng các bộ lọc (Giữ nguyên các filter cũ của cậu)
+            if (!string.IsNullOrEmpty(searchString)) productsQuery = productsQuery.Where(p => p.Name.Contains(searchString));
+            if (!string.IsNullOrEmpty(productCategory)) productsQuery = productsQuery.Where(p => p.Category.Name == productCategory);
+            if (minPrice.HasValue) productsQuery = productsQuery.Where(p => p.Price >= minPrice.Value);
+            if (maxPrice.HasValue) productsQuery = productsQuery.Where(p => p.Price <= maxPrice.Value);
+
+            // 3. LOGIC SẮP XẾP MỚI ĐÂY CẬU ƠI
+            switch (sortOrder)
             {
-                productsQuery = productsQuery.Where(p => p.Name.Contains(searchString));
+                case "price_asc":
+                    productsQuery = productsQuery.OrderBy(p => p.Price);
+                    break;
+                case "price_desc":
+                    productsQuery = productsQuery.OrderByDescending(p => p.Price);
+                    break;
+                case "rating":
+                    // Sắp xếp theo điểm đánh giá trung bình
+                    productsQuery = productsQuery.OrderByDescending(p => p.Reviews.Any() ? p.Reviews.Average(r => r.Rating) : 0);
+                    break;
+                case "newest":
+                default:
+                    productsQuery = productsQuery.OrderByDescending(p => p.CreatedAt);
+                    sortOrder = "newest"; // Giá trị mặc định
+                    break;
             }
 
-            // 3. Lọc theo danh mục
-            if (!string.IsNullOrEmpty(productCategory))
-            {
-                productsQuery = productsQuery.Where(p => p.Category.Name == productCategory);
-            }
+            // 4. Đổ dữ liệu ra View
+            ViewBag.ProductCategory = new SelectList(await _context.Categories.OrderBy(c => c.Name).ToListAsync(), "Name", "Name", productCategory);
 
-            // 4. Lọc theo giá thấp nhất
-            if (minPrice.HasValue)
-            {
-                productsQuery = productsQuery.Where(p => p.Price >= minPrice.Value);
-            }
-
-            // 5. Lọc theo giá cao nhất
-            if (maxPrice.HasValue)
-            {
-                productsQuery = productsQuery.Where(p => p.Price <= maxPrice.Value);
-            }
-
-            // 6. Lấy lại danh sách Category cho Sidebar
-            var categories = await _context.Categories.OrderBy(c => c.Name).ToListAsync();
-            ViewBag.ProductCategory = new SelectList(categories, "Name", "Name", productCategory);
-
-            // 7. Lưu lại giá trị lọc để hiển thị lại lên form sau khi load trang
+            // Lưu lại trạng thái để View hiển thị đúng
+            ViewData["CurrentSort"] = sortOrder;
             ViewData["CurrentSearchString"] = searchString;
             ViewData["CurrentCategory"] = productCategory;
             ViewData["MinPrice"] = minPrice;

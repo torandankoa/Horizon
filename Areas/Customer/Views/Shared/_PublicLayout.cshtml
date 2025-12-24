@@ -31,9 +31,7 @@
         <nav class="navbar navbar-expand-lg navbar-light shadow-sm">
             @* Đổi navbar-dark thành navbar-light *@
             <div class="container">
-                <a class="navbar-brand" asp-area="Customer" asp-controller="Home" asp-action="Index">
-                    HORIZON
-                </a>
+                <a class="navbar-brand" asp-area="Customer" asp-controller="Home" asp-action="Index">HORIZON</a>
 
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navContent">
                     <span class="navbar-toggler-icon"></span>
@@ -51,10 +49,17 @@
                     </form>
 
                     <ul class="navbar-nav ms-auto align-items-center">
-                        <li class="nav-item"><a class="nav-link" asp-action="Index" asp-controller="Home">Home</a></li>
-                        <li class="nav-item"><a class="nav-link" asp-action="Shop" asp-controller="Products">Shop</a></li>
+                        <li class="nav-item">
+                            @* THÊM asp-area="Customer" *@
+                            <a class="nav-link" asp-area="Customer" asp-controller="Home" asp-action="Index">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            @* THÊM asp-area="Customer" *@
+                            <a class="nav-link" asp-area="Customer" asp-controller="Products" asp-action="Shop">Shop</a>
+                        </li>
 
-                        <li class="nav-item mx-2">
+                        @* Giỏ hàng cũng cần Area *@
+                        <li class="nav-item mx-2 position-relative">
                             @await Component.InvokeAsync("Cart", this.Context)
                         </li>
 

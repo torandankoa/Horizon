@@ -99,11 +99,13 @@
                 </p>
                 <div class="d-flex align-items-center gap-2">
                     <span class="small text-muted d-none d-md-block">Sort by:</span>
-                    <select class="form-select form-select-sm border-0 bg-light" style="width: auto;">
-                        <option>Newest Arrivals</option>
-                        <option>Price: Low to High</option>
-                        <option>Price: High to Low</option>
-                        <option>Top Rated</option>
+                    <select class="form-select form-select-sm border-0 bg-light"
+                            style="width: auto;"
+                            onchange="updateSortOrder(this.value)">
+                        <option value="newest" selected="@(ViewData["CurrentSort"]?.ToString() == "newest")">Newest Arrivals</option>
+                        <option value="price_asc" selected="@(ViewData["CurrentSort"]?.ToString() == "price_asc")">Price: Low to High</option>
+                        <option value="price_desc" selected="@(ViewData["CurrentSort"]?.ToString() == "price_desc")">Price: High to Low</option>
+                        <option value="rating" selected="@(ViewData["CurrentSort"]?.ToString() == "rating")">Top Rated</option>
                     </select>
                 </div>
             </div>
@@ -149,6 +151,22 @@
 
 @section Scripts {
     <script>
-        // Code bổ sung để giữ trạng thái lọc nếu cần
+        function updateSortOrder(val) {
+            // 1. Tìm cái form lọc bên trái (sidebar)
+            var filterForm = document.querySelector('.filter-sidebar form');
+
+            // 2. Tạo một input ẩn chứa giá trị sort nếu chưa có
+            var sortInput = filterForm.querySelector('input[name="sortOrder"]');
+            if (!sortInput) {
+                sortInput = document.createElement('input');
+                sortInput.type = 'hidden';
+                sortInput.name = 'sortOrder';
+                filterForm.appendChild(sortInput);
+            }
+
+            // 3. Gán giá trị và Submit form
+            sortInput.value = val;
+            filterForm.submit();
+        }
     </script>
 }
