@@ -56,10 +56,28 @@ app.MapControllerRoute(
 // Map các trang Razor Pages của Identity <<< THÊM DÒNG NÀY
 app.MapRazorPages();
 
-// Khối code SeedData 
+// ... (các đoạn code phía trên giữ nguyên) ...
+
+// Khối code Tự động tạo bảng và đổ dữ liệu SeedData
 using (var scope = app.Services.CreateScope())
 {
-    await SeedData.InitializeAsync(scope.ServiceProvider);
+    var services = scope.ServiceProvider;
+    try
+    {
+        var context = services.GetRequiredService<MyDbContext>();
+
+        // >>> DÒNG QUAN TRỌNG NHẤT: Tự động tạo bảng nếu chưa có trên server <<<
+        await context.Database.MigrateAsync();
+
+        // Sau đó mới chạy SeedData để đổ 100 đơn hàng mẫu
+        await SeedData.InitializeAsync(services);
+    }
+    catch (Exception ex)
+    {
+        // Ghi log lỗi nếu có sự cố xảy ra để mình biết đường sửa
+        var logger = services.GetRequiredService<ILogger<Program>>();
+        logger.LogError(ex, "An error occurred while migrating or seeding the database.");
+    }
 }
 
 // ========== PHẦN 4: CHẠY ỨNG DỤNG ==========
