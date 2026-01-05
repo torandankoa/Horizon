@@ -29,14 +29,13 @@
     font-weight: 600;
 }
 
-/* SỬA LỖI NÚT Ở CỘT ACTIONS */
 .btn-group .btn {
     padding: 0.4rem 0.6rem;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    background-color: #ffffff; /* Đảm bảo có màu nền */
-    border: 1px solid #dee2e6; /* Có viền nhẹ */
+    background-color: #ffffff; 
+    border: 1px solid #dee2e6;
 }
 
     .btn-group .btn:hover {

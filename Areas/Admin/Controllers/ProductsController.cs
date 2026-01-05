@@ -91,10 +91,10 @@ namespace Horizon.Areas.Admin.Controllers
         {
             // TỰ SINH SLUG TỪ TÊN
             product.Slug = product.Name.ToSlug();
-            // 2. Xóa lỗi kiểm tra của Slug vì chúng ta đã tự sinh nó ở trên, không cần người dùng nhập
+            // 2. Xóa lỗi kiểm tra của Slug đã tự sinh nó ở trên, không cần người dùng nhập
             ModelState.Remove("Slug");
             ModelState.Remove("Category"); // Xóa luôn Category nếu nó báo lỗi null
-            // Bây giờ chúng ta bind cả ImageUrl, nên không cần Remove khỏi ModelState
+            //  Bind  ImageUrl
 
             if (ModelState.IsValid)
             {
@@ -116,7 +116,6 @@ namespace Horizon.Areas.Admin.Controllers
                     product.ImageUrl = "/images/products/" + uniqueFileName;
                 }
                 // 2. Nếu không có file upload, ImageUrl đã được bind tự động từ form.
-                // Chúng ta không cần làm gì thêm ở đây, vì giá trị từ ô text "ImageUrl" đã nằm trong `product.ImageUrl`.
 
                 _context.Add(product);
                 await _context.SaveChangesAsync();
@@ -179,7 +178,7 @@ namespace Horizon.Areas.Admin.Controllers
                             }
                         }
 
-                        // Lưu file ảnh mới (logic tương tự hàm Create)
+                        // Lưu file ảnh mới 
                         string uniqueFileName = Guid.NewGuid().ToString() + Path.GetExtension(imageFile.FileName);
                         string uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "images", "products");
                         string filePath = Path.Combine(uploadsFolder, uniqueFileName);
@@ -193,7 +192,6 @@ namespace Horizon.Areas.Admin.Controllers
                         product.ImageUrl = "/images/products/" + uniqueFileName;
                     }
                     // 2. Nếu không có file mới được upload, thì ImageUrl đã được bind từ ô nhập URL.
-                    // Chúng ta không cần làm gì thêm, EF Core sẽ tự cập nhật giá trị mới này.
 
                     _context.Update(product);
                     await _context.SaveChangesAsync();

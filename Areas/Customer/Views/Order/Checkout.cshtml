@@ -3,7 +3,7 @@
 
 @{
     ViewData["Title"] = "Deployment Dispatch - Checkout";
-    // Giả sử cậu lấy giỏ hàng từ Session để hiển thị tóm tắt ở cột phải
+    // Lấy giỏ hàng từ Session để hiển thị tóm tắt ở cột phải
     var cart = Context.Session.Get<List<CartItem>>("Cart") ?? new List<CartItem>();
     decimal total = cart.Sum(item => item.Subtotal);
 }
@@ -91,7 +91,7 @@
             </div>
         </div>
 
-        @* --- CỘT PHẢI: TÓM TẮT ĐƠN HÀNG (SỰ KHÁC BIỆT CỦA PRO) --- *@
+        @* --- CỘT PHẢI: TÓM TẮT ĐƠN HÀNG  --- *@
         <div class="col-lg-5">
             <div class="card border-0 shadow-sm rounded-4 sticky-top" style="top: 100px;">
                 <div class="card-header bg-white border-bottom py-3">

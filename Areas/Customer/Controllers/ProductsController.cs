@@ -24,7 +24,7 @@ namespace Horizon.Areas.Customer.Controllers
             // 1. Lấy truy vấn cơ sở
             var productsQuery = _context.Products.Include(p => p.Category).Include(p => p.Reviews).AsQueryable();
 
-            // 2. Áp dụng các bộ lọc (Giữ nguyên các filter cũ của cậu)
+            // 2. Áp dụng các bộ lọc 
             if (!string.IsNullOrEmpty(searchString)) productsQuery = productsQuery.Where(p => p.Name.Contains(searchString));
             if (!string.IsNullOrEmpty(productCategory)) productsQuery = productsQuery.Where(p => p.Category.Name == productCategory);
             if (minPrice.HasValue) productsQuery = productsQuery.Where(p => p.Price >= minPrice.Value);

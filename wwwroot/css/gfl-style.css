@@ -4,8 +4,8 @@
 */
 
 :root {
-    /* --- BẢNG MÀU HIỆN ĐẠI --- */
-    --primary-color: #2563eb; /* Xanh chuyên nghiệp (giống Azure/Facebook) */
+    /* --- BẢNG MÀU --- */
+    --primary-color: #2563eb; 
     --primary-hover: #1d4ed8;
     --secondary-color: #64748b;
     --bg-body: #f8fafc; /* Nền hơi xám nhạt để làm nổi bật Card trắng */
@@ -200,17 +200,17 @@ body {
 .product-card img {
     width: 100%;
     aspect-ratio: 1/1; /* Ảnh luôn vuông cho đẹp */
-    object-fit: contain; /* Hoặc cover tùy cậu, contain sẽ không bị mất hình */
+    object-fit: contain; 
     background: #fff;
 }
 
-/* --- CẢI TIẾN SÂN KHẤU CHIBI (SLIDESHOW TRƯỢT NGANG) --- */
+/* --- (SLIDESHOW TRƯỢT NGANG) --- */
 #chibi-stage {
     position: relative;
     height: 150px; /* Giới hạn chiều cao tổng thể */
     background: #ffffff;
     border: 1px solid var(--border-color);
-    overflow: hidden; /* Cực kỳ quan trọng để ẩn phần thừa */
+    overflow: hidden; /* ẩn phần thừa */
     display: flex;
     align-items: center;
     white-space: nowrap;
